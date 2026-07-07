@@ -1,0 +1,82 @@
+---
+import Icon from './Icon.astro';
+import { profile } from '../data/profile';
+---
+
+<section id="contacto" class="contact container">
+  <div class="contact__card" data-reveal>
+    <div class="contact__glow" aria-hidden="true"></div>
+    <span class="kicker">Contacto</span>
+    <h2>¿Construimos calidad juntos?</h2>
+    <p>
+      Estoy disponible para roles de QA Automation, SDET y DevOps.
+      Si tu equipo necesita a alguien con visión end-to-end del ciclo de vida del software, hablemos.
+    </p>
+    <div class="contact__actions">
+      <a class="btn btn--light" href={`mailto:${profile.email}`}>
+        <Icon name="mail" size={16} /> {profile.email}
+      </a>
+      <a class="btn btn--ghost" href={profile.links.linkedin} target="_blank" rel="noopener">
+        <Icon name="linkedin" size={16} /> LinkedIn
+      </a>
+      <a class="btn btn--ghost" href={profile.cvUrl} download>
+        <Icon name="download" size={16} /> CV en PDF
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    margin-top: 90px;
+  }
+
+  .contact__card {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(36px, 6vw, 64px);
+    border-radius: var(--r-xl);
+    border: 1px solid rgba(47, 107, 255, 0.3);
+    background:
+      radial-gradient(900px 400px at 15% -20%, rgba(0, 224, 255, 0.16), transparent 60%),
+      radial-gradient(900px 500px at 90% 130%, rgba(47, 107, 255, 0.22), transparent 60%),
+      #101017;
+    text-align: center;
+  }
+
+  .contact__glow {
+    position: absolute;
+    inset: -50%;
+    background: conic-gradient(from 0deg, transparent 70%, rgba(0, 224, 255, 0.08) 80%, transparent 90%);
+    animation: spin 14s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .contact__card h2 {
+    font-size: clamp(26px, 4.5vw, 40px);
+    margin-top: 10px;
+  }
+
+  .contact__card p {
+    max-width: 560px;
+    margin: 16px auto 0;
+    font-size: 15px;
+    color: var(--text-2);
+    line-height: 1.7;
+  }
+
+  .contact__actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 30px;
+    position: relative;
+  }
+</style>

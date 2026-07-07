@@ -1,0 +1,101 @@
+---
+// Acceso rápido a los proyectos, visible solo en desktop grande donde
+// el layout__side (más corto) deja espacio vacío debajo de la ProfileCard.
+import Icon from './Icon.astro';
+import { projects } from '../data/profile';
+---
+
+<div class="side-projects card" data-reveal>
+  <h2>Proyectos</h2>
+  <ul class="side-projects__list">
+    {
+      projects.map((p) => (
+        <li>
+          <a href={`#${p.id}`} class="side-projects__item">
+            <span class="side-projects__icon" style={`--hue: ${p.iconHue}`}>
+              <Icon name={p.icon} size={15} />
+            </span>
+            <span class="side-projects__info">
+              <strong>{p.title}</strong>
+              <span>{p.org}</span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .side-projects {
+    display: none;
+    margin-top: 20px;
+    padding: 22px 24px 20px;
+    border-radius: var(--r-xl);
+  }
+
+  .side-projects h2 {
+    font-size: 14.5px;
+    font-weight: 650;
+    margin-bottom: 15px;
+  }
+
+  .side-projects__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 13px;
+  }
+
+  .side-projects__item {
+    display: flex;
+    gap: 11px;
+    align-items: center;
+  }
+
+  .side-projects__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #fff;
+    color: hsl(var(--hue) 75% 45%);
+  }
+
+  .side-projects__info {
+    display: grid;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .side-projects__info strong {
+    font-size: 12.5px;
+    font-weight: 610;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .side-projects__info span {
+    font-size: 11px;
+    color: var(--text-3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .side-projects__item:hover strong {
+    color: var(--accent-hover);
+  }
+
+  /* Solo en desktop grande: es cuando queda espacio vacío bajo la ProfileCard */
+  @media (min-width: 1180px) {
+    .side-projects {
+      display: block;
+    }
+  }
+</style>

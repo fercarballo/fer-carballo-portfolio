@@ -1,0 +1,124 @@
+---
+import Base from '../../layouts/Base.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Tags únicos para el filtro
+const allTags = [...new Set(posts.flatMap((p) => p.data.tags))];
+---
+
+<Base
+  title="Blog — Fernando Carballo"
+  description="Artículos sobre QA Automation, testing, DevOps, CI/CD y calidad de software, escritos desde la trinchera."
+>
+  <main class="container">
+    <header class="blog-hero" data-reveal>
+      <span class="kicker">Blog</span>
+      <h1>Notas desde la trinchera de la calidad</h1>
+      <p>
+        Testing, automatización, CI/CD y cultura DevOps. Lo que aprendo rompiendo software
+        (a propósito) para que no se rompa en producción.
+      </p>
+    </header>
+
+    <div class="blog-tags" data-reveal>
+      <button class="chip blog-tag active" data-tag="all">Todos</button>
+      {allTags.map((t) => <button class="chip blog-tag" data-tag={t}>{t}</button>)}
+    </div>
+
+    <div class="blog-grid" id="blog-grid">
+      {
+        posts.map((post, i) => (
+          <div class="blog-grid__item" data-tags={post.data.tags.join(',')}>
+            <BlogCard post={post} index={i} />
+          </div>
+        ))
+      }
+    </div>
+  </main>
+</Base>
+
+<style>
+  main {
+    padding-top: 60px;
+    min-height: 60vh;
+  }
+
+  .blog-hero {
+    max-width: 640px;
+    margin-bottom: 40px;
+  }
+
+  .blog-hero h1 {
+    font-size: clamp(30px, 5vw, 44px);
+    margin-top: 8px;
+  }
+
+  .blog-hero p {
+    margin-top: 16px;
+    font-size: 15.5px;
+    color: var(--text-2);
+    line-height: 1.7;
+  }
+
+  .blog-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .blog-tag {
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+
+  .blog-tag:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+
+  .blog-tag.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 18px;
+  }
+
+  .blog-grid__item.hide {
+    display: none;
+  }
+</style>
+
+<script>
+  function initBlogFilter() {
+    const grid = document.getElementById('blog-grid');
+    if (!grid || grid.dataset.init) return;
+    grid.dataset.init = '1';
+
+    const tags = Array.from(document.querySelectorAll<HTMLButtonElement>('.blog-tag'));
+    const items = Array.from(grid.querySelectorAll<HTMLElement>('.blog-grid__item'));
+
+    tags.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        tags.forEach((t) => t.classList.toggle('active', t === btn));
+        const tag = btn.dataset.tag;
+        items.forEach((item) => {
+          const show = tag === 'all' || (item.dataset.tags ?? '').split(',').includes(tag!);
+          item.classList.toggle('hide', !show);
+        });
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initBlogFilter);
+</script>

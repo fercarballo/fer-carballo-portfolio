@@ -1,0 +1,237 @@
+---
+import Icon from './Icon.astro';
+import { profile } from '../data/profile';
+---
+
+<aside class="pcard card" data-reveal>
+  <div class="pcard__avatar-wrap">
+    <div class="pcard__avatar" aria-hidden="true">
+      <span>FC</span>
+    </div>
+    <span class="pcard__badge" title="Disponible">
+      <Icon name="check" size={12} />
+    </span>
+  </div>
+
+  <h1 class="pcard__name">{profile.name}</h1>
+  <p class="pcard__role" id="rotating-role">
+    <span class="rot" data-roles={JSON.stringify(profile.roles)}>{profile.roles[1]}</span>
+  </p>
+  <p class="pcard__loc"><Icon name="pin" size={13} /> {profile.location}</p>
+
+  <a class="pcard__cta" href={profile.cvUrl} download>
+    <span class="pcard__cta-icon"><Icon name="download" size={15} /></span>
+    <span>Descargar mi CV</span>
+    <Icon name="arrow-right" size={16} class="pcard__cta-arrow" />
+  </a>
+
+  <section class="pcard__section">
+    <h2>Sobre mí</h2>
+    {profile.about.map((p) => <p class="pcard__about">{p}</p>)}
+  </section>
+
+  <section class="pcard__section pcard__section--last">
+    <h2>Links</h2>
+    <div class="pcard__links">
+      <a href={profile.links.github} target="_blank" rel="noopener" aria-label="GitHub"><Icon name="github" size={16} /></a>
+      <a href={profile.links.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn"><Icon name="linkedin" size={16} /></a>
+      <a href={`mailto:${profile.email}`} aria-label="Email"><Icon name="mail" size={16} /></a>
+    </div>
+  </section>
+</aside>
+
+<style>
+  .pcard {
+    position: relative;
+    padding: 0 26px 10px;
+    border-radius: var(--r-xl);
+    background: #121216;
+  }
+
+  .pcard__avatar-wrap {
+    position: relative;
+    width: 92px;
+    margin-top: -46px; /* pisa el banner como en el mockup */
+  }
+
+  .pcard__avatar {
+    display: grid;
+    place-items: center;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: linear-gradient(140deg, #0e2a66, #2f6bff 60%, #00c8ef);
+    border: 4px solid #121216;
+    box-shadow: 0 10px 30px -8px rgba(47, 107, 255, 0.55);
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #eaf1ff;
+  }
+
+  .pcard__badge {
+    position: absolute;
+    right: 2px;
+    bottom: 4px;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid #121216;
+    color: #fff;
+  }
+
+  .pcard__name {
+    margin-top: 14px;
+    font-size: 25px;
+    font-weight: 700;
+  }
+
+  .pcard__role {
+    margin-top: 4px;
+    font-size: 14px;
+    color: var(--accent-hover);
+    font-weight: 550;
+    min-height: 22px;
+  }
+
+  .rot {
+    display: inline-block;
+  }
+
+  .rot.swap {
+    animation: rot-swap 0.45s ease;
+  }
+
+  @keyframes rot-swap {
+    0% {
+      opacity: 0;
+      transform: translateY(8px);
+      filter: blur(4px);
+    }
+    100% {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+  }
+
+  .pcard__loc {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: var(--text-3);
+  }
+
+  .pcard__cta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 11px 16px;
+    border-radius: var(--r-full);
+    border: 1px solid var(--border-strong);
+    background: rgba(255, 255, 255, 0.03);
+    font-size: 13.5px;
+    font-weight: 600;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .pcard__cta:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .pcard__cta-icon {
+    display: grid;
+    place-items: center;
+    color: var(--accent-hover);
+  }
+
+  .pcard__cta :global(.pcard__cta-arrow) {
+    margin-left: auto;
+    transition: transform 0.25s ease;
+  }
+
+  .pcard__cta:hover :global(.pcard__cta-arrow) {
+    transform: translateX(4px);
+  }
+
+  .pcard__section {
+    margin-top: 24px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+  }
+
+  .pcard__section--last {
+    padding-bottom: 16px;
+  }
+
+  .pcard__section h2 {
+    font-size: 14.5px;
+    font-weight: 650;
+    margin-bottom: 13px;
+  }
+
+  .pcard__about {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--text-2);
+  }
+
+  .pcard__about + .pcard__about {
+    margin-top: 10px;
+  }
+
+  .pcard__links {
+    display: flex;
+    gap: 10px;
+  }
+
+  .pcard__links a {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--chip);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    transition: color 0.2s, border-color 0.2s, transform 0.15s;
+  }
+
+  .pcard__links a:hover {
+    color: var(--text);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+</style>
+
+<script>
+  // Rotación de roles: QA Manual → QA Automation → SDET → DevOps → Developer
+  function initRoleRotation() {
+    const el = document.querySelector<HTMLElement>('#rotating-role .rot');
+    if (!el || el.dataset.init) return;
+    el.dataset.init = '1';
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const roles: string[] = JSON.parse(el.dataset.roles || '[]');
+    if (roles.length < 2) return;
+    let i = roles.indexOf(el.textContent?.trim() || '') ;
+
+    setInterval(() => {
+      i = (i + 1) % roles.length;
+      el.classList.remove('swap');
+      // reflow para reiniciar la animación
+      void el.offsetWidth;
+      el.textContent = roles[i];
+      el.classList.add('swap');
+    }, 2600);
+  }
+
+  document.addEventListener('astro:page-load', initRoleRotation);
+</script>

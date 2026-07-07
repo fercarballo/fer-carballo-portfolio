@@ -1,0 +1,147 @@
+---
+import Icon from './Icon.astro';
+import { profile } from '../data/profile';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer__in">
+    <div class="footer__brand">
+      <span class="footer__logo">FC</span>
+      <div>
+        <p class="footer__name">{profile.name}</p>
+        <p class="footer__tag">QA Manual · Automation · SDET · DevOps · Dev</p>
+      </div>
+    </div>
+
+    <nav class="footer__links" aria-label="Footer">
+      <a href="/#proyectos">Proyectos</a>
+      <a href="/#experiencia">Experiencia</a>
+      <a href="/blog">Blog</a>
+      <a href="/rss.xml">RSS</a>
+    </nav>
+
+    <div class="footer__social">
+      <a href={profile.links.github} target="_blank" rel="noopener" aria-label="GitHub"><Icon name="github" size={16} /></a>
+      <a href={profile.links.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn"><Icon name="linkedin" size={16} /></a>
+      <a href={`mailto:${profile.email}`} aria-label="Email"><Icon name="mail" size={16} /></a>
+    </div>
+  </div>
+  <div class="container footer__bottom">
+    <p>© {year} {profile.name}. Construido con Astro — 0 KB de JS innecesario.</p>
+    <p class="footer__status"><span class="dot"></span> Disponible para nuevos desafíos</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: 90px;
+    border-top: 1px solid var(--border);
+    background: linear-gradient(180deg, transparent, rgba(47, 107, 255, 0.04));
+  }
+
+  .footer__in {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 40px 0 28px;
+  }
+
+  .footer__brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .footer__logo {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, #00e0ff, #2f6bff 70%);
+    font-weight: 800;
+    font-size: 14px;
+    color: #fff;
+  }
+
+  .footer__name {
+    font-weight: 650;
+    font-size: 15px;
+  }
+
+  .footer__tag {
+    font-size: 12.5px;
+    color: var(--text-3);
+  }
+
+  .footer__links {
+    display: flex;
+    gap: 22px;
+    font-size: 13.5px;
+    color: var(--text-2);
+  }
+
+  .footer__links a:hover {
+    color: var(--text);
+  }
+
+  .footer__social {
+    display: flex;
+    gap: 10px;
+  }
+
+  .footer__social a {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .footer__social a:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+
+  .footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 18px 0 26px;
+    border-top: 1px solid var(--border);
+    font-size: 12.5px;
+    color: var(--text-3);
+  }
+
+  .footer__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--green);
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 10px var(--green);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    50% {
+      opacity: 0.4;
+    }
+  }
+</style>

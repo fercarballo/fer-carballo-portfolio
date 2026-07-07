@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="404 — Test fallido" description="Página no encontrada">
+  <main class="container nf">
+    <div class="nf__terminal card">
+      <div class="nf__bar">
+        <span style="--c: #ff5f57"></span>
+        <span style="--c: #febc2e"></span>
+        <span style="--c: #28c840"></span>
+      </div>
+      <pre class="nf__body">$ npx playwright test navigate-to-page
+
+  ✘ 1 failed
+    <span class="err">Error: expect(page).toHaveURL(...)</span>
+    <span class="dim">Expected: una página que exista</span>
+    <span class="dim">Received: 404 — Not Found</span>
+
+  <span class="ok">Sugerencia del QA:</span> volvé al inicio y reintentá el flujo.</pre>
+    </div>
+    <a class="btn btn--primary" href="/">Volver al inicio</a>
+  </main>
+</Base>
+
+<style>
+  .nf {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding-top: 40px;
+  }
+
+  .nf__terminal {
+    width: min(560px, 100%);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    background: #0c0c10;
+  }
+
+  .nf__bar {
+    display: flex;
+    gap: 7px;
+    padding: 12px 16px;
+    background: #17171c;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nf__bar span {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--c);
+  }
+
+  .nf__body {
+    margin: 0;
+    padding: 22px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.8;
+    color: #cfd3dc;
+    white-space: pre-wrap;
+  }
+
+  .nf__body .err {
+    color: #ff6b66;
+  }
+
+  .nf__body .dim {
+    color: #62626e;
+  }
+
+  .nf__body .ok {
+    color: var(--green);
+    font-weight: 600;
+  }
+</style>

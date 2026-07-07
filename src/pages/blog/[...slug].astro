@@ -1,0 +1,279 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { getCollection, render } from 'astro:content';
+import { profile } from '../../data/profile';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const date = post.data.pubDate.toLocaleDateString('es-AR', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const words = post.body?.split(/\s+/).length ?? 0;
+const minutes = Math.max(1, Math.round(words / 200));
+---
+
+<Base title={`${post.data.title} — Blog de Fernando Carballo`} description={post.data.description}>
+  <main class="container post">
+    <a class="post__back" href="/blog"><Icon name="arrow-left" size={15} /> Volver al blog</a>
+
+    <header class="post__head" data-reveal>
+      <span class="post__icon" style={`--hue: ${post.data.iconHue}`}>
+        <Icon name={post.data.icon} size={24} />
+      </span>
+      <h1>{post.data.title}</h1>
+      <p class="post__desc">{post.data.description}</p>
+      <div class="post__meta">
+        <span class="post__author">FC</span>
+        <span>{profile.name}</span>
+        <span>·</span>
+        <time datetime={post.data.pubDate.toISOString()}>{date}</time>
+        <span>·</span>
+        <span><Icon name="clock" size={13} /> {minutes} min de lectura</span>
+      </div>
+      <div class="post__tags">
+        {post.data.tags.map((t) => <span class="chip">{t}</span>)}
+      </div>
+    </header>
+
+    <article class="post__body card">
+      <Content />
+    </article>
+
+    <footer class="post__foot card" data-reveal>
+      <p>¿Te sirvió este artículo? Charlemos sobre QA y DevOps.</p>
+      <div class="post__foot-actions">
+        <a class="btn btn--primary" href={`mailto:${profile.email}`}><Icon name="mail" size={15} /> Contactame</a>
+        <a class="btn btn--ghost" href="/blog">Más artículos</a>
+      </div>
+    </footer>
+  </main>
+</Base>
+
+<style>
+  .post {
+    max-width: 760px;
+    padding-top: 48px;
+  }
+
+  .post__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: var(--text-2);
+    margin-bottom: 32px;
+    transition: color 0.2s;
+  }
+
+  .post__back:hover {
+    color: var(--text);
+  }
+
+  .post__head {
+    margin-bottom: 34px;
+  }
+
+  .post__icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    background: #fff;
+    color: hsl(var(--hue) 75% 45%);
+    margin-bottom: 22px;
+    box-shadow: 0 10px 26px -8px rgba(0, 0, 0, 0.55);
+  }
+
+  .post__head h1 {
+    font-size: clamp(28px, 4.5vw, 40px);
+    line-height: 1.15;
+  }
+
+  .post__desc {
+    margin-top: 14px;
+    font-size: 16px;
+    color: var(--text-2);
+    line-height: 1.65;
+  }
+
+  .post__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--text-3);
+  }
+
+  .post__meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .post__author {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(140deg, #1d2b53, #2f6bff);
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #dbe6ff;
+  }
+
+  .post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .post__body {
+    padding: clamp(24px, 4vw, 44px);
+    border-radius: var(--r-xl);
+    font-size: 15px;
+    line-height: 1.8;
+    color: #cfcfd6;
+  }
+
+  /* Prosa del markdown */
+  .post__body :global(h2) {
+    font-size: 22px;
+    margin: 36px 0 14px;
+    color: var(--text);
+  }
+
+  .post__body :global(h3) {
+    font-size: 17px;
+    margin: 28px 0 10px;
+    color: var(--text);
+  }
+
+  .post__body :global(p) {
+    margin: 0 0 18px;
+  }
+
+  .post__body :global(a) {
+    color: var(--accent-hover);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .post__body :global(ul),
+  .post__body :global(ol) {
+    margin: 0 0 18px;
+    padding-left: 22px;
+  }
+
+  .post__body :global(li) {
+    margin-bottom: 8px;
+  }
+
+  .post__body :global(li::marker) {
+    color: var(--accent-hover);
+  }
+
+  .post__body :global(code) {
+    font-family: var(--mono);
+    font-size: 0.88em;
+    background: var(--chip);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 7px;
+    color: #a5c8ff;
+  }
+
+  .post__body :global(pre) {
+    background: #0c0c10 !important;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    overflow-x: auto;
+    margin: 0 0 20px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .post__body :global(pre code) {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: inherit;
+  }
+
+  .post__body :global(blockquote) {
+    margin: 0 0 18px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--text-2);
+    font-style: italic;
+  }
+
+  .post__body :global(strong) {
+    color: var(--text);
+  }
+
+  .post__body :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  .post__body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 20px;
+    font-size: 13.5px;
+  }
+
+  .post__body :global(th),
+  .post__body :global(td) {
+    text-align: left;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+  }
+
+  .post__body :global(th) {
+    background: var(--chip);
+    color: var(--text);
+  }
+
+  .post__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 26px;
+    padding: 26px 30px;
+    border-radius: var(--r-xl);
+  }
+
+  .post__foot p {
+    font-size: 14.5px;
+    color: var(--text-2);
+  }
+
+  .post__foot-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+</style>
