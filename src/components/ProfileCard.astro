@@ -38,18 +38,24 @@ const hasPhoto = existsSync(new URL('../../public/avatar/fer.jpg', import.meta.u
   </p>
   <p class="pcard__loc"><Icon name="pin" size={13} /> {profile.location}</p>
 
-  <a class="pcard__cta" href={profile.cvUrl} download>
-    <span class="pcard__cta-icon"><Icon name="download" size={15} /></span>
-    <span>Descargar mi CV</span>
-    <Icon name="arrow-right" size={16} class="pcard__cta-arrow" />
-  </a>
+  <div class="pcard__links pcard__links--top">
+    <a href={profile.links.github} target="_blank" rel="noopener" aria-label="GitHub"><Icon name="github" size={16} /></a>
+    <a href={profile.links.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn"><Icon name="linkedin" size={16} /></a>
+    <a href={`mailto:${profile.email}`} aria-label="Email"><Icon name="mail" size={16} /></a>
+  </div>
 
   <section class="pcard__section">
     <h2>Sobre mí</h2>
     {profile.about.map((p) => <p class="pcard__about">{p}</p>)}
   </section>
 
-  <section class="pcard__section">
+  <a class="pcard__cta" href={profile.cvUrl} download>
+    <span class="pcard__cta-icon"><Icon name="download" size={15} /></span>
+    <span>Descargar mi CV</span>
+    <Icon name="arrow-right" size={16} class="pcard__cta-arrow" />
+  </a>
+
+  <section class="pcard__section pcard__section--last">
     <h2>Resultados</h2>
     <div class="pcard__stats">
       {
@@ -60,15 +66,6 @@ const hasPhoto = existsSync(new URL('../../public/avatar/fer.jpg', import.meta.u
           </div>
         ))
       }
-    </div>
-  </section>
-
-  <section class="pcard__section pcard__section--last">
-    <h2>Links</h2>
-    <div class="pcard__links">
-      <a href={profile.links.github} target="_blank" rel="noopener" aria-label="GitHub"><Icon name="github" size={16} /></a>
-      <a href={profile.links.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn"><Icon name="linkedin" size={16} /></a>
-      <a href={`mailto:${profile.email}`} aria-label="Email"><Icon name="mail" size={16} /></a>
     </div>
   </section>
 </aside>
@@ -171,7 +168,7 @@ const hasPhoto = existsSync(new URL('../../public/avatar/fer.jpg', import.meta.u
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 22px;
     padding: 11px 16px;
     border-radius: var(--r-full);
     border: 1px solid var(--border-strong);
@@ -260,6 +257,11 @@ const hasPhoto = existsSync(new URL('../../public/avatar/fer.jpg', import.meta.u
   .pcard__links {
     display: flex;
     gap: 10px;
+  }
+
+  /* Links de contacto justo debajo de la ubicación */
+  .pcard__links--top {
+    margin-top: 16px;
   }
 
   .pcard__links a {
