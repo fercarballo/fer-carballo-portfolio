@@ -1,10 +1,14 @@
 ---
-// Banner con shader WebGL: gradiente fluido cian→azul animado con ruido FBM.
-// Fallback: gradiente CSS animado. ~3 KB de JS, pausado fuera de viewport.
+// Banner ilustrado: parque + skyline con paneo lento (Ken Burns) en loop
+// imperceptible. Si existe `public/banner/hero-loop.mp4` (video IA del
+// personaje caminando), se usa automáticamente en su lugar, con la imagen
+// como poster/fallback. Grano sutil encima para textura premium.
+import { existsSync } from 'node:fs';
 import Icon from './Icon.astro';
 
+const hasLoopVideo = existsSync(new URL('../../public/banner/hero-loop.mp4', import.meta.url));
+
 // Stack principal como badges de logo, en vez de un listado de texto filtrable.
-// Cada uno con el color de marca de la herramienta para el hover.
 const stack = [
   { name: 'Cypress', icon: 'refresh', color: '#69D3A7' },
   { name: 'Playwright', icon: 'bot', color: '#2EAD33' },
@@ -17,8 +21,33 @@ const stack = [
 ---
 
 <div class="banner" data-reveal>
-  <canvas id="hero-gl" aria-hidden="true"></canvas>
+  {
+    hasLoopVideo ? (
+      <video
+        class="banner__art"
+        src="/banner/hero-loop.mp4"
+        poster="/banner/hero-park.jpg"
+        autoplay
+        muted
+        loop
+        playsinline
+        aria-hidden="true"
+      />
+    ) : (
+      <img
+        class="banner__art"
+        src="/banner/hero-park.jpg"
+        alt=""
+        width="1800"
+        height="1004"
+        fetchpriority="high"
+        decoding="async"
+        aria-hidden="true"
+      />
+    )
+  }
   <div class="banner__grain" aria-hidden="true"></div>
+  <div class="banner__scrim" aria-hidden="true"></div>
   <ul class="banner__stack" aria-label="Stack tecnológico principal">
     {
       stack.map((t) => (
@@ -34,39 +63,65 @@ const stack = [
 <style>
   .banner {
     position: relative;
-    height: clamp(150px, 22vw, 210px);
+    height: clamp(170px, 26vw, 260px);
     border-radius: var(--r-xl);
     overflow: hidden;
-    /* Fallback CSS si WebGL no está disponible */
-    background: linear-gradient(100deg, #00e5ff 0%, #0066ff 45%, #1a2cff 75%, #0b18a8 100%);
-    background-size: 200% 200%;
-    animation: gradient-drift 10s ease-in-out infinite alternate;
-    box-shadow: 0 30px 80px -30px rgba(30, 90, 255, 0.5);
+    /* Fallback mientras carga la ilustración: cielo → pasto */
+    background: linear-gradient(180deg, #7ec8f2 0%, #a9dcf5 45%, #8fc668 78%, #5fa844 100%);
+    box-shadow: 0 30px 80px -30px rgba(30, 90, 255, 0.4);
   }
 
-  @keyframes gradient-drift {
-    to {
-      background-position: 100% 50%;
-    }
-  }
-
-  #hero-gl {
+  /* ── Ilustración (o video IA) con paneo lento ── */
+  .banner__art {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
+    object-fit: cover;
+    /* Encuadre: deja al personaje y al skyline en cámara */
+    object-position: center 58%;
+    transform-origin: 50% 62%;
+    animation: art-drift 44s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+
+  /*
+   * Ken Burns en loop imperceptible: `alternate` hace que el paneo vaya y
+   * vuelva por el mismo camino con easing suave — no hay corte ni salto.
+   */
+  @keyframes art-drift {
+    from {
+      transform: scale(1.07) translateX(-1.1%);
+    }
+    to {
+      transform: scale(1.12) translateX(1.1%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .banner__art {
+      animation: none;
+      transform: scale(1.05);
+    }
   }
 
   /* Grano sutil para textura premium */
   .banner__grain {
     position: absolute;
     inset: 0;
-    opacity: 0.35;
+    opacity: 0.3;
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
   }
 
-  /* Badges de stack tecnológico: logos con nombre accesible, no una lista filtrable */
+  /* Sombra suave abajo para que los badges y el borde de la ProfileCard lean bien */
+  .banner__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(6, 10, 25, 0.08) 0%, transparent 30%, transparent 62%, rgba(6, 10, 25, 0.38) 100%);
+  }
+
+  /* Badges de stack tecnológico */
   .banner__stack {
     position: absolute;
     right: clamp(12px, 2.5vw, 22px);
@@ -102,7 +157,7 @@ const stack = [
     transform: translateY(-3px) scale(1.08);
   }
 
-  /* Tooltip propio con el nombre de la herramienta (en vez del title nativo) */
+  /* Tooltip propio con el nombre de la herramienta */
   .banner__tooltip {
     position: absolute;
     bottom: calc(100% + 9px);
@@ -140,154 +195,3 @@ const stack = [
     transform: translateX(-50%) translateY(0);
   }
 </style>
-
-<script>
-  // Shader de gradiente fluido — WebGL1 para máxima compatibilidad
-  const VERT = `
-    attribute vec2 p;
-    void main() { gl_Position = vec4(p, 0.0, 1.0); }
-  `;
-
-  const FRAG = `
-    precision mediump float;
-    uniform vec2 r;
-    uniform float t;
-
-    // Ruido simplex-ish barato
-    vec2 hash(vec2 p) {
-      p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
-      return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
-    }
-
-    float noise(vec2 p) {
-      vec2 i = floor(p);
-      vec2 f = fract(p);
-      vec2 u = f * f * (3.0 - 2.0 * f);
-      return mix(
-        mix(dot(hash(i), f), dot(hash(i + vec2(1.0, 0.0)), f - vec2(1.0, 0.0)), u.x),
-        mix(dot(hash(i + vec2(0.0, 1.0)), f - vec2(0.0, 1.0)), dot(hash(i + vec2(1.0, 1.0)), f - vec2(1.0, 1.0)), u.x),
-        u.y
-      );
-    }
-
-    float fbm(vec2 p) {
-      float v = 0.0;
-      float a = 0.55;
-      for (int i = 0; i < 4; i++) {
-        v += a * noise(p);
-        p = p * 2.1 + vec2(3.7, 1.3);
-        a *= 0.5;
-      }
-      return v;
-    }
-
-    void main() {
-      vec2 uv = gl_FragCoord.xy / r;
-      vec2 q = uv * vec2(r.x / r.y, 1.0);
-
-      // Gradiente dominado por la posición horizontal, con ondulación suave de ruido
-      float n1 = fbm(q * 0.9 + vec2(t * 0.05, -t * 0.03));
-      float n2 = fbm(q * 1.6 - vec2(t * 0.04, t * 0.02) + n1 * 0.5);
-      float blend = smoothstep(-0.15, 1.05, uv.x * 1.2 + n1 * 0.28 + n2 * 0.18 - 0.22);
-
-      vec3 cyan   = vec3(0.05, 0.92, 1.0);
-      vec3 blue   = vec3(0.07, 0.38, 1.0);
-      vec3 deep   = vec3(0.03, 0.10, 0.72);
-
-      vec3 col = mix(cyan, blue, blend);
-      col = mix(col, deep, smoothstep(0.78, 1.45, blend + n2 * 0.15));
-
-      // brillo superior sutil
-      col += (1.0 - uv.y) * 0.05;
-
-      gl_FragColor = vec4(col, 1.0);
-    }
-  `;
-
-  function initHeroGL() {
-    const canvas = document.getElementById('hero-gl') as HTMLCanvasElement | null;
-    if (!canvas || canvas.dataset.init) return;
-    canvas.dataset.init = '1';
-
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      canvas.remove(); // queda el gradiente CSS estático
-      return;
-    }
-
-    const gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' });
-    if (!gl) {
-      canvas.remove();
-      return;
-    }
-
-    function compile(type: number, src: string) {
-      const s = gl!.createShader(type)!;
-      gl!.shaderSource(s, src);
-      gl!.compileShader(s);
-      return s;
-    }
-
-    const prog = gl.createProgram()!;
-    gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT));
-    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-      canvas.remove();
-      return;
-    }
-    gl.useProgram(prog);
-
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    const loc = gl.getAttribLocation(prog, 'p');
-    gl.enableVertexAttribArray(loc);
-    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-
-    const uRes = gl.getUniformLocation(prog, 'r');
-    const uTime = gl.getUniformLocation(prog, 't');
-
-    let raf = 0;
-    let running = false;
-    const start = performance.now();
-
-    function resize() {
-      const dpr = Math.min(devicePixelRatio || 1, 1.5);
-      const { clientWidth: w, clientHeight: h } = canvas!;
-      if (canvas!.width !== w * dpr || canvas!.height !== h * dpr) {
-        canvas!.width = w * dpr;
-        canvas!.height = h * dpr;
-        gl!.viewport(0, 0, canvas!.width, canvas!.height);
-      }
-    }
-
-    function frame(now: number) {
-      resize();
-      gl!.uniform2f(uRes, canvas!.width, canvas!.height);
-      gl!.uniform1f(uTime, (now - start) / 1000);
-      gl!.drawArrays(gl!.TRIANGLES, 0, 3);
-      raf = requestAnimationFrame(frame);
-    }
-
-    // Solo animar cuando el banner está en viewport
-    const io = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !running) {
-        running = true;
-        raf = requestAnimationFrame(frame);
-      } else if (!entry.isIntersecting && running) {
-        running = false;
-        cancelAnimationFrame(raf);
-      }
-    });
-    io.observe(canvas);
-
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        cancelAnimationFrame(raf);
-        running = false;
-      }
-    });
-  }
-
-  document.addEventListener('astro:page-load', initHeroGL);
-</script>
