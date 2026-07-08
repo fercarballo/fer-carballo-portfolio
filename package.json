@@ -2,7 +2,7 @@
   "name": "fer-carballo-portfolio",
   "type": "module",
   "version": "1.0.0",
-  "description": "Portfolio de Fernando Carballo — QA Automation · SDET · DevOps · Dev",
+  "description": "Portfolio de Fernando Carballo — QA Engineer · QA Manual & Automation · SDET",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

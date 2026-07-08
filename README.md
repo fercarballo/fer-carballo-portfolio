@@ -1,6 +1,6 @@
 # Portfolio — Fernando Carballo
 
-Portfolio personal de QA Automation · SDET · DevOps, construido con [Astro 5](https://astro.build). Diseño dark tipo dashboard con banner de shader WebGL, partículas, tilt 3D, paleta de comandos ⌘K y blog integrado.
+Portfolio personal de QA Engineer · QA Manual & Automation · SDET, construido con [Astro 5](https://astro.build). Diseño dark tipo dashboard con banner de shader WebGL, partículas, tilt 3D, paleta de comandos ⌘K y blog integrado.
 
 ## Comandos
 
@@ -42,7 +42,7 @@ Aparece automáticamente en `/blog`, en la home, en la paleta ⌘K y en el RSS.
 
 ## Pendientes (TODOs)
 
-- [ ] Verificar el usuario de GitHub en `src/data/profile.ts` (hoy: `fercarballodev`)
+- [ ] Verificar el usuario de GitHub en `src/data/profile.ts` (verificado: `fercarballo`)
 - [ ] Agregar links reales a repos en cada proyecto (`repo:` en `src/data/profile.ts`)
 - [ ] Cambiar `site` en `astro.config.mjs` cuando tengas dominio propio
 

@@ -30,6 +30,20 @@ import { profile } from '../data/profile';
     {profile.about.map((p) => <p class="pcard__about">{p}</p>)}
   </section>
 
+  <section class="pcard__section">
+    <h2>Resultados</h2>
+    <div class="pcard__stats">
+      {
+        profile.highlights.map((h) => (
+          <div class="pcard__stat">
+            <strong>{h.value}</strong>
+            <span>{h.label}</span>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
   <section class="pcard__section pcard__section--last">
     <h2>Links</h2>
     <div class="pcard__links">
@@ -185,6 +199,36 @@ import { profile } from '../data/profile';
 
   .pcard__about + .pcard__about {
     margin-top: 10px;
+  }
+
+  .pcard__stats {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pcard__stat {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: var(--r-lg);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+  }
+
+  .pcard__stat strong {
+    font-size: 16px;
+    font-weight: 750;
+    color: var(--accent-hover);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pcard__stat span {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-2);
   }
 
   .pcard__links {

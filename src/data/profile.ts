@@ -1,25 +1,32 @@
 /**
  * ─────────────────────────────────────────────────────────────
  *  FUENTE ÚNICA DE DATOS DEL PORTFOLIO
+ *  Sincronizado con LinkedIn (linkedin.com/in/fercarballo).
  *  Editá este archivo para actualizar todo el sitio.
  * ─────────────────────────────────────────────────────────────
  */
 
 export const profile = {
   name: 'Fernando Carballo',
-  headline: 'QA Automation Engineer · SDET',
+  headline: 'QA Engineer · QA Manual & Automation · SDET',
   // Roles que rotan en el hero
-  roles: ['QA Manual', 'QA Automation', 'SDET', 'Developer'],
-  location: 'CABA, Buenos Aires · Argentina',
+  roles: ['QA Manual', 'QA Automation', 'SDET', 'API Testing'],
+  location: 'Buenos Aires, Argentina',
   email: 'fercarballodev@gmail.com',
   cvUrl: '/cv/Fernando-Carballo-CV.pdf',
   links: {
     linkedin: 'https://linkedin.com/in/fercarballo',
-    github: 'https://github.com/fercarballodev', // TODO: verificá tu usuario real de GitHub
+    github: 'https://github.com/fercarballo',
   },
   about: [
-    'QA Engineer con más de 4 años de trayectoria en tecnología y telecomunicaciones, con un recorrido integral que abarca atención al cliente, desarrollo fullstack, aseguramiento de calidad y operación de plataformas cloud-native.',
-    'Combino una mirada centrada en el usuario con sólido criterio técnico para diseñar pruebas, automatizar flujos críticos y operar entornos de Kubernetes con pipelines CI/CD. Visión end-to-end del ciclo de vida del software.',
+    'Un bug encontrado en producción cuesta hasta 10 veces más que uno detectado a tiempo. Mi trabajo es que nunca llegue tan lejos.',
+    'QA Engineer con más de 4 años en tecnología y telecomunicaciones. Aseguro la calidad de las plataformas digitales de Personal (Telecom Argentina): diseño y ejecuto pruebas funcionales, de regresión, integración, smoke y UAT, y automatizo flujos críticos y APIs con Cypress, Playwright y Postman.',
+    'Mi diferencial: vengo del desarrollo (JavaScript, React, Vue) y operé plataformas OpenShift/Kubernetes con CI/CD, así que pruebo entendiendo cómo se construye y despliega el producto — no solo la interfaz.',
+  ],
+  highlights: [
+    { value: '−30%', label: 'tiempos de gestión y resolución de defectos (Jira + Xray)' },
+    { value: '🏆 2025', label: 'Reconocimiento a la Práctica de Calidad · Telecom' },
+    { value: '4+', label: 'años en tecnología y telecomunicaciones' },
   ],
 };
 
@@ -39,66 +46,67 @@ export type Experience = {
 export const experience: Experience[] = [
   {
     role: 'QA Engineer',
-    company: 'Personal Argentina',
+    company: 'Personal (Telecom Argentina)',
     badge: 'PE',
     badgeHue: 217,
-    type: 'Full Time',
+    type: 'Full Time · Híbrido',
     start: 'Jul 2023',
     end: 'Actualidad',
     duration: '3 años',
     bullets: [
-      'Diseñé, ejecuté y documenté casos de prueba funcionales, de regresión e integración previos al despliegue.',
-      'Validé flujos críticos y APIs REST con Postman, verificando contratos, respuestas, códigos de estado y evidencia de resultados.',
-      'Gestioné defectos con Jira y Xray, asegurando trazabilidad requerimiento-prueba-evidencia-resultado.',
-      'Apliqué automatización para regresiones funcionales sobre flujos críticos, utilizando Cypress, Playwright y entornos JavaScript.',
-      'Operé y di soporte a plataformas OpenShift/Kubernetes para aplicaciones contenerizadas y microservicios.',
-      'Desarrollé y mantuve pipelines CI/CD en GitLab para build, validación, imágenes y despliegue en OpenShift.',
-      'Implementé GitOps con ArgoCD y analicé logs e incidentes con prácticas DevSecOps.',
+      'Tribu Canales Digitales y Contact Center: aseguramiento de calidad de extremo a extremo de las plataformas digitales y de contacto.',
+      'Diseñé y ejecuté casos de prueba funcionales, de regresión, integración, smoke y UAT.',
+      'Reduje un 30% los tiempos de gestión y resolución de defectos implementando mejoras en Jira y Xray, aumentando la transparencia del seguimiento de incidentes.',
+      'Automaticé regresiones de flujos críticos y validación de APIs REST con Cypress, Playwright y Postman (JavaScript), liberando tiempo del equipo para pruebas exploratorias.',
+      'Analicé especificaciones funcionales y técnicas asegurando cobertura completa de testing y reduciendo el riesgo de retrabajo.',
+      'Colaboré en equipos Scrum con desarrolladores, analistas y product owners, alineando objetivos de calidad con el negocio.',
+      'Reconocimiento interno a la Práctica de Calidad (Telecom, 2025). 🏆',
     ],
-    tools: ['Cypress', 'Playwright', 'Postman', 'Jira', 'Xray', 'OpenShift', 'Kubernetes', 'GitLab CI/CD', 'ArgoCD'],
+    tools: ['Cypress', 'Playwright', 'Postman', 'JavaScript', 'SQL', 'Jira', 'Xray', 'Confluence', 'GitLab CI/CD'],
   },
   {
-    role: 'Software Developer FullStack',
+    role: 'Software Developer',
     company: 'Corporación Cápsula',
     badge: 'CC',
     badgeHue: 265,
-    type: 'Full Time',
+    type: 'Full Time · Híbrido',
     start: 'Sep 2022',
     end: 'Jul 2023',
     duration: '11 meses',
     bullets: [
-      'Desarrollé interfaces frontend responsivas con JavaScript, React.js y Vue.js integradas a servicios backend.',
+      'Desarrollé interfaces frontend responsivas con JavaScript, React.js y Vue.js integradas a servicios backend mediante APIs REST.',
       'Modelé y consulté bases de datos MySQL para la persistencia de aplicaciones web.',
-      'Trabajé con Git, CI/CD en Jenkins y entornos Docker para optimizar integración y despliegue.',
+      'Trabajé con Git, CI/CD en Jenkins y contenedores Docker en entornos de desarrollo y pruebas.',
+      'Esta experiencia como developer es la base de mi perfil SDET: escribo automatización como código mantenible.',
     ],
-    tools: ['React.js', 'Vue.js', 'MySQL', 'Jenkins', 'Docker'],
+    tools: ['React.js', 'Vue.js', 'JavaScript', 'MySQL', 'Jenkins', 'Docker'],
   },
   {
     role: 'Asesor de Atención al Cliente',
     company: 'Telecentro',
     badge: 'T',
     badgeHue: 190,
-    type: 'Full Time',
+    type: 'Full Time · Presencial',
     start: 'Sep 2021',
     end: 'Ago 2022',
     duration: '1 año',
     bullets: [
-      'Atendí consultas, reclamos y gestiones de clientes, asegurando resolución y satisfacción.',
-      'Manejé alto volumen de llamadas con registro en sistemas de gestión y comunicación clara.',
+      'Resolución de consultas, reclamos y gestiones con alto volumen de llamadas y registro en sistemas de gestión.',
+      'Base de mis habilidades actuales de QA: escucha activa, análisis del problema, documentación precisa y seguimiento hasta el cierre.',
     ],
   },
   {
     role: 'Asesor de Atención al Cliente',
-    company: 'Konecta (Allus BPO) · Telefónica/Personal',
+    company: 'Konecta (ex Allus BPO) · Telefónica/Personal',
     badge: 'K',
     badgeHue: 330,
-    type: 'Full Time',
+    type: 'Full Time · Presencial',
     start: 'Sep 2019',
     end: 'Ago 2021',
     duration: '2 años',
     bullets: [
-      'Brindé atención telefónica para la cuenta Telefónica/Personal, priorizando calidad y satisfacción del cliente.',
-      'Resolví consultas y reclamos cumpliendo objetivos de servicio (SLA) y registrando gestiones en sistema.',
+      'Atención telefónica para la cuenta Telefónica/Personal cumpliendo objetivos de servicio (SLA), con registro de gestiones en sistema.',
+      'Primer contacto con el mundo telco, donde desarrollé la orientación al usuario que hoy aplico como QA.',
     ],
   },
 ];
@@ -114,7 +122,7 @@ export type Project = {
   details: string[];
   tags: string[];
   level: string;
-  repo?: string; // TODO: agregá los links reales a tus repos
+  repo?: string;
 };
 
 export const projects: Project[] = [
@@ -173,60 +181,6 @@ export const projects: Project[] = [
     level: 'API',
   },
   {
-    id: 'gitlab-pipelines',
-    icon: 'infinity',
-    iconHue: 12,
-    title: 'Pipelines CI/CD en GitLab',
-    org: 'DevOps',
-    category: 'devops',
-    summary:
-      'Diseño y mantenimiento de pipelines para build, validación, construcción de imágenes y despliegue en OpenShift, con stages de calidad como quality gates.',
-    details: [
-      'Stages de build, test, análisis y deploy con jobs paralelos y cache de dependencias.',
-      'Construcción de imágenes de contenedor y push a registry con tags versionados.',
-      'Quality gates: la suite automatizada y el linting bloquean despliegues con fallas.',
-      'Despliegue continuo a entornos OpenShift con rollback ante incidentes.',
-    ],
-    tags: ['GitLab CI', 'Docker', 'OpenShift'],
-    level: 'CI/CD',
-  },
-  {
-    id: 'argocd-gitops',
-    icon: 'ship',
-    iconHue: 200,
-    title: 'GitOps con ArgoCD',
-    org: 'DevOps · Cloud-Native',
-    category: 'devops',
-    summary:
-      'Implementación de GitOps con ArgoCD sobre Kubernetes/OpenShift: el estado deseado vive en Git, sincronización declarativa y análisis de logs e incidentes con prácticas DevSecOps.',
-    details: [
-      'Aplicaciones ArgoCD declarativas: el repositorio Git como única fuente de verdad.',
-      'Sincronización automática con self-healing y detección de drift de configuración.',
-      'Gestión de deployments, services, routes, secrets, configmaps, namespaces y PVCs.',
-      'Análisis de logs e incidentes en contenedores con enfoque DevSecOps.',
-    ],
-    tags: ['ArgoCD', 'Kubernetes', 'GitOps'],
-    level: 'Cloud',
-  },
-  {
-    id: 'qa-dashboard',
-    icon: 'chart',
-    iconHue: 265,
-    title: 'Dashboard de Métricas QA',
-    org: 'Development',
-    category: 'dev',
-    summary:
-      'Aplicación web en React para visualizar métricas de calidad: cobertura de casos, defectos por severidad, tendencia de regresiones y salud de pipelines, consumiendo APIs REST.',
-    details: [
-      'Frontend en React con componentes reutilizables y estado derivado de APIs REST.',
-      'Visualización de KPIs de calidad: densidad de defectos, pass rate y flakiness.',
-      'Persistencia en MySQL con consultas optimizadas para series temporales.',
-      'Deploy contenerizado con Docker detrás de un pipeline CI/CD.',
-    ],
-    tags: ['React', 'REST APIs', 'MySQL'],
-    level: 'Full Stack',
-  },
-  {
     id: 'jira-xray',
     icon: 'shield',
     iconHue: 145,
@@ -234,15 +188,51 @@ export const projects: Project[] = [
     org: 'QA Manual',
     category: 'qa',
     summary:
-      'Diseño de planes de prueba, ejecución documentada y gestión del ciclo de vida del defecto con trazabilidad completa requerimiento-prueba-evidencia-resultado.',
+      'Diseño de planes de prueba, ejecución documentada y gestión del ciclo de vida del defecto con trazabilidad completa requerimiento-prueba-evidencia-resultado. Resultado: −30% en tiempos de gestión.',
     details: [
       'Planes y sets de prueba en Xray vinculados a historias de usuario y requerimientos.',
       'Criterios de aceptación y alcance documentados en Confluence junto a desarrollo y producto.',
       'Ciclo de vida del defecto: detección, severidad/prioridad, seguimiento y verificación.',
-      'Métricas de ejecución por ciclo para decisiones de release go/no-go.',
+      'Mejoras de proceso que redujeron un 30% los tiempos de gestión y resolución de defectos.',
     ],
     tags: ['Jira', 'Xray', 'Confluence'],
     level: 'Manual',
+  },
+  {
+    id: 'sql-data-validation',
+    icon: 'chart',
+    iconHue: 265,
+    title: 'Validación de Datos con SQL',
+    org: 'QA · Data',
+    category: 'qa',
+    summary:
+      'Validación de consistencia de datos entre UI, APIs y base de datos con consultas SQL: reconciliación de registros, verificación de estados y soporte a pruebas de integración.',
+    details: [
+      'Consultas SQL para validar que la UI y las APIs reflejen el estado real de los datos.',
+      'Reconciliación de registros entre sistemas con JOINs y agregaciones.',
+      'Detección temprana de inconsistencias de datos antes del despliegue.',
+      'Evidencia de resultados adjunta al ciclo de prueba en Xray.',
+    ],
+    tags: ['SQL', 'MySQL', 'Data QA'],
+    level: 'Integración',
+  },
+  {
+    id: 'gitlab-pipelines',
+    icon: 'infinity',
+    iconHue: 12,
+    title: 'Quality Gates en CI/CD',
+    org: 'QA × DevOps',
+    category: 'devops',
+    summary:
+      'Integración de suites automatizadas como quality gates en pipelines GitLab CI: la calidad bloquea despliegues con fallas. Experiencia operando OpenShift/Kubernetes y GitOps con ArgoCD.',
+    details: [
+      'Suites de Cypress/Playwright ejecutándose en cada merge request.',
+      'Stages de build, test y deploy con jobs paralelos y cache de dependencias.',
+      'Quality gates: la automatización y el linting bloquean despliegues con fallas.',
+      'Contexto DevOps: OpenShift/Kubernetes, ArgoCD y prácticas GitOps.',
+    ],
+    tags: ['GitLab CI', 'Docker', 'OpenShift'],
+    level: 'CI/CD',
   },
   {
     id: 'frontend-capsula',
@@ -264,27 +254,159 @@ export const projects: Project[] = [
   },
 ];
 
-export type Certification = { title: string; issuer: string; year: string };
+export type Certification = {
+  title: string;
+  issuer: string;
+  year: string; // año o mes/año de expedición
+  thumb?: string; // miniatura PNG generada desde el PDF oficial
+  pdf?: string; // documento oficial
+  tag?: 'QA' | 'IA' | 'Seguridad' | 'Dev';
+};
 
+/** Certificaciones con documento oficial verificable (galería) */
 export const certifications: Certification[] = [
-  { title: 'QA Fase II — Programación (Java y POO), Estrategias de Automatización, Técnicas de Caja Blanca', issuer: 'Tech Station Personal Argentina', year: '2024–2025' },
-  { title: 'Bootcamp QA Manual', issuer: 'Tech Station Personal Argentina', year: '2023' },
-  { title: 'Bootcamp Front End Developer', issuer: 'EducaciónIT + Telecom', year: '2022' },
-  { title: 'Especialización en React JS', issuer: 'Informatorio Chaco', year: '2022' },
-  { title: 'Experiencia de Usuario (UX) Avanzado', issuer: 'LinkedIn', year: '2022' },
-  { title: 'JavaScript Algorithms and Data Structures', issuer: 'freeCodeCamp', year: '2021' },
-  { title: 'Excel y Power BI: Análisis y Visualización de Datos', issuer: 'Udemy', year: '2021' },
+  {
+    title: 'QA Fase II · Programación para Testers II (Java y POO)',
+    issuer: 'Tech Station · Telecom/Personal',
+    year: 'Dic 2025',
+    thumb: '/certs/thumbs/qa2-programacion-testers-2-java.png',
+    pdf: '/certs/qa2-programacion-testers-2-java.pdf',
+    tag: 'QA',
+  },
+  {
+    title: 'QA Fase II · Estrategias de Automatización',
+    issuer: 'Tech Station · Telecom/Personal',
+    year: 'Sep 2025',
+    thumb: '/certs/thumbs/qa2-estrategias-automatizacion.png',
+    pdf: '/certs/qa2-estrategias-automatizacion.pdf',
+    tag: 'QA',
+  },
+  {
+    title: 'Gestión de Riesgos con ejemplos de Software Testing',
+    issuer: 'Mi Aprendizaje · Personal',
+    year: 'May 2025',
+    thumb: '/certs/thumbs/gestion-riesgos-testing.png',
+    pdf: '/certs/gestion-riesgos-testing.pdf',
+    tag: 'QA',
+  },
+  {
+    title: 'API Testing con Postman',
+    issuer: 'Mi Aprendizaje · Personal',
+    year: 'May 2025',
+    thumb: '/certs/thumbs/api-testing-postman.png',
+    pdf: '/certs/api-testing-postman.pdf',
+    tag: 'QA',
+  },
+  {
+    title: 'IA Responsable: Ética & Seguridad',
+    issuer: 'Mi Aprendizaje · Personal',
+    year: 'Abr 2025',
+    thumb: '/certs/thumbs/ia-responsable.png',
+    pdf: '/certs/ia-responsable.pdf',
+    tag: 'IA',
+  },
+  {
+    title: 'Dominando el Arte del Prompting',
+    issuer: 'Mi Aprendizaje · Personal',
+    year: 'Abr 2025',
+    thumb: '/certs/thumbs/prompting.png',
+    pdf: '/certs/prompting.pdf',
+    tag: 'IA',
+  },
+  {
+    title: 'Fundamentos de Inteligencia Artificial',
+    issuer: 'Digital Station · Telecom',
+    year: 'Abr 2025',
+    thumb: '/certs/thumbs/fundamentos-ia.png',
+    pdf: '/certs/fundamentos-ia.pdf',
+    tag: 'IA',
+  },
+  {
+    title: 'Conociendo sobre IA',
+    issuer: 'Digital Station · Telecom',
+    year: 'Abr 2025',
+    thumb: '/certs/thumbs/conociendo-ia.png',
+    pdf: '/certs/conociendo-ia.pdf',
+    tag: 'IA',
+  },
+  {
+    title: 'Introducción a la Ciberseguridad',
+    issuer: 'Digital Station · Telecom',
+    year: 'Dic 2024',
+    thumb: '/certs/thumbs/intro-ciberseguridad.png',
+    pdf: '/certs/intro-ciberseguridad.pdf',
+    tag: 'Seguridad',
+  },
+  {
+    title: 'QA Fase II · Técnicas de Caja Blanca',
+    issuer: 'Tech Station · Telecom/Personal',
+    year: 'Dic 2024',
+    thumb: '/certs/thumbs/qa2-caja-blanca.png',
+    pdf: '/certs/qa2-caja-blanca.pdf',
+    tag: 'QA',
+  },
+  {
+    title: 'QA Fase II · Programación para Testers',
+    issuer: 'Tech Station · Telecom/Personal',
+    year: 'Oct 2024',
+    thumb: '/certs/thumbs/qa2-programacion-testers.png',
+    pdf: '/certs/qa2-programacion-testers.pdf',
+    tag: 'QA',
+  },
+  {
+    title: 'Bootcamp QA Manual',
+    issuer: 'Tech Station · Telecom',
+    year: 'Sep 2023',
+    thumb: '/certs/thumbs/bootcamp-qa-manual.png',
+    pdf: '/certs/bootcamp-qa-manual.pdf',
+    tag: 'QA',
+  },
 ];
 
-export const education = {
-  degree: 'Analista de Sistemas',
-  school: 'Escuela Da Vinci',
-  status: 'En curso',
+/** Otras certificaciones (sin documento en el sitio) */
+export const moreCertifications: Certification[] = [
+  { title: 'Especialización en React JS', issuer: 'Informatorio Chaco', year: '2022', tag: 'Dev' },
+  { title: 'Experiencia de Usuario (UX) Avanzado', issuer: 'LinkedIn Learning', year: '2022', tag: 'Dev' },
+  { title: 'JavaScript Algorithms and Data Structures', issuer: 'freeCodeCamp', year: '2021', tag: 'Dev' },
+  { title: 'SQL: Creación de Bases de Datos', issuer: 'Udemy', year: '2021', tag: 'Dev' },
+  { title: 'Scrum Fundamentals Certified', issuer: 'VMEdu', year: '2021', tag: 'QA' },
+  { title: 'Excel y Power BI: Análisis y Visualización de Datos', issuer: 'Udemy', year: '2021', tag: 'Dev' },
+];
+
+export type Education = {
+  degree: string;
+  school: string;
+  period: string;
+  status?: string;
 };
+
+export const education: Education[] = [
+  {
+    degree: 'Analista de Sistemas',
+    school: 'Escuela Da Vinci',
+    period: '2025 – 2028',
+    status: 'En curso',
+  },
+  {
+    degree: 'Tecnicatura Superior en Desarrollo Web y Aplicaciones Digitales',
+    school: 'ISPC · Instituto Superior Politécnico Córdoba',
+    period: '2022 – 2024',
+  },
+  {
+    degree: 'Bootcamp Front End Developer (React + Redux)',
+    school: 'EducacionIT',
+    period: '2022',
+  },
+  {
+    degree: 'Tecnicatura Superior en Programación',
+    school: 'Teclab Instituto Técnico Superior',
+    period: '2021',
+  },
+];
 
 export const tabs = [
   { id: 'all', label: 'Todo' },
   { id: 'qa', label: 'QA & Testing' },
-  { id: 'devops', label: 'DevOps' },
+  { id: 'devops', label: 'CI/CD' },
   { id: 'dev', label: 'Desarrollo' },
 ] as const;
