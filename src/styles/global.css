@@ -2,26 +2,36 @@
    Design System — tokens calcados del mockup
    ───────────────────────────────────────────── */
 :root {
-  /* Superficies */
-  --bg: #08080a;
-  --panel: #101013;
-  --card: #17171b;
-  --card-hover: #1c1c21;
-  --chip: #222227;
-  --border: rgba(255, 255, 255, 0.07);
-  --border-strong: rgba(255, 255, 255, 0.13);
+  /*
+   * Paleta "Parque": derivada de la ilustración del banner —
+   * verdes de follaje, celeste de cielo y coral de amapolas,
+   * sobre superficies oscuras con tinte bosque.
+   * Contraste verificado: texto principal ~16:1 (AAA),
+   * botón primario blanco/verde 5.0:1 (AA), links verdes ~8:1 (AAA).
+   */
+
+  /* Superficies (bosque nocturno, tinte verde sutil) */
+  --bg: #0a0e0b;
+  --panel: #101511;
+  --card: #151b16;
+  --card-hover: #1a221b;
+  --chip: #202a22;
+  --border: rgba(210, 245, 220, 0.08);
+  --border-strong: rgba(210, 245, 220, 0.15);
 
   /* Texto */
-  --text: #f4f4f5;
-  --text-2: #a7a7b0;
-  --text-3: #71717c;
+  --text: #f2f6f0;
+  --text-2: #a9b4aa;
+  --text-3: #7a857b;
 
   /* Acentos */
-  --accent: #2f6bff;
-  --accent-hover: #4d80ff;
-  --accent-soft: rgba(47, 107, 255, 0.14);
-  --cyan: #00e0ff;
-  --green: #3fd68c;
+  --accent: #15803d; /* verde parque — fondos de botón/ícono con texto blanco (5.0:1) */
+  --accent-bright: #1c9e4e; /* hover de superficies verdes */
+  --accent-hover: #46d17e; /* verde claro — links, kickers y texto de acento (8:1 sobre card) */
+  --accent-soft: rgba(70, 209, 126, 0.13);
+  --cyan: #5ec6ff; /* celeste cielo — acento secundario */
+  --green: #46d17e;
+  --poppy: #ff7a59; /* coral amapola — highlight puntual */
 
   /* Radios */
   --r-xl: 26px;
@@ -61,7 +71,7 @@ body {
 }
 
 ::selection {
-  background: rgba(47, 107, 255, 0.4);
+  background: rgba(70, 209, 126, 0.35);
   color: #fff;
 }
 
@@ -152,11 +162,11 @@ p {
 .btn--primary {
   background: var(--accent);
   color: #fff;
-  box-shadow: 0 8px 24px -10px rgba(47, 107, 255, 0.7);
+  box-shadow: 0 8px 24px -10px rgba(34, 160, 90, 0.7);
 }
 
 .btn--primary:hover {
-  background: var(--accent-hover);
+  background: var(--accent-bright);
 }
 
 .btn--light {
@@ -239,7 +249,7 @@ p {
   transition: opacity 0.3s ease;
   background: radial-gradient(
     420px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(72, 129, 255, 0.12),
+    rgba(96, 220, 145, 0.11),
     transparent 65%
   );
 }
@@ -258,7 +268,7 @@ p {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #26262c;
+  background: #242c25;
   border-radius: 8px;
   border: 2px solid var(--bg);
 }
