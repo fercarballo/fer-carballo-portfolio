@@ -56,6 +56,10 @@
 html {
   scroll-behavior: smooth;
   color-scheme: dark;
+  /* Reserva SIEMPRE el ancho de la barra de scroll, tenga o no scroll la
+     página. Evita que el contenido centrado se corra unos px al pasar de
+     una página larga (con scrollbar) a una corta (sin scrollbar). */
+  scrollbar-gutter: stable;
 }
 
 body {
