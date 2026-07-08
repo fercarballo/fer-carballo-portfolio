@@ -1,6 +1,6 @@
 ---
 import Icon from './Icon.astro';
-import { certifications, moreCertifications, education } from '../data/profile';
+import { certifications, moreCertifications } from '../data/profile';
 ---
 
 <div id="certificaciones" class="certs container">
@@ -69,23 +69,6 @@ import { certifications, moreCertifications, education } from '../data/profile';
     }
   </div>
 
-  <div class="certs__edu-grid">
-    {
-      education.map((edu, i) => (
-        <div class="certs__edu card" data-tilt data-reveal style={`--d: ${i * 0.05}s`}>
-          <span class="certs__edu-icon"><Icon name="grad" size={20} /></span>
-          <div>
-            <h3>{edu.degree}</h3>
-            <p>{edu.school}</p>
-            <span class="chip chip--outline">
-              {edu.period}
-              {edu.status ? ` · ${edu.status}` : ''}
-            </span>
-          </div>
-        </div>
-      ))
-    }
-  </div>
 </div>
 
 <script>
@@ -289,47 +272,6 @@ import { certifications, moreCertifications, education } from '../data/profile';
   .certs__more-chip em {
     font-style: normal;
     color: var(--text-3);
-  }
-
-  /* ── Educación ────────────────────────────── */
-  .certs__edu-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 16px;
-    margin-top: 34px;
-  }
-
-  .certs__edu {
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-    padding: 22px;
-    border-radius: var(--r-lg);
-    background: linear-gradient(140deg, rgba(34, 160, 90, 0.12), var(--card) 55%);
-    border-color: rgba(70, 209, 126, 0.25);
-  }
-
-  .certs__edu-icon {
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-    width: 44px;
-    height: 44px;
-    border-radius: 13px;
-    background: var(--accent);
-    color: #fff;
-  }
-
-  .certs__edu h3 {
-    font-size: 14px;
-    font-weight: 650;
-    line-height: 1.4;
-  }
-
-  .certs__edu p {
-    margin: 3px 0 10px;
-    font-size: 13px;
-    color: var(--text-2);
   }
 
   @media (max-width: 640px) {
