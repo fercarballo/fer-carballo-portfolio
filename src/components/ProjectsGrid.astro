@@ -1,6 +1,6 @@
 ---
 import Icon from './Icon.astro';
-import { projects, tabs, profile } from '../data/profile';
+import { projects, tabs } from '../data/profile';
 
 interface Props {
   // true cuando se renderiza como sección propia (no embebida junto a ProfileCard)
@@ -12,6 +12,11 @@ const { standalone = false } = Astro.props;
 
 <section id="proyectos" class:list={['proj', { container: standalone, 'proj--standalone': standalone }]}>
   <div class="proj__bar" data-reveal>
+    <div>
+      <span class="kicker">GitHub</span>
+      <h2>Proyectos</h2>
+      <p class="proj__sub">Repos públicos reales — el código y el detalle completo están en cada uno.</p>
+    </div>
     <div class="proj__tabs" role="tablist" aria-label="Filtrar proyectos">
       {
         tabs.map((tab, i) => (
@@ -26,18 +31,17 @@ const { standalone = false } = Astro.props;
         ))
       }
     </div>
-    <div class="proj__meta">
-      <span class="proj__count" id="proj-count">{projects.length} proyectos</span>
-      <span class="proj__sort"><Icon name="filter" size={15} /></span>
-    </div>
   </div>
 
   <div class="proj__grid" id="proj-grid">
     {
       projects.map((p, i) => (
-        <article
+        <a
           class="proj-card card"
           id={p.id}
+          href={p.repo}
+          target="_blank"
+          rel="noopener"
           data-category={p.category}
           data-tilt
           data-reveal
@@ -51,15 +55,12 @@ const { standalone = false } = Astro.props;
               <h3>{p.title}</h3>
               <p>{p.org}</p>
             </div>
-            <span class="proj-card__dots">
-              <Icon name="dots" size={18} />
+            <span class="proj-card__external">
+              <Icon name="external" size={16} />
             </span>
           </header>
 
-          <p class="proj-card__desc">
-            {p.summary}
-            <button class="proj-card__more" data-open={`modal-${p.id}`}>más</button>
-          </p>
+          <p class="proj-card__desc">{p.summary}</p>
 
           <div class="proj-card__chips">
             <span class="chip chip--outline">{p.level}</span>
@@ -69,51 +70,11 @@ const { standalone = false } = Astro.props;
           </div>
 
           <footer class="proj-card__actions">
-            <button class="btn btn--primary" data-open={`modal-${p.id}`}>
-              Ver detalles
-            </button>
-            <a class="btn btn--light" href={p.repo ?? profile.links.github} target="_blank" rel="noopener">
-              <Icon name="github" size={15} /> Código
-            </a>
+            <span class="proj-card__link">
+              <Icon name="github" size={15} /> Ver en GitHub
+            </span>
           </footer>
-
-          <dialog class="proj-modal" id={`modal-${p.id}`} aria-label={p.title}>
-            <div class="proj-modal__box">
-              <header class="proj-modal__head">
-                <span class="proj-card__icon" style={`--hue: ${p.iconHue}`}>
-                  <Icon name={p.icon} size={22} />
-                </span>
-                <div class="proj-card__titles">
-                  <h3>{p.title}</h3>
-                  <p>{p.org}</p>
-                </div>
-                <button class="proj-modal__close" data-close aria-label="Cerrar">
-                  <Icon name="close" size={17} />
-                </button>
-              </header>
-              <ul class="proj-modal__list">
-                {p.details.map((d) => (
-                  <li>
-                    <Icon name="check" size={15} />
-                    <span>{d}</span>
-                  </li>
-                ))}
-              </ul>
-              <div class="proj-card__chips">
-                <span class="chip">{p.level}</span>
-                {p.tags.map((t) => (
-                  <span class="chip">{t}</span>
-                ))}
-              </div>
-              <footer class="proj-modal__foot">
-                <a class="btn btn--primary" href={p.repo ?? profile.links.github} target="_blank" rel="noopener">
-                  <Icon name="github" size={15} /> Ver código
-                </a>
-                <button class="btn btn--ghost" data-close>Cerrar</button>
-              </footer>
-            </div>
-          </dialog>
-        </article>
+        </a>
       ))
     }
   </div>
@@ -126,10 +87,17 @@ const { standalone = false } = Astro.props;
 
   .proj__bar {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 14px;
+    gap: 18px;
     margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+
+  .proj__sub {
+    margin-top: 6px;
+    font-size: 13.5px;
+    color: var(--text-3);
   }
 
   .proj__tabs {
@@ -141,6 +109,7 @@ const { standalone = false } = Astro.props;
     border: 1px solid var(--border);
     overflow-x: auto;
     scrollbar-width: none;
+    flex-shrink: 0;
   }
 
   .proj__tabs::-webkit-scrollbar {
@@ -168,29 +137,6 @@ const { standalone = false } = Astro.props;
     padding: 7px 17px;
   }
 
-  .proj__meta {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .proj__count {
-    font-size: 12.5px;
-    color: var(--text-3);
-    white-space: nowrap;
-  }
-
-  .proj__sort {
-    display: grid;
-    place-items: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    color: var(--text-2);
-  }
-
   .proj__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -203,10 +149,6 @@ const { standalone = false } = Astro.props;
     }
   }
 
-  .proj__tabs {
-    min-width: 0;
-  }
-
   .proj-card {
     display: flex;
     flex-direction: column;
@@ -214,6 +156,8 @@ const { standalone = false } = Astro.props;
     padding: 22px;
     border-radius: var(--r-lg);
     scroll-margin-top: 90px;
+    color: inherit;
+    text-decoration: none;
   }
 
   .proj-card.hide {
@@ -253,32 +197,21 @@ const { standalone = false } = Astro.props;
     color: var(--text-3);
   }
 
-  .proj-card__dots {
+  .proj-card__external {
     margin-left: auto;
     color: var(--text-3);
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .proj-card:hover .proj-card__external {
+    color: var(--accent-hover);
+    transform: translate(2px, -2px);
   }
 
   .proj-card__desc {
     font-size: 13.5px;
     line-height: 1.6;
     color: var(--text-2);
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .proj-card__more {
-    display: inline;
-    padding: 0;
-    margin-left: 4px;
-    color: var(--green);
-    font-size: 13px;
-    font-weight: 550;
-  }
-
-  .proj-card__more:hover {
-    text-decoration: underline;
   }
 
   .proj-card__chips {
@@ -288,98 +221,21 @@ const { standalone = false } = Astro.props;
   }
 
   .proj-card__actions {
-    display: flex;
-    gap: 10px;
     margin-top: auto;
     padding-top: 4px;
   }
 
-  /* ── Modal de detalles ── */
-  .proj-modal {
-    margin: auto;
-    padding: 0;
-    width: min(560px, calc(100vw - 32px));
-    background: transparent;
-    border: 0;
-    outline: none;
-  }
-
-  .proj-modal::backdrop {
-    background: rgba(2, 2, 6, 0.7);
-    backdrop-filter: blur(6px);
-  }
-
-  .proj-modal__box {
-    background: #16161a;
-    border: 1px solid var(--border-strong);
-    border-radius: 22px;
-    padding: 24px;
-    display: grid;
-    gap: 18px;
-    box-shadow: 0 40px 120px -20px rgba(0, 0, 0, 0.85);
-  }
-
-  .proj-modal[open] .proj-modal__box {
-    animation: modal-in 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2);
-  }
-
-  @keyframes modal-in {
-    from {
-      opacity: 0;
-      transform: translateY(16px) scale(0.97);
-    }
-  }
-
-  .proj-modal__head {
-    display: flex;
+  .proj-card__link {
+    display: inline-flex;
     align-items: center;
-    gap: 13px;
-  }
-
-  .proj-modal__close {
-    margin-left: auto;
-    display: grid;
-    place-items: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--chip);
-    border: 1px solid var(--border);
-    color: var(--text-2);
-    flex-shrink: 0;
-  }
-
-  .proj-modal__close:hover {
-    color: var(--text);
-  }
-
-  .proj-modal__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 11px;
-  }
-
-  .proj-modal__list li {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
+    gap: 8px;
     font-size: 13.5px;
-    line-height: 1.55;
-    color: var(--text-2);
+    font-weight: 600;
+    color: var(--accent-hover);
   }
 
-  .proj-modal__list li :global(svg) {
-    flex-shrink: 0;
-    margin-top: 3px;
-    color: var(--green);
-  }
-
-  .proj-modal__foot {
-    display: flex;
-    gap: 10px;
-    padding-top: 4px;
+  .proj-card:hover .proj-card__link {
+    color: var(--cyan);
   }
 </style>
 
@@ -390,13 +246,11 @@ const { standalone = false } = Astro.props;
     grid.dataset.init = '1';
 
     const cards = Array.from(grid.querySelectorAll<HTMLElement>('.proj-card'));
-    const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.proj__tab'));
-    const count = document.getElementById('proj-count');
+    const tabButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.proj__tab'));
 
-    // Filtro por categoría con micro-animación de entrada
-    tabs.forEach((tab) => {
+    tabButtons.forEach((tab) => {
       tab.addEventListener('click', () => {
-        tabs.forEach((t) => {
+        tabButtons.forEach((t) => {
           t.classList.toggle('active', t === tab);
           t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
         });
@@ -416,24 +270,6 @@ const { standalone = false } = Astro.props;
             );
           }
         });
-        if (count) count.textContent = `${visible} proyecto${visible === 1 ? '' : 's'}`;
-      });
-    });
-
-    // Modales de detalle
-    document.querySelectorAll<HTMLElement>('[data-open]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const dialog = document.getElementById(btn.dataset.open!) as HTMLDialogElement | null;
-        dialog?.showModal();
-      });
-    });
-
-    document.querySelectorAll<HTMLDialogElement>('.proj-modal').forEach((dialog) => {
-      dialog.addEventListener('click', (e) => {
-        if (e.target === dialog) dialog.close();
-      });
-      dialog.querySelectorAll('[data-close]').forEach((btn) => {
-        btn.addEventListener('click', () => dialog.close());
       });
     });
   }

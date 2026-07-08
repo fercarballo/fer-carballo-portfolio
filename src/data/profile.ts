@@ -119,138 +119,66 @@ export type Project = {
   org: string;
   category: 'qa' | 'devops' | 'dev';
   summary: string;
-  details: string[];
   tags: string[];
   level: string;
-  repo?: string;
+  repo: string; // repo público de GitHub — fuente de la verdad del proyecto
 };
 
+/**
+ * Proyectos = últimos repos públicos reales de github.com/fercarballo.
+ * Descripción breve tomada del repo; para más detalle, el botón lleva directo a GitHub.
+ */
 export const projects: Project[] = [
   {
-    id: 'playwright-framework',
-    icon: 'bot',
-    iconHue: 152,
-    title: 'Framework E2E con Playwright',
-    org: 'QA Automation',
+    id: 'performance-reliability-testing-suite',
+    icon: 'chart',
+    iconHue: 12,
+    title: 'Performance & Reliability Testing Suite',
+    org: 'Proyecto personal',
     category: 'qa',
     summary:
-      'Framework de pruebas end-to-end con Playwright + TypeScript: Page Object Model, fixtures reutilizables, ejecución paralela y reportes con evidencia (trace, video, screenshots).',
-    details: [
-      'Arquitectura Page Object Model con fixtures tipados y datos de prueba desacoplados.',
-      'Ejecución paralela multi-browser (Chromium, Firefox, WebKit) con sharding en CI.',
-      'Reportes HTML con traces, videos y screenshots adjuntos como evidencia por caso.',
-      'Integración con GitLab CI: la suite corre en cada merge request y bloquea regresiones.',
-    ],
-    tags: ['Playwright', 'TypeScript', 'POM'],
-    level: 'E2E',
+      'Suite de pruebas de performance y reliability con k6 (carga, estrés, spike, soak) e inyección de fallas, con observabilidad end-to-end vía Prometheus, Grafana, OpenTelemetry, Tempo y Loki sobre una demo de self-care telco.',
+    tags: ['TypeScript', 'k6', 'OpenTelemetry'],
+    level: 'Performance',
+    repo: 'https://github.com/fercarballo/performance-reliability-testing-suite',
   },
   {
-    id: 'cypress-regression',
-    icon: 'refresh',
-    iconHue: 217,
-    title: 'Suite de Regresión con Cypress',
-    org: 'QA Automation',
-    category: 'qa',
-    summary:
-      'Automatización de regresiones funcionales sobre flujos críticos de negocio: login, checkout y formularios, con comandos custom, intercepts de red y datos controlados.',
-    details: [
-      'Cobertura de flujos críticos priorizada por análisis de riesgo e impacto.',
-      'Comandos custom e intercepts (cy.intercept) para aislar el frontend de servicios inestables.',
-      'Estrategia de datos de prueba con seeds y estados controlados por escenario.',
-      'Reducción del tiempo de regresión manual de horas a minutos por ciclo.',
-    ],
-    tags: ['Cypress', 'JavaScript', 'Regresión'],
-    level: 'Funcional',
-  },
-  {
-    id: 'api-testing',
-    icon: 'braces',
-    iconHue: 28,
-    title: 'API Testing: Contratos REST',
-    org: 'QA · API Testing',
-    category: 'qa',
-    summary:
-      'Validación de APIs REST con Postman/Newman: contratos, esquemas, códigos de estado, flujos encadenados y evidencia de resultados integrada al ciclo de vida del defecto.',
-    details: [
-      'Colecciones Postman con tests de contrato: esquema JSON, headers, status codes y tiempos.',
-      'Flujos encadenados con variables de entorno y pre-request scripts.',
-      'Ejecución headless con Newman en pipelines CI para validación continua.',
-      'Evidencia trazable en Jira/Xray: requerimiento → prueba → evidencia → resultado.',
-    ],
-    tags: ['Postman', 'Newman', 'REST'],
-    level: 'API',
-  },
-  {
-    id: 'jira-xray',
+    id: 'telco-reliability-lab',
     icon: 'shield',
     iconHue: 145,
-    title: 'Gestión de Calidad con Jira + Xray',
-    org: 'QA Manual',
+    title: 'Telco Reliability Lab',
+    org: 'Proyecto personal',
     category: 'qa',
     summary:
-      'Diseño de planes de prueba, ejecución documentada y gestión del ciclo de vida del defecto con trazabilidad completa requerimiento-prueba-evidencia-resultado. Resultado: −30% en tiempos de gestión.',
-    details: [
-      'Planes y sets de prueba en Xray vinculados a historias de usuario y requerimientos.',
-      'Criterios de aceptación y alcance documentados en Confluence junto a desarrollo y producto.',
-      'Ciclo de vida del defecto: detección, severidad/prioridad, seguimiento y verificación.',
-      'Mejoras de proceso que redujeron un 30% los tiempos de gestión y resolución de defectos.',
-    ],
-    tags: ['Jira', 'Xray', 'Confluence'],
-    level: 'Manual',
+      'API de autogestión telco instrumentada de punta a punta: suite de performance con k6, observabilidad completa en Grafana (métricas, trazas y logs vía OpenTelemetry), idempotencia de pagos a nivel de base de datos, inyección de fallas y CI con gates de SLO.',
+    tags: ['k6', 'Grafana', 'SLO gates'],
+    level: 'Reliability',
+    repo: 'https://github.com/fercarballo/telco-reliability-lab',
   },
   {
-    id: 'sql-data-validation',
-    icon: 'chart',
+    id: 'qa-linkedin-drafts',
+    icon: 'chat',
     iconHue: 265,
-    title: 'Validación de Datos con SQL',
-    org: 'QA · Data',
-    category: 'qa',
-    summary:
-      'Validación de consistencia de datos entre UI, APIs y base de datos con consultas SQL: reconciliación de registros, verificación de estados y soporte a pruebas de integración.',
-    details: [
-      'Consultas SQL para validar que la UI y las APIs reflejen el estado real de los datos.',
-      'Reconciliación de registros entre sistemas con JOINs y agregaciones.',
-      'Detección temprana de inconsistencias de datos antes del despliegue.',
-      'Evidencia de resultados adjunta al ciclo de prueba en Xray.',
-    ],
-    tags: ['SQL', 'MySQL', 'Data QA'],
-    level: 'Integración',
-  },
-  {
-    id: 'gitlab-pipelines',
-    icon: 'infinity',
-    iconHue: 12,
-    title: 'Quality Gates en CI/CD',
-    org: 'QA × DevOps',
-    category: 'devops',
-    summary:
-      'Integración de suites automatizadas como quality gates en pipelines GitLab CI: la calidad bloquea despliegues con fallas. Experiencia operando OpenShift/Kubernetes y GitOps con ArgoCD.',
-    details: [
-      'Suites de Cypress/Playwright ejecutándose en cada merge request.',
-      'Stages de build, test y deploy con jobs paralelos y cache de dependencias.',
-      'Quality gates: la automatización y el linting bloquean despliegues con fallas.',
-      'Contexto DevOps: OpenShift/Kubernetes, ArgoCD y prácticas GitOps.',
-    ],
-    tags: ['GitLab CI', 'Docker', 'OpenShift'],
-    level: 'CI/CD',
-  },
-  {
-    id: 'frontend-capsula',
-    icon: 'code',
-    iconHue: 330,
-    title: 'Interfaces Web Responsivas',
-    org: 'Corporación Cápsula',
+    title: 'QA LinkedIn Drafts',
+    org: 'Proyecto personal',
     category: 'dev',
     summary:
-      'Desarrollo de interfaces frontend responsivas con React.js y Vue.js integradas a servicios backend, con persistencia MySQL y despliegue vía Jenkins + Docker.',
-    details: [
-      'Componentes UI responsivos en React.js y Vue.js integrados a servicios backend.',
-      'Modelado y consultas MySQL para la persistencia de aplicaciones web.',
-      'Flujo Git con revisiones e integración continua en Jenkins.',
-      'Entornos Docker reproducibles para desarrollo y despliegue.',
-    ],
-    tags: ['Vue.js', 'React', 'Jenkins'],
-    level: 'Frontend',
+      'Asistente local con Human-in-the-Loop para preparar publicaciones técnicas de QA/SDET en LinkedIn: genera borradores de texto e imágenes de apoyo, pero la persona siempre revisa, aprueba y publica a mano.',
+    tags: ['Python', 'Human-in-the-Loop'],
+    level: 'Tooling',
+    repo: 'https://github.com/fercarballo/TESTING-LIDERAZGO',
+  },
+  {
+    id: 'carballotech-social-feed-api',
+    icon: 'braces',
+    iconHue: 28,
+    title: 'CarballoTech Social Feed API',
+    org: 'Proyecto personal',
+    category: 'dev',
+    summary: 'Salida JSON estática pública del feed social de CarballoTech, servida vía GitHub Pages.',
+    tags: ['GitHub Pages', 'JSON API'],
+    level: 'API',
+    repo: 'https://github.com/fercarballo/carballotech-social-feed-api-pages',
   },
 ];
 
