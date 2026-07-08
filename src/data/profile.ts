@@ -313,31 +313,6 @@ export const projects: Project[] = [
     level: 'Reliability',
     repo: 'https://github.com/fercarballo/telco-reliability-lab',
   },
-  {
-    id: 'qa-linkedin-drafts',
-    icon: 'chat',
-    iconHue: 265,
-    title: 'QA LinkedIn Drafts',
-    org: 'Proyecto personal',
-    category: 'dev',
-    summary:
-      'Asistente local con Human-in-the-Loop para preparar publicaciones técnicas de QA/SDET en LinkedIn: genera borradores de texto e imágenes de apoyo, pero la persona siempre revisa, aprueba y publica a mano.',
-    tags: ['Python', 'Human-in-the-Loop'],
-    level: 'Tooling',
-    repo: 'https://github.com/fercarballo/TESTING-LIDERAZGO',
-  },
-  {
-    id: 'carballotech-social-feed-api',
-    icon: 'braces',
-    iconHue: 28,
-    title: 'CarballoTech Social Feed API',
-    org: 'Proyecto personal',
-    category: 'dev',
-    summary: 'Salida JSON estática pública del feed social de CarballoTech, servida vía GitHub Pages.',
-    tags: ['GitHub Pages', 'JSON API'],
-    level: 'API',
-    repo: 'https://github.com/fercarballo/carballotech-social-feed-api-pages',
-  },
 ];
 
 export type Certification = {
@@ -494,5 +469,4 @@ export const tabs = [
   { id: 'all', label: 'Todo' },
   { id: 'qa', label: 'QA & Testing' },
   { id: 'devops', label: 'CI/CD' },
-  { id: 'dev', label: 'Desarrollo' },
 ] as const;
