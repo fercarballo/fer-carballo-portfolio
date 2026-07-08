@@ -30,6 +30,34 @@ export const profile = {
   ],
 };
 
+/**
+ * Presencia profesional: tarjetas de GitHub y LinkedIn.
+ * - GitHub: los stats se traen en tiempo de build desde la API pública
+ *   (github.com/users/fercarballo). Estos valores son el fallback si la
+ *   API no responde durante el build.
+ * - LinkedIn: no tiene API pública, así que usamos datos reales conocidos
+ *   del perfil (linkedin.com/in/fercarballo). Actualizá acá si cambian.
+ */
+export const presence = {
+  github: {
+    username: 'fercarballo',
+    url: 'https://github.com/fercarballo',
+    // Fallback (se sobreescribe con datos en vivo si el build alcanza la API)
+    repos: 35,
+    followers: 27,
+    following: 38,
+  },
+  linkedin: {
+    url: 'https://linkedin.com/in/fercarballo',
+    handle: 'in/fercarballo',
+    headline: 'QA Engineer | QA Manual & Automation | SDET',
+    currentRole: 'QA Engineer',
+    currentCompany: 'Personal (Telecom Argentina)',
+    connections: '160+',
+    followers: '340+',
+  },
+};
+
 export type Experience = {
   role: string;
   company: string;

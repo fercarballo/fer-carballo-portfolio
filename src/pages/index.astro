@@ -7,6 +7,7 @@ import ProjectsGrid from '../components/ProjectsGrid.astro';
 import ProcessSection from '../components/ProcessSection.astro';
 import ExperienceSection from '../components/ExperienceSection.astro';
 import CertificationsSection from '../components/CertificationsSection.astro';
+import PresenceSection from '../components/PresenceSection.astro';
 import ContactSection from '../components/ContactSection.astro';
 import BlogCard from '../components/BlogCard.astro';
 import Icon from '../components/Icon.astro';
@@ -34,6 +35,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 
   <CertificationsSection />
   <ProjectsGrid standalone />
+  <PresenceSection />
   <ProcessSection />
 
   <section class="blog-preview container">

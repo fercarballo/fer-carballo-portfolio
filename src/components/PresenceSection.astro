@@ -1,0 +1,404 @@
+---
+import Icon from './Icon.astro';
+import { presence, profile } from '../data/profile';
+
+// ── GitHub: datos en vivo en tiempo de build (API pública, sin auth) ──
+// Si el build no alcanza la API (rate-limit/offline), usa el fallback de profile.ts.
+let gh = { repos: presence.github.repos, followers: presence.github.followers, following: presence.github.following };
+let topRepos: { name: string; language: string | null; stars: number; url: string }[] = [];
+
+try {
+  const headers = { 'User-Agent': 'fercarballo-portfolio', Accept: 'application/vnd.github+json' };
+  const [uRes, rRes] = await Promise.all([
+    fetch(`https://api.github.com/users/${presence.github.username}`, { headers }),
+    fetch(`https://api.github.com/users/${presence.github.username}/repos?sort=pushed&per_page=100`, { headers }),
+  ]);
+  if (uRes.ok) {
+    const u = await uRes.json();
+    gh = { repos: u.public_repos, followers: u.followers, following: u.following };
+  }
+  if (rRes.ok) {
+    const repos = (await rRes.json()) as any[];
+    // Ocultamos el repo del propio portfolio (auto-referencia) y proyectos
+    // personales no técnicos, para que el recruiter vea trabajo relevante.
+    const hide = new Set(['fer-carballo-portfolio', 'disney-2027', 'fercarballo']);
+    topRepos = repos
+      .filter((r) => !r.fork && !hide.has(r.name))
+      .sort((a, b) => new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime())
+      .slice(0, 4)
+      .map((r) => ({ name: r.name, language: r.language, stars: r.stargazers_count, url: r.html_url }));
+  }
+} catch {
+  // silencioso: se usa el fallback
+}
+
+const li = presence.linkedin;
+
+// Colores de lenguaje para los puntos (los que aparecen en tus repos)
+const langColor: Record<string, string> = {
+  TypeScript: '#3178c6',
+  JavaScript: '#f1e05a',
+  Astro: '#ff5d01',
+  HTML: '#e34c26',
+  Python: '#3572A5',
+  Java: '#b07219',
+  Vue: '#41b883',
+  CSS: '#563d7c',
+};
+---
+
+<section id="presencia" class="presence container">
+  <div class="section-head" data-reveal>
+    <div>
+      <span class="kicker">Presencia profesional</span>
+      <h2>GitHub &amp; LinkedIn</h2>
+      <p class="presence__sub">Perfiles en vivo — GitHub se actualiza solo en cada deploy.</p>
+    </div>
+  </div>
+
+  <div class="presence__grid">
+    <!-- ── GitHub ── -->
+    <article class="pres-card card" data-tilt data-reveal>
+      <header class="pres-card__band pres-card__band--gh">
+        <Icon name="github" size={19} />
+        <span>GitHub</span>
+      </header>
+
+      <div class="pres-card__body">
+        <div class="pres-card__id">
+          <img class="pres-card__avatar" src="/avatar/fer.jpg" alt={profile.name} width="60" height="60" loading="lazy" />
+          <div class="pres-card__idtext">
+            <h3>{profile.name}</h3>
+            <a href={presence.github.url} target="_blank" rel="noopener" class="pres-card__handle">@{presence.github.username}</a>
+          </div>
+        </div>
+
+        <div class="pres-card__stats">
+          <div><strong>{gh.repos}</strong><span>repos</span></div>
+          <div><strong>{gh.followers}</strong><span>seguidores</span></div>
+          <div><strong>{gh.following}</strong><span>siguiendo</span></div>
+        </div>
+
+        {
+          topRepos.length > 0 && (
+            <ul class="pres-card__repos">
+              {topRepos.map((r) => (
+                <li>
+                  <a href={r.url} target="_blank" rel="noopener">
+                    <span class="pres-card__repo-name">{r.name}</span>
+                    <span class="pres-card__repo-meta">
+                      {r.language && (
+                        <span class="pres-card__lang">
+                          <span class="pres-card__dot" style={`--c: ${langColor[r.language] ?? '#8b98a5'}`} />
+                          {r.language}
+                        </span>
+                      )}
+                      {r.stars > 0 && <span class="pres-card__stars">★ {r.stars}</span>}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+
+        <a class="pres-card__cta pres-card__cta--gh" href={presence.github.url} target="_blank" rel="noopener">
+          <Icon name="github" size={15} /> Ver perfil en GitHub
+        </a>
+      </div>
+    </article>
+
+    <!-- ── LinkedIn ── -->
+    <article class="pres-card card" data-tilt data-reveal style="--d: .06s">
+      <header class="pres-card__band pres-card__band--li">
+        <Icon name="linkedin" size={19} />
+        <span>LinkedIn</span>
+      </header>
+
+      <div class="pres-card__body">
+        <div class="pres-card__id">
+          <img class="pres-card__avatar" src="/avatar/fer.jpg" alt={profile.name} width="60" height="60" loading="lazy" />
+          <div class="pres-card__idtext">
+            <h3>{profile.name}</h3>
+            <a href={li.url} target="_blank" rel="noopener" class="pres-card__handle">{li.handle}</a>
+          </div>
+        </div>
+
+        <p class="pres-card__headline">{li.headline}</p>
+
+        <div class="pres-card__stats">
+          <div><strong>{li.connections}</strong><span>contactos</span></div>
+          <div><strong>{li.followers}</strong><span>seguidores</span></div>
+        </div>
+
+        <div class="pres-card__role">
+          <span class="pres-card__role-icon"><Icon name="check" size={13} /></span>
+          <span>
+            <strong>{li.currentRole}</strong>
+            <em>{li.currentCompany}</em>
+          </span>
+        </div>
+
+        <a class="pres-card__cta pres-card__cta--li" href={li.url} target="_blank" rel="noopener">
+          <Icon name="linkedin" size={15} /> Ver perfil en LinkedIn
+        </a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  .presence {
+    margin-top: 90px;
+  }
+
+  .presence__sub {
+    margin-top: 6px;
+    font-size: 13.5px;
+    color: var(--text-3);
+  }
+
+  .presence__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  @media (max-width: 860px) {
+    .presence__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .pres-card {
+    overflow: hidden;
+    padding: 0;
+    border-radius: var(--r-lg);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Banda de marca superior */
+  .pres-card__band {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .pres-card__band--gh {
+    background: linear-gradient(120deg, #1b1f24, #24292f 60%, #2d333b);
+  }
+
+  .pres-card__band--li {
+    background: linear-gradient(120deg, #0a66c2, #0a66c2 40%, #0e86e0);
+  }
+
+  .pres-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px 22px 22px;
+    flex: 1;
+  }
+
+  /* Identidad */
+  .pres-card__id {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .pres-card__avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 22%;
+    border: 2px solid var(--border-strong);
+    flex-shrink: 0;
+  }
+
+  .pres-card__idtext h3 {
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .pres-card__handle {
+    font-size: 13px;
+    color: var(--accent-hover);
+    font-family: var(--mono);
+  }
+
+  .pres-card__handle:hover {
+    color: var(--cyan);
+  }
+
+  .pres-card__headline {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text-2);
+  }
+
+  /* Stats */
+  .pres-card__stats {
+    display: flex;
+    gap: 26px;
+    padding: 14px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pres-card__stats div {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .pres-card__stats strong {
+    font-size: 20px;
+    font-weight: 750;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pres-card__stats span {
+    font-size: 11.5px;
+    color: var(--text-3);
+  }
+
+  /* Repos (GitHub) */
+  .pres-card__repos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2px;
+  }
+
+  .pres-card__repos a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: var(--r-md);
+    transition: background 0.18s;
+  }
+
+  .pres-card__repos a:hover {
+    background: var(--card-hover);
+  }
+
+  .pres-card__repo-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0; /* permite que el nombre se recorte y el lenguaje quede visible */
+  }
+
+  .pres-card__repos a:hover .pres-card__repo-name {
+    color: var(--accent-hover);
+  }
+
+  .pres-card__repo-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .pres-card__lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    color: var(--text-3);
+  }
+
+  .pres-card__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--c);
+  }
+
+  .pres-card__stars {
+    font-size: 11.5px;
+    color: var(--text-3);
+  }
+
+  /* Rol actual (LinkedIn) */
+  .pres-card__role {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 12px 14px;
+    border-radius: var(--r-md);
+    background: var(--accent-soft);
+    border: 1px solid var(--border);
+  }
+
+  .pres-card__role-icon {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .pres-card__role span:last-child {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pres-card__role strong {
+    font-size: 13.5px;
+    font-weight: 650;
+  }
+
+  .pres-card__role em {
+    font-style: normal;
+    font-size: 12.5px;
+    color: var(--text-3);
+  }
+
+  /* CTA */
+  .pres-card__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    margin-top: auto;
+    padding: 12px 16px;
+    border-radius: var(--r-full);
+    font-size: 13.5px;
+    font-weight: 650;
+    color: #fff;
+    transition: transform 0.18s, box-shadow 0.2s, filter 0.2s;
+  }
+
+  .pres-card__cta--gh {
+    background: #24292f;
+    border: 1px solid #3a4048;
+  }
+
+  .pres-card__cta--li {
+    background: #0a66c2;
+  }
+
+  .pres-card__cta:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+    box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.6);
+  }
+</style>
