@@ -43,9 +43,44 @@ import { projects } from '../data/profile';
   .side-projects__list {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0 8px 0 0;
     display: grid;
     gap: 13px;
+    /* La lista puede tener muchos proyectos: se acota con scroll interno
+       para que la columna lateral quede más corta que la de experiencia
+       y nunca estire el layout dejando huecos en el centro. */
+    max-height: 250px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+    overscroll-behavior: contain;
+  }
+
+  .side-projects__list::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .side-projects__list::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 999px;
+  }
+
+  /* Difuminado inferior sobre el contenedor (no scrollea) que sugiere
+     que hay más proyectos para ver al hacer scroll en la lista. */
+  .side-projects {
+    position: relative;
+  }
+
+  .side-projects::after {
+    content: '';
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 20px;
+    height: 34px;
+    pointer-events: none;
+    background: linear-gradient(to top, var(--card), transparent);
+    border-radius: 0 0 var(--r-xl) var(--r-xl);
   }
 
   .side-projects__item {
