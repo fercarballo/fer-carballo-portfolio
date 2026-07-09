@@ -25,7 +25,13 @@ const words = post.body?.split(/\s+/).length ?? 0;
 const minutes = Math.max(1, Math.round(words / 200));
 ---
 
-<Base title={`${post.data.title} — Blog de Fernando Carballo`} description={post.data.description}>
+<Base
+  title={`${post.data.title} — Blog de Fernando Carballo`}
+  description={post.data.description}
+  ogType="article"
+  publishedTime={post.data.pubDate.toISOString()}
+  tags={post.data.tags}
+>
   <main class="container post">
     <a class="post__back" href="/blog"><Icon name="arrow-left" size={15} /> Volver al blog</a>
 
@@ -53,7 +59,7 @@ const minutes = Math.max(1, Math.round(words / 200));
     </article>
 
     <footer class="post__foot card" data-reveal>
-      <p>¿Te sirvió este artículo? Charlemos sobre QA y DevOps.</p>
+      <p>¿Te sirvió este artículo? Charlemos sobre QA, testing y automatización.</p>
       <div class="post__foot-actions">
         <a class="btn btn--primary" href={`mailto:${profile.email}`}><Icon name="mail" size={15} /> Contactame</a>
         <a class="btn btn--ghost" href="/blog">Más artículos</a>

@@ -8,7 +8,7 @@ export async function GET(context) {
 
   return rss({
     title: 'Blog de Fernando Carballo',
-    description: 'QA Automation, testing, DevOps, CI/CD y calidad de software.',
+    description: 'QA, testing manual y automatizado, API testing, CI/CD y calidad de software.',
     site: context.site,
     items: posts.map((post) => ({
       title: post.data.title,

@@ -10,14 +10,60 @@ import { profile } from '../data/profile';
 interface Props {
   title?: string;
   description?: string;
+  ogType?: 'website' | 'article';
+  image?: string;
+  publishedTime?: string;
+  tags?: string[];
 }
 
 const {
-  title = `${profile.name} — QA Automation · SDET · DevOps`,
-  description = 'Portfolio de Fernando Carballo: QA Manual, QA Automation, SDET y DevOps. Cypress, Playwright, Postman, Kubernetes, GitLab CI/CD y ArgoCD.',
+  title = `${profile.name} — QA Engineer · QA Manual & Automation · SDET`,
+  description = 'Portfolio de Fernando Carballo, QA Engineer con 4+ años en telecomunicaciones. Testing manual y automatizado con Cypress, Playwright y Postman (API), SDET, SQL y CI/CD. Calidad de extremo a extremo con criterio de desarrollo.',
+  ogType = 'website',
+  image = '/og.jpg',
+  publishedTime,
+  tags = [],
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image, Astro.site);
+
+// ── Datos estructurados (JSON-LD) para aparecer en búsquedas reales ──
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  url: Astro.site?.href,
+  image: new URL('/avatar/fer.jpg', Astro.site).href,
+  jobTitle: 'QA Engineer',
+  email: `mailto:${profile.email}`,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Buenos Aires',
+    addressCountry: 'AR',
+  },
+  worksFor: { '@type': 'Organization', name: 'Personal (Telecom Argentina)' },
+  knowsAbout: [
+    'Quality Assurance', 'Software Testing', 'Test Automation', 'Cypress',
+    'Playwright', 'Postman', 'API Testing', 'SDET', 'JavaScript', 'SQL', 'CI/CD',
+  ],
+  sameAs: [profile.links.github, profile.links.linkedin],
+};
+
+const articleSchema = ogType === 'article'
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: title,
+      description,
+      image: ogImage.href,
+      datePublished: publishedTime,
+      author: { '@type': 'Person', name: profile.name, url: Astro.site?.href },
+      publisher: { '@type': 'Person', name: profile.name },
+      mainEntityOfPage: canonical.href,
+      keywords: tags.join(', '),
+    }
+  : null;
 ---
 
 <!doctype html>
@@ -31,15 +77,31 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title="Blog de Fernando Carballo" href="/rss.xml" />
-    <meta name="theme-color" content="#08080a" />
+    <meta name="theme-color" content="#0a0e0b" />
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={`${profile.name} — Portfolio`} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="es_AR" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${profile.name} — QA Engineer`} />
+    {ogType === 'article' && publishedTime && (
+      <meta property="article:published_time" content={publishedTime} />
+    )}
+    {ogType === 'article' && <meta property="article:author" content={profile.name} />}
+    {tags.map((t) => <meta property="article:tag" content={t} />)}
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
     <meta name="generator" content={Astro.generator} />
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    {articleSchema && <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />}
     <ClientRouter />
   </head>
   <body>
@@ -114,7 +176,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
             if (s.y > h + 5) s.y = -5;
             ctx!.beginPath();
             ctx!.arc(s.x + ox * s.depth, s.y + oy * s.depth, s.r, 0, Math.PI * 2);
-            ctx!.fillStyle = `rgba(190, 205, 255, ${s.a})`;
+            ctx!.fillStyle = `rgba(200, 236, 212, ${s.a})`;
             ctx!.fill();
           }
           raf = requestAnimationFrame(frame);
@@ -137,7 +199,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           for (const s of stars) {
             ctx.beginPath();
             ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(190, 205, 255, ${s.a})`;
+            ctx.fillStyle = `rgba(200, 236, 212, ${s.a})`;
             ctx.fill();
           }
           return;

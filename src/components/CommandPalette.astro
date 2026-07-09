@@ -11,11 +11,11 @@ type Item = { label: string; hint: string; href: string; group: string };
 
 const items: Item[] = [
   { label: 'Inicio', hint: 'Perfil y proyectos', href: '/#top', group: 'Secciones' },
-  { label: 'Proyectos', hint: 'QA · DevOps · Dev', href: '/#proyectos', group: 'Secciones' },
+  { label: 'Proyectos', hint: 'QA · Automation · SDET', href: '/#proyectos', group: 'Secciones' },
   { label: 'Cómo trabajo', hint: 'Pipeline de calidad', href: '/#proceso', group: 'Secciones' },
   { label: 'Experiencia', hint: 'Trayectoria profesional', href: '/#experiencia', group: 'Secciones' },
   { label: 'Certificaciones', hint: 'Formación y cursos', href: '/#certificaciones', group: 'Secciones' },
-  { label: 'Blog', hint: 'Artículos sobre QA y DevOps', href: '/blog', group: 'Secciones' },
+  { label: 'Blog', hint: 'Artículos sobre QA y testing', href: '/blog', group: 'Secciones' },
   { label: 'Contacto', hint: 'Hablemos', href: '/#contacto', group: 'Secciones' },
   { label: 'Descargar CV', hint: 'PDF actualizado', href: '/cv/Fernando-Carballo-CV.pdf', group: 'Acciones' },
   ...projects.map((p) => ({ label: p.title, hint: p.org, href: `/#${p.id}`, group: 'Proyectos' })),

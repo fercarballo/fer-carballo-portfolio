@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fercarballo.com/sitemap-index.xml
