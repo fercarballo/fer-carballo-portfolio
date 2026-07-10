@@ -24,11 +24,39 @@ const { cluster, pillar, satellites, items } = group;
 // Repos del ecosistema referenciados por los artículos de esta colección.
 const repos = [...new Set(items.map((p) => p.data.repo).filter(Boolean))] as string[];
 const totalMinutes = items.reduce((acc, p) => acc + readingMinutes(p.body), 0);
+
+const site = Astro.site!.href.replace(/\/$/, '');
+const collectionSchema = {
+  '@type': 'CollectionPage',
+  '@id': `${site}/blog/coleccion/${cluster.id}/#collection`,
+  url: `${site}/blog/coleccion/${cluster.id}/`,
+  name: cluster.title,
+  description: cluster.blurb,
+  inLanguage: 'es-AR',
+  isPartOf: { '@id': `${site}/blog/#blog` },
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: items.length,
+    itemListOrder: 'https://schema.org/ItemListOrderAscending',
+    itemListElement: items.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: p.data.title,
+      url: `${site}/blog/${p.id}/`,
+    })),
+  },
+};
 ---
 
 <Base
   title={`${cluster.title} — Blog de Fernando Carballo`}
   description={cluster.blurb}
+  breadcrumbs={[
+    { name: 'Inicio', url: '/' },
+    { name: 'Blog', url: '/blog/' },
+    { name: cluster.short },
+  ]}
+  schema={collectionSchema}
 >
   <main class="container coll" style={`--hue: ${cluster.hue}`}>
     <nav class="crumbs" aria-label="Ruta de navegación">
@@ -37,7 +65,7 @@ const totalMinutes = items.reduce((acc, p) => acc + readingMinutes(p.body), 0);
       <span>Colección {cluster.id}</span>
     </nav>
 
-    <header class="coll-hero" data-reveal>
+    <header class="coll-hero">
       <span class="coll-hero__icon"><Icon name={cluster.icon} size={26} /></span>
       <div>
         <span class="kicker">Colección {cluster.id}</span>
@@ -53,7 +81,9 @@ const totalMinutes = items.reduce((acc, p) => acc + readingMinutes(p.body), 0);
     </header>
 
     <!-- Pilar -->
-    <a class="pillar card" href={`/blog/${pillar.id}/`} data-reveal data-tilt>
+    <!-- Sin data-reveal: es el elemento más grande sobre el pliegue y su fade-in
+         retrasaba el LCP de ~120ms a ~840ms (medido con cwv.mjs). -->
+    <a class="pillar card" href={`/blog/${pillar.id}/`} data-tilt>
       <div class="pillar__top">
         <span class="badge badge--pilar">Pilar · empezá acá</span>
         {pillar.data.readingLevel && <span class="badge badge--level">{pillar.data.readingLevel}</span>}

@@ -28,6 +28,13 @@ const date = post.data.pubDate.toLocaleDateString('es-AR', { day: 'numeric', mon
 // TOC: sólo h2/h3 (los artículos numeran sus secciones).
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const repo = post.data.repo;
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Blog', url: '/blog/' },
+  { name: cluster.short, url: `/blog/coleccion/${cluster.id}/` },
+  { name: post.data.title },
+];
 ---
 
 <Base
@@ -36,6 +43,8 @@ const repo = post.data.repo;
   ogType="article"
   publishedTime={post.data.pubDate.toISOString()}
   tags={post.data.tags}
+  section={cluster.title}
+  breadcrumbs={breadcrumbs}
 >
   <main class="container post" style={`--hue: ${cluster.hue}`}>
     <nav class="crumbs" aria-label="Ruta de navegación">
@@ -46,7 +55,7 @@ const repo = post.data.repo;
       <span class="crumbs__current">{post.data.type === 'pilar' ? 'Pilar' : `Satélite ${post.data.order}`}</span>
     </nav>
 
-    <header class="post__head" data-reveal>
+    <header class="post__head">
       <div class="post__badges">
         <span class={`badge ${post.data.type === 'pilar' ? 'badge--pilar' : 'badge--sat'}`}>
           {post.data.type === 'pilar' ? 'Pilar' : 'Satélite'}

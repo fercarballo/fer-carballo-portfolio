@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "blog:import": "node scripts/import-blog.mjs",
-    "blog:diagrams": "node scripts/render-diagrams.mjs"
+    "blog:diagrams": "node scripts/render-diagrams.mjs && node scripts/annotate-diagrams.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.11",

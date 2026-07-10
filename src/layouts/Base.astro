@@ -14,6 +14,12 @@ interface Props {
   image?: string;
   publishedTime?: string;
   tags?: string[];
+  /** Migas para BreadcrumbList (rich results). Sin el item final = página actual. */
+  breadcrumbs?: { name: string; url?: string }[];
+  /** Datos estructurados extra de la página (Blog, CollectionPage, ItemList…). */
+  schema?: Record<string, unknown> | Record<string, unknown>[] | null;
+  /** Sección editorial del artículo (article:section). */
+  section?: string;
 }
 
 const {
@@ -23,54 +29,99 @@ const {
   image = '/og.jpg',
   publishedTime,
   tags = [],
+  breadcrumbs = [],
+  schema = null,
+  section,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image, Astro.site);
 
-// ── Datos estructurados (JSON-LD) para aparecer en búsquedas reales ──
-const personSchema = {
-  '@context': 'https://schema.org',
+/**
+ * ── Datos estructurados (JSON-LD) ──
+ * Un solo `@graph` con nodos referenciables por `@id`. Google prefiere esto
+ * a scripts sueltos: las entidades se enlazan entre sí (autor → artículo →
+ * sitio) en vez de repetirse.
+ */
+const site = Astro.site!.href.replace(/\/$/, '');
+const PERSON_ID = `${site}/#fernando`;
+const SITE_ID = `${site}/#website`;
+
+const person = {
   '@type': 'Person',
+  '@id': PERSON_ID,
   name: profile.name,
-  url: Astro.site?.href,
-  image: new URL('/avatar/fer.jpg', Astro.site).href,
+  url: `${site}/`,
+  image: `${site}/avatar/fer.jpg`,
   jobTitle: 'QA Engineer',
+  description: 'QA Engineer especializado en testing manual y automatizado, API testing y SDET.',
   email: `mailto:${profile.email}`,
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Buenos Aires',
-    addressCountry: 'AR',
-  },
+  address: { '@type': 'PostalAddress', addressLocality: 'Buenos Aires', addressCountry: 'AR' },
   worksFor: { '@type': 'Organization', name: 'Personal (Telecom Argentina)' },
   knowsAbout: [
-    'Quality Assurance', 'Software Testing', 'Test Automation', 'Cypress',
-    'Playwright', 'Postman', 'API Testing', 'SDET', 'JavaScript', 'SQL', 'CI/CD',
+    'Quality Assurance', 'Software Testing', 'Test Automation', 'Cypress', 'Playwright',
+    'Postman', 'API Testing', 'Contract Testing', 'SDET', 'JavaScript', 'TypeScript',
+    'SQL', 'CI/CD', 'Performance Testing', 'Observability',
   ],
   sameAs: [profile.links.github, profile.links.linkedin],
 };
 
-const articleSchema = ogType === 'article'
+const website = {
+  '@type': 'WebSite',
+  '@id': SITE_ID,
+  url: `${site}/`,
+  name: `${profile.name} — Portfolio`,
+  inLanguage: 'es-AR',
+  publisher: { '@id': PERSON_ID },
+};
+
+/** TechArticle es más preciso que BlogPosting para contenido de ingeniería. */
+const article = ogType === 'article'
   ? {
-      '@context': 'https://schema.org',
-      '@type': 'BlogPosting',
-      headline: title,
+      '@type': 'TechArticle',
+      '@id': `${canonical.href}#article`,
+      headline: title.split(' — ')[0],
       description,
       image: ogImage.href,
       datePublished: publishedTime,
-      author: { '@type': 'Person', name: profile.name, url: Astro.site?.href },
-      publisher: { '@type': 'Person', name: profile.name },
+      dateModified: publishedTime,
+      inLanguage: 'es-AR',
+      author: { '@id': PERSON_ID },
+      publisher: { '@id': PERSON_ID },
+      isPartOf: { '@id': SITE_ID },
       mainEntityOfPage: canonical.href,
       keywords: tags.join(', '),
+      ...(section ? { articleSection: section } : {}),
     }
   : null;
+
+const breadcrumbList = breadcrumbs.length
+  ? {
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs.map((b, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: b.name,
+        ...(b.url ? { item: new URL(b.url, Astro.site).href } : {}),
+      })),
+    }
+  : null;
+
+const graph = [person, website, article, breadcrumbList, schema].flat().filter(Boolean);
+const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es" class="no-js">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/*
+      Marca JS antes del primer paint. El CSS sólo esconde `[data-reveal]`
+      bajo `.js`, así el contenido es visible sin JavaScript y no dependemos
+      de que el IntersectionObserver corra para ver la página.
+    */}
+    <script is:inline>document.documentElement.classList.replace('no-js', 'js');</script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={profile.name} />
@@ -78,6 +129,8 @@ const articleSchema = ogType === 'article'
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title="Blog de Fernando Carballo" href="/rss.xml" />
     <meta name="theme-color" content="#0a0e0b" />
+    {/* Permite miniaturas grandes y snippets completos en Google/Discover. */}
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <!-- Open Graph -->
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={`${profile.name} — Portfolio`} />
@@ -93,6 +146,7 @@ const articleSchema = ogType === 'article'
       <meta property="article:published_time" content={publishedTime} />
     )}
     {ogType === 'article' && <meta property="article:author" content={profile.name} />}
+    {ogType === 'article' && section && <meta property="article:section" content={section} />}
     {tags.map((t) => <meta property="article:tag" content={t} />)}
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -100,8 +154,7 @@ const articleSchema = ogType === 'article'
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="generator" content={Astro.generator} />
-    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
-    {articleSchema && <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />}
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <ClientRouter />
   </head>
   <body>

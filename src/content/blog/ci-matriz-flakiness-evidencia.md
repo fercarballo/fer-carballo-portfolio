@@ -30,7 +30,7 @@ Conviene conocer CI/CD, artefactos, secretos y datos sintéticos.
 El pipeline **escalona** por costo de feedback, de forma coherente con el modelo por capas de [Android](https://developer.android.com/training/testing/fundamentals/strategies): lo barato bloquea temprano; lo caro corre después.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/ci-matriz-flakiness-evidencia-1.svg" alt="Diagrama: ci-matriz-flakiness-evidencia (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/ci-matriz-flakiness-evidencia-1.svg" width="1537" height="63" alt="Diagrama: ci-matriz-flakiness-evidencia (1)" loading="lazy" decoding="async" />
 </figure>
 
 Un **smoke E2E deliberadamente pequeño** —un dispositivo por plataforma— protege el merge. La **matriz completa** corre de noche, cuando nadie está esperando el resultado. Ese smoke cross-channel vive en `nexo-cross-channel-regression`.

@@ -210,19 +210,27 @@ const { standalone = false } = Astro.props;
    * `proximity` y no `mandatory`: con snap obligatorio Chrome cancela el
    * scroll programático (scrollTo/scrollBy quedan en 0), rompiendo los botones.
    * Con proximity el arrastre del usuario sigue enganchando a las tarjetas.
+   *
+   * `scroll-padding-inline` DEBE igualar al padding horizontal. Si no, el punto
+   * de snap de la primera tarjeta cae en 4px y no en scrollLeft:0, así que en el
+   * primer layout Chrome hace un scroll de ajuste de 4px. Blink finaliza el LCP
+   * en el primer scroll → la página entera se queda sin candidato de LCP.
+   * Medido: sin esta línea, 0/5 cargas reportan LCP; con ella, 5/5.
    */
   .proj__rail {
     --cols: 4;
     --gap: 18px;
+    --pad-x: 4px;
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
     gap: var(--gap);
     overflow-x: auto;
     scroll-snap-type: x proximity;
+    scroll-padding-inline: var(--pad-x);
     scroll-behavior: smooth;
-    padding: 6px 4px 20px;
-    margin: 0 -4px;
+    padding: 6px var(--pad-x) 20px;
+    margin: 0 calc(-1 * var(--pad-x));
     scrollbar-width: none;
     overscroll-behavior-x: contain;
   }

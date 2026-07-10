@@ -103,7 +103,7 @@ Dos filosofías, con trade-offs:
 - **Reset por recreación.** Se destruye y recrea el estado (o el entorno). *Ventaja:* funciona con efectos sistémicos. *Costo:* más lento.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/datos-y-entornos-de-prueba-reproducibles-1.svg" alt="Diagrama: datos-y-entornos-de-prueba-reproducibles (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/datos-y-entornos-de-prueba-reproducibles-1.svg" width="1255" height="85" alt="Diagrama: datos-y-entornos-de-prueba-reproducibles (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Lectura.** El teardown no es opcional ni "lo hacemos cuando haya tiempo": es el eslabón que garantiza que la ejecución *N+1* empiece del mismo punto que la *N*. Sin él, el resultado de un test depende del orden en que corrieron los demás, que es la definición misma de una suite no reproducible.
@@ -174,7 +174,7 @@ Para riesgo alto, el ideal es un entorno **creado por y para cada PR**, destruid
 Costos honestos: consumo de recursos, tiempo de arranque, y complejidad de *tear-down* garantizado (un entorno efímero que no se destruye es una fuga de costos). *Decisión de diseño:* efímeros para E2E de riesgo alto; para el grueso de tests de API, aislamiento por dato sobre un entorno compartido pero **inmutable** entre corridas.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/datos-y-entornos-de-prueba-reproducibles-2.svg" alt="Diagrama: datos-y-entornos-de-prueba-reproducibles (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/datos-y-entornos-de-prueba-reproducibles-2.svg" width="264" height="732" alt="Diagrama: datos-y-entornos-de-prueba-reproducibles (2)" loading="lazy" decoding="async" />
 </figure>
 
 **Lectura.** El paso `DOWN` es tan importante como el `UP`: un entorno efímero sin destrucción garantizada no es efímero, es basura acumulándose. Automatizá la destrucción incluso cuando los tests fallan (bloque `finally`, no solo camino feliz).

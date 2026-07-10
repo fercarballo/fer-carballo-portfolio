@@ -133,7 +133,7 @@ Ocho componentes y, sobre todo, las relaciones entre ellos. Lo importante del di
 cajas: es el **bucle** que las cierra.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/de-qa-automation-a-quality-engineering-mapa-1.svg" alt="Diagrama: de-qa-automation-a-quality-engineering-mapa (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/de-qa-automation-a-quality-engineering-mapa-1.svg" width="1367" height="603" alt="Diagrama: de-qa-automation-a-quality-engineering-mapa (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Cómo leerlo.** El riesgo (`R`) alimenta la estrategia (`S`), que define un **portafolio** (`P`)
@@ -333,7 +333,7 @@ contratos sin HTTP/JSON, ni razonar sobre idempotencia sin transacciones, ni opt
 antes de tener entornos reproducibles.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/de-qa-automation-a-quality-engineering-mapa-2.svg" alt="Diagrama: de-qa-automation-a-quality-engineering-mapa (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/de-qa-automation-a-quality-engineering-mapa-2.svg" width="264" height="828" alt="Diagrama: de-qa-automation-a-quality-engineering-mapa (2)" loading="lazy" decoding="async" />
 </figure>
 
 <span class="em em--inferencia">INFERENCIA</span> Saltarse los fundamentos produce *automatización de culto a la carga*: tests que

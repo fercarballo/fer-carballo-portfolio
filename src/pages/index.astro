@@ -12,6 +12,7 @@ import ContactSection from '../components/ContactSection.astro';
 import BlogCard from '../components/BlogCard.astro';
 import Icon from '../components/Icon.astro';
 import { getCollection } from 'astro:content';
+import { projects } from '../data/profile';
 
 // El blog es un corpus por colecciones, no un feed cronológico: en la home
 // mostramos los primeros pilares (las puertas de entrada), no "lo más nuevo".
@@ -22,9 +23,46 @@ const posts = allPosts
   .slice(0, 3);
 const totalPosts = allPosts.length;
 const totalClusters = new Set(allPosts.map((p) => p.data.cluster)).size;
+
+/**
+ * La home es, literalmente, la página de perfil de una persona: `ProfilePage`
+ * con `mainEntity` apuntando al nodo Person del @graph. Los proyectos van como
+ * ItemList de SoftwareSourceCode, que es lo que realmente son (repos públicos).
+ */
+const site = Astro.site!.href.replace(/\/$/, '');
+const homeSchema = [
+  {
+    '@type': 'ProfilePage',
+    '@id': `${site}/#profilepage`,
+    url: `${site}/`,
+    inLanguage: 'es-AR',
+    isPartOf: { '@id': `${site}/#website` },
+    mainEntity: { '@id': `${site}/#fernando` },
+    about: { '@id': `${site}/#fernando` },
+  },
+  {
+    '@type': 'ItemList',
+    '@id': `${site}/#proyectos`,
+    name: 'Proyectos públicos de Fernando Carballo',
+    numberOfItems: projects.length,
+    itemListElement: projects.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'SoftwareSourceCode',
+        name: p.title,
+        description: p.summary,
+        url: p.repo,
+        codeRepository: p.repo,
+        programmingLanguage: p.tags,
+        author: { '@id': `${site}/#fernando` },
+      },
+    })),
+  },
+];
 ---
 
-<Base>
+<Base schema={homeSchema}>
   <main id="top" class="container">
     <HeroBanner />
 

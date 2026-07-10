@@ -142,7 +142,7 @@ Usaremos esta plantilla para cada métrica siguiente. Y una regla dura: **si no 
 Las métricas anteriores solo son auditables si podés seguir el hilo desde un requisito hasta la evidencia. Ese hilo es la **trazabilidad**, y su casa en el portfolio ficticio es `nexo-quality-control-tower`.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/metricas-y-trazabilidad-de-calidad-1.svg" alt="Diagrama: metricas-y-trazabilidad-de-calidad (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/metricas-y-trazabilidad-de-calidad-1.svg" width="1447" height="98" alt="Diagrama: metricas-y-trazabilidad-de-calidad (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Lectura.** El valor no está en ninguna caja aislada sino en poder *recorrer el hilo* ante un incidente: *¿qué control debía atrapar esto? ¿corrió? ¿con qué datos? ¿qué decidimos y qué aprendimos?* La flecha `LE → RK` (aprendizaje que actualiza el riesgo) es la que convierte la trazabilidad en un sistema que mejora, no en un archivo muerto.

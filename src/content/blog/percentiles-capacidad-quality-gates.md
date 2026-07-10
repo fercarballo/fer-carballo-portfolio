@@ -69,7 +69,7 @@ La *coordinated omission* es un sesgo descrito por Gil Tene (autor de HdrHistogr
 Mecánica: en un generador de **modelo cerrado** (ver [artículo 3](/blog/experimento-carga-responsable-jmeter/)), un VU que está esperando una respuesta lenta **no lanza** las peticiones que, según el plan, debían salir durante ese stall. Esas peticiones "omitidas" habrían tenido latencia alta (el sistema estaba lento), pero nunca se registran. Resultado: el reporte muestra p95/p99 **mejores de lo que la experiencia real fue**.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/percentiles-capacidad-quality-gates-1.svg" alt="Diagrama: percentiles-capacidad-quality-gates (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/percentiles-capacidad-quality-gates-1.svg" width="264" height="494" alt="Diagrama: percentiles-capacidad-quality-gates (1)" loading="lazy" decoding="async" />
 </figure>
 
 Mitigaciones documentadas:

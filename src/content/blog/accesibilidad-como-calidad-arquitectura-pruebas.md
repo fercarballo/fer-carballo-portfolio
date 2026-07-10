@@ -85,7 +85,7 @@ Sobre el horizonte: **WCAG 3.0 sigue en *Working Draft*** (actualización de mar
 La idea central del pilar es que la calidad de accesibilidad es un **ciclo cerrado** que empieza en diseño/contenido y vuelve a él. Cada etapa detecta un tipo distinto de defecto; ninguna reemplaza a la siguiente.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/accesibilidad-como-calidad-arquitectura-pruebas-1.svg" alt="Diagrama: accesibilidad-como-calidad-arquitectura-pruebas (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/accesibilidad-como-calidad-arquitectura-pruebas-1.svg" width="1153" height="98" alt="Diagrama: accesibilidad-como-calidad-arquitectura-pruebas (1)" loading="lazy" decoding="async" />
 </figure>
 
 Qué detecta —y qué **no**— cada etapa:

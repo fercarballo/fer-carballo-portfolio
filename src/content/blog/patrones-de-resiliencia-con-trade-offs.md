@@ -121,7 +121,7 @@ TransferResult submit(TransferCommand command) {
 **Qué hace.** Monitorea la tasa de fallos hacia una dependencia. Si supera un umbral, **abre el circuito**: durante un tiempo, las llamadas fallan rápido (o van al fallback) **sin** tocar la dependencia, dándole aire para recuperarse. Después prueba con unas pocas llamadas ("medio abierto") y decide si cerrar.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/patrones-de-resiliencia-con-trade-offs-1.svg" alt="Diagrama: patrones-de-resiliencia-con-trade-offs (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/patrones-de-resiliencia-con-trade-offs-1.svg" width="543" height="370" alt="Diagrama: patrones-de-resiliencia-con-trade-offs (1)" loading="lazy" decoding="async" />
 </figure>
 
 > **Hecho citado.** Resilience4j modela exactamente estos estados —`CLOSED`, `OPEN`, `HALF_OPEN`— más dos especiales, `DISABLED` y `FORCED_OPEN`, y calcula la tasa de fallos sobre una ventana deslizante configurable (por conteo o por tiempo) ([Resilience4j — CircuitBreaker](https://resilience4j.readme.io/docs/circuitbreaker), consultado 2026-07-09).
@@ -204,7 +204,7 @@ Lo que el YAML **no** dice y vos tenés que decidir:
 Los patrones no son independientes: se **componen**, y el orden cambia el comportamiento. Un orden razonable, de afuera hacia adentro de la llamada:
 
 <figure class="diagram">
-  <img src="/blog/diagrams/patrones-de-resiliencia-con-trade-offs-2.svg" alt="Diagrama: patrones-de-resiliencia-con-trade-offs (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/patrones-de-resiliencia-con-trade-offs-2.svg" width="1840" height="159" alt="Diagrama: patrones-de-resiliencia-con-trade-offs (2)" loading="lazy" decoding="async" />
 </figure>
 
 > **Decisión de diseño (con matiz).** Este orden es **una** convención razonable, no la única. Por ejemplo, ubicar el retry *por dentro* del circuit breaker hace que cada ciclo de reintentos cuente como una unidad ante el breaker; ubicarlo *por fuera* cambia cómo el breaker percibe los fallos. Resilience4j documenta el orden de decoración y permite ajustarlo; **verificá el comportamiento exacto de tu versión** ([Resilience4j — Getting Started](https://resilience4j.readme.io/docs/getting-started), consultado 2026-07-09). La única forma honesta de saber cómo interactúan en tu caso es **probarlo** (de eso trata el [artículo 3](/blog/experimento-de-caos-local-transferencia-degradada/)).

@@ -50,7 +50,7 @@ El síntoma es "40 tests rojos". La causa es que el selector describe **dónde e
 La idea central: elegí selectores según **qué tan estable es lo que describen**. De más estable a menos:
 
 <figure class="diagram">
-  <img src="/blog/diagrams/selectores-sostenibles-contratos-ui-1.svg" alt="Diagrama: selectores-sostenibles-contratos-ui (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/selectores-sostenibles-contratos-ui-1.svg" width="264" height="539" alt="Diagrama: selectores-sostenibles-contratos-ui (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Cómo leer esta jerarquía:**

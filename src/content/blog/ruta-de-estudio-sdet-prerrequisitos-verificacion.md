@@ -70,7 +70,7 @@ exacto, todavía no lo entendés.**
 ## 3. La ruta, con sus dependencias
 
 <figure class="diagram">
-  <img src="/blog/diagrams/ruta-de-estudio-sdet-prerrequisitos-verificacion-1.svg" alt="Diagrama: ruta-de-estudio-sdet-prerrequisitos-verificacion (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/ruta-de-estudio-sdet-prerrequisitos-verificacion-1.svg" width="494" height="918" alt="Diagrama: ruta-de-estudio-sdet-prerrequisitos-verificacion (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Cómo leer el diagrama.** Las flechas sólidas son **dependencias duras**: la etapa siguiente no se

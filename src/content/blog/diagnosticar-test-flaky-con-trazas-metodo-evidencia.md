@@ -70,7 +70,7 @@ Re-ejecutar hasta el verde trata a las cinco igual: las esconde. La observabilid
 ## 2. El método de triage en un diagrama
 
 <figure class="diagram">
-  <img src="/blog/diagrams/diagnosticar-test-flaky-con-trazas-metodo-evidencia-1.svg" alt="Diagrama: diagnosticar-test-flaky-con-trazas-metodo-evidencia (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/diagnosticar-test-flaky-con-trazas-metodo-evidencia-1.svg" width="844" height="902" alt="Diagrama: diagnosticar-test-flaky-con-trazas-metodo-evidencia (1)" loading="lazy" decoding="async" />
 </figure>
 
 El diagrama codifica tres decisiones de disciplina:

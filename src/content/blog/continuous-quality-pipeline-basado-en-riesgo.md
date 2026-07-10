@@ -85,7 +85,7 @@ La lógica: **el PR paga solo controles rápidos y de alta señal**; los control
 El siguiente diagrama es el **flujo de Continuous Quality**. Distingo controles **bloqueantes** (detienen el avance) de **informativos** (registran evidencia pero no bloquean), y muestro cómo cada fase alimenta un repositorio de evidencia.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/continuous-quality-pipeline-basado-en-riesgo-1.svg" alt="Diagrama: continuous-quality-pipeline-basado-en-riesgo (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/continuous-quality-pipeline-basado-en-riesgo-1.svg" width="2506" height="204" alt="Diagrama: continuous-quality-pipeline-basado-en-riesgo (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Lectura del diagrama:**
@@ -203,7 +203,7 @@ Reglas de datos: **seeds sintéticos**, limpieza garantizada (idealmente el ento
 El segundo diagrama muestra la **decisión de release y la evidencia** como una secuencia, incluyendo lo que pasa *después* del deploy.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/continuous-quality-pipeline-basado-en-riesgo-2.svg" alt="Diagrama: continuous-quality-pipeline-basado-en-riesgo (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/continuous-quality-pipeline-basado-en-riesgo-2.svg" width="1050" height="435" alt="Diagrama: continuous-quality-pipeline-basado-en-riesgo (2)" loading="lazy" decoding="async" />
 </figure>
 
 **Lectura:** el desarrollador empuja un cambio; CI publica **reportes y provenance** en el repositorio de evidencia; la evidencia le muestra al *release owner* el estado de los controles requeridos; el owner **despliega o registra una excepción** (no hay "deploy silencioso"); el entorno devuelve **telemetría y checks sintéticos**; y el bucle se cierra con feedback trazable hacia quien hizo el cambio.

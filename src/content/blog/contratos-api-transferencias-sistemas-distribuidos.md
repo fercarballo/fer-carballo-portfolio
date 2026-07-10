@@ -49,7 +49,7 @@ Ese es el fallo que los contratos atacan: **la integración es una frontera de s
 El siguiente diagrama muestra las fronteras de una transferencia ficticia en Nexo. Cada flecha es un lugar donde dos partes *acuerdan algo* — y por lo tanto un lugar donde ese acuerdo puede romperse.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/contratos-api-transferencias-sistemas-distribuidos-1.svg" alt="Diagrama: contratos-api-transferencias-sistemas-distribuidos (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/contratos-api-transferencias-sistemas-distribuidos-1.svg" width="760" height="256" alt="Diagrama: contratos-api-transferencias-sistemas-distribuidos (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Qué evidencia se produce en cada frontera:**
@@ -120,7 +120,7 @@ Aquí se juega el criterio senior: **cada capa responde una pregunta distinta**;
 El flujo mínimo para que un contrato *bloquee* un cambio rompiente antes de producción:
 
 <figure class="diagram">
-  <img src="/blog/diagrams/contratos-api-transferencias-sistemas-distribuidos-2.svg" alt="Diagrama: contratos-api-transferencias-sistemas-distribuidos (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/contratos-api-transferencias-sistemas-distribuidos-2.svg" width="850" height="435" alt="Diagrama: contratos-api-transferencias-sistemas-distribuidos (2)" loading="lazy" decoding="async" />
 </figure>
 
 **Qué evidencia produce cada frontera:** el `Consumer` publica una **expectativa versionada**; el `Provider CI` la busca y la **verifica** contra un entorno con estados controlados; el entorno devuelve **logs sanitizados**; el resultado se publica en el registro y habilita (o bloquea) el despliegue. Esta es la mecánica que un flujo consumer-driven automatiza — y **cuándo conviene o no** es el tema de *Consumer-Driven Contract Testing*.

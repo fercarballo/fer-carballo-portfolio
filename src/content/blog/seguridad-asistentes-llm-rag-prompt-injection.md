@@ -63,7 +63,7 @@ Además del glosario del pilar:
 ## 3. Límites de confianza: dónde entra el ataque
 
 <figure class="diagram">
-  <img src="/blog/diagrams/seguridad-asistentes-llm-rag-prompt-injection-1.svg" alt="Diagrama: seguridad-asistentes-llm-rag-prompt-injection (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/seguridad-asistentes-llm-rag-prompt-injection-1.svg" width="462" height="642" alt="Diagrama: seguridad-asistentes-llm-rag-prompt-injection (1)" loading="lazy" decoding="async" />
 </figure>
 
 El nodo `X` entra por **dos** flechas, y ahí está toda la lección. Tres lecturas:

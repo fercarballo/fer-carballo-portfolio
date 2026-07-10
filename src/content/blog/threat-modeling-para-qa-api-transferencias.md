@@ -105,7 +105,7 @@ Para modelar amenazas necesitamos cinco elementos, no solo "el endpoint":
 El primer artefacto de una sesión de threat modeling útil es un DFD *para modelar amenazas*, no un diagrama de arquitectura completo. Debe ser simple y revisable.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/threat-modeling-para-qa-api-transferencias-1.svg" alt="Diagrama: threat-modeling-para-qa-api-transferencias (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/threat-modeling-para-qa-api-transferencias-1.svg" width="1109" height="256" alt="Diagrama: threat-modeling-para-qa-api-transferencias (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Qué representa cada flecha, y dónde está el límite de confianza:**
@@ -122,7 +122,7 @@ El primer artefacto de una sesión de threat modeling útil es un DFD *para mode
 Ahora la vista de secuencia del "flujo feliz":
 
 <figure class="diagram">
-  <img src="/blog/diagrams/threat-modeling-para-qa-api-transferencias-2.svg" alt="Diagrama: threat-modeling-para-qa-api-transferencias (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/threat-modeling-para-qa-api-transferencias-2.svg" width="1050" height="452" alt="Diagrama: threat-modeling-para-qa-api-transferencias (2)" loading="lazy" decoding="async" />
 </figure>
 
 **El flujo feliz no demuestra autorización correcta.** Que esta secuencia funcione para Ana operando la cuenta de Ana no dice *nada* sobre qué pasa cuando Ana intenta operar la cuenta de Bruno. Por eso el trabajo real de QA está en las ramas que este diagrama **no** muestra:

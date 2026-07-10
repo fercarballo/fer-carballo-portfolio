@@ -35,7 +35,7 @@ Peor: ambos tienen un stage de deploy a *staging*. En el mismo commit, los dos i
 El problema de fondo no es técnico sino de **autoridad**: no se decidió **quién manda** sobre cada commit. Dos pipelines no son un problema si tienen roles claros; son un problema cuando **ambos creen ser la fuente de verdad**.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/gitlab-ci-jenkins-fuente-de-verdad-por-commit-1.svg" alt="Diagrama: gitlab-ci-jenkins-fuente-de-verdad-por-commit (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/gitlab-ci-jenkins-fuente-de-verdad-por-commit-1.svg" width="1203" height="159" alt="Diagrama: gitlab-ci-jenkins-fuente-de-verdad-por-commit (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Lectura:** dos flujos actúan sobre el mismo commit y el mismo entorno sin una autoridad única; el resultado es un estado del que nadie puede dar cuenta.

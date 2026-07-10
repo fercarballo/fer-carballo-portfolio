@@ -95,7 +95,7 @@ function classifyFailure(result, telemetry, environmentHealth):
 Para clasificar hace falta ver qué hizo el sistema durante el test. Eso requiere una costura: un **correlation-id** generado por el test (ver [artículo de datos](/blog/datos-aislados-paralelismo-seguro/)) que viaja en las requests y aparece en logs y trazas del backend.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/confiabilidad-diagnostico-flakiness-evidencia-1.svg" alt="Diagrama: confiabilidad-diagnostico-flakiness-evidencia (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/confiabilidad-diagnostico-flakiness-evidencia-1.svg" width="1051" height="435" alt="Diagrama: confiabilidad-diagnostico-flakiness-evidencia (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Cómo leer el diagrama:**

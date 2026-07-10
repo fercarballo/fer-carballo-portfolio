@@ -46,7 +46,7 @@ Necesitás: HTTP y estados de respuesta, nociones de CI, y familiaridad con la t
 Un `.jmx` sin hipótesis produce números sin significado. En `nexo-performance-lab`, el `.jmx` es un artefacto *dentro* de un sistema que también contiene: la **ficha de hipótesis**, los **perfiles** de carga por entorno, los **generadores de datos**, y el **análisis reproducible**. Si lo primero que abrís es JMeter, ya empezaste mal: no sabés qué estás tratando de refutar.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/experimento-carga-responsable-jmeter-1.svg" alt="Diagrama: experimento-carga-responsable-jmeter (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/experimento-carga-responsable-jmeter-1.svg" width="1587" height="159" alt="Diagrama: experimento-carga-responsable-jmeter (1)" loading="lazy" decoding="async" />
 </figure>
 
 ## 2. La ficha de experimento antes del script
@@ -91,7 +91,7 @@ Esta es probablemente la decisión técnica más importante del diseño, y la qu
 - **Modelo abierto:** las llegadas son independientes de las respuestas; se sostiene una **tasa de llegada** aunque el sistema sufra. Se parece más al tráfico real de una app (los usuarios llegan los quiera o no tu servidor).
 
 <figure class="diagram">
-  <img src="/blog/diagrams/experimento-carga-responsable-jmeter-2.svg" alt="Diagrama: experimento-carga-responsable-jmeter (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/experimento-carga-responsable-jmeter-2.svg" width="1178" height="172" alt="Diagrama: experimento-carga-responsable-jmeter (2)" loading="lazy" decoding="async" />
 </figure>
 
 **Consecuencia para la medición:** el modelo cerrado es una de las causas de la *coordinated omission* (el generador "omite" mandar las peticiones que tocaban durante un stall, y las latencias de tu reporte salen mejores de lo que fueron). Lo desarrollamos en el [artículo 4](/blog/percentiles-capacidad-quality-gates/).

@@ -33,7 +33,7 @@ Este es el problema que ataca este artículo: **¿cómo demuestro, después de l
 ## Tres fuentes de verdad (y por qué divergen)
 
 <figure class="diagram">
-  <img src="/blog/diagrams/reconciliacion-auditoria-observabilidad-financiera-1.svg" alt="Diagrama: reconciliacion-auditoria-observabilidad-financiera (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/reconciliacion-auditoria-observabilidad-financiera-1.svg" width="715" height="256" alt="Diagrama: reconciliacion-auditoria-observabilidad-financiera (1)" loading="lazy" decoding="async" />
 </figure>
 
 - **Estado operacional:** el saldo "rápido" que ve la app.

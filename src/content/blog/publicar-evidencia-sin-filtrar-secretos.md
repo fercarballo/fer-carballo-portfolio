@@ -56,7 +56,7 @@ Lista dura (el prompt del pilar la exige explícitamente):
 ## Concepto: el flujo de saneo antes de publicar
 
 <figure class="diagram">
-  <img src="/blog/diagrams/publicar-evidencia-sin-filtrar-secretos-1.svg" alt="Diagrama: publicar-evidencia-sin-filtrar-secretos (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/publicar-evidencia-sin-filtrar-secretos-1.svg" width="657" height="1254" alt="Diagrama: publicar-evidencia-sin-filtrar-secretos (1)" loading="lazy" decoding="async" />
 </figure>
 
 Tres compuertas, en orden: **secretos → PII/URLs → tamaño/crudo**. Nada se publica sin pasar las tres.

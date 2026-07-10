@@ -19,3 +19,23 @@
   Cache-Control: public, max-age=2592000
 /certs/*
   Cache-Control: public, max-age=2592000
+
+# Diagramas: se regeneran sólo si cambia el .mmd de origen
+/blog/diagrams/*
+  Cache-Control: public, max-age=2592000
+  Content-Type: image/svg+xml
+
+# El CV y el OG cambian poco pero deben poder invalidarse
+/cv/*
+  Cache-Control: public, max-age=86400
+/og.jpg
+  Cache-Control: public, max-age=604800
+
+# Feeds: frescos pero cacheables en el borde
+/rss.xml
+  Cache-Control: public, max-age=3600
+  Content-Type: application/rss+xml; charset=utf-8
+/sitemap-index.xml
+  Cache-Control: public, max-age=3600
+/sitemap-0.xml
+  Cache-Control: public, max-age=3600

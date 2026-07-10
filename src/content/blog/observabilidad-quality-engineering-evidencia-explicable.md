@@ -111,7 +111,7 @@ Quality Engineering necesita **las tres**, sin confundirlas:
 Cada señal tiene un dominio propio. Elegir la señal equivocada para una pregunta es la causa raíz de la mitad de los "no encuentro nada en la telemetría".
 
 <figure class="diagram">
-  <img src="/blog/diagrams/observabilidad-quality-engineering-evidencia-explicable-1.svg" alt="Diagrama: observabilidad-quality-engineering-evidencia-explicable (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/observabilidad-quality-engineering-evidencia-explicable-1.svg" width="1073" height="371" alt="Diagrama: observabilidad-quality-engineering-evidencia-explicable (1)" loading="lazy" decoding="async" />
 </figure>
 
 - **Logs** — eventos discretos con contexto. Responden *qué pasó y cuándo*. **No** responden bien *cuánto* (agregación cara) ni *dónde en el camino* (sin correlación explícita). El modelo de logs de OpenTelemetry define campos para correlacionar cada registro con `TraceId`, `SpanId` y el `Resource` ([OTel, *Logs Data Model*](https://opentelemetry.io/docs/specs/otel/logs/data-model/)).
@@ -156,7 +156,7 @@ traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
 ```
 
 <figure class="diagram">
-  <img src="/blog/diagrams/observabilidad-quality-engineering-evidencia-explicable-2.svg" alt="Diagrama: observabilidad-quality-engineering-evidencia-explicable (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/observabilidad-quality-engineering-evidencia-explicable-2.svg" width="650" height="495" alt="Diagrama: observabilidad-quality-engineering-evidencia-explicable (2)" loading="lazy" decoding="async" />
 </figure>
 
 Dos precisiones que evitan errores caros:
@@ -310,7 +310,7 @@ service:
 Integramos todo en el journey ficticio de referencia. El diagrama muestra cómo una prueba, la API, el ledger y las notificaciones producen señales que convergen en un reporte de calidad.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/observabilidad-quality-engineering-evidencia-explicable-3.svg" alt="Diagrama: observabilidad-quality-engineering-evidencia-explicable (3)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/observabilidad-quality-engineering-evidencia-explicable-3.svg" width="1045" height="256" alt="Diagrama: observabilidad-quality-engineering-evidencia-explicable (3)" loading="lazy" decoding="async" />
 </figure>
 
 **Decisiones del diseño:**
@@ -338,7 +338,7 @@ El detalle de *cómo* enlazar el test con la evidencia y *qué hacer cuando el s
 No hace falta llegar a un sistema completo el primer día. Una progresión honesta:
 
 <figure class="diagram">
-  <img src="/blog/diagrams/observabilidad-quality-engineering-evidencia-explicable-4.svg" alt="Diagrama: observabilidad-quality-engineering-evidencia-explicable (4)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/observabilidad-quality-engineering-evidencia-explicable-4.svg" width="1400" height="108" alt="Diagrama: observabilidad-quality-engineering-evidencia-explicable (4)" loading="lazy" decoding="async" />
 </figure>
 
 - **Nivel 0 → 1:** dar esquema a los logs y quitar PII. Barato, alto impacto.

@@ -6,7 +6,7 @@ import { profile } from '../data/profile';
 <header class="nav-wrap">
   <nav class="container nav" aria-label="Principal">
     <div class="nav__left">
-      <a href="/" class="logo" aria-label="Inicio">
+      <a href="/" class="logo" aria-label="FC — Inicio">
         <span class="logo__mark">FC</span>
       </a>
       <div class="nav__links">
@@ -17,10 +17,10 @@ import { profile } from '../data/profile';
       </div>
     </div>
 
-    <button class="search" data-open-palette aria-label="Buscar (Cmd+K)">
+    <button class="search" data-open-palette aria-keyshortcuts="Meta+K Control+K">
       <Icon name="search" size={15} />
       <span class="search__label">Buscar en el sitio…</span>
-      <kbd>⌘K</kbd>
+      <kbd aria-hidden="true">⌘K</kbd>
     </button>
 
     <div class="nav__right">
@@ -30,7 +30,7 @@ import { profile } from '../data/profile';
       <a class="icon-btn" href={profile.links.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">
         <Icon name="linkedin" size={17} />
       </a>
-      <a class="avatar" href="/#top" aria-label="Perfil">FC</a>
+      <a class="avatar" href="/#top" aria-label="FC — Perfil">FC</a>
     </div>
   </nav>
 </header>
@@ -125,7 +125,7 @@ import { profile } from '../data/profile';
     border-radius: 6px;
     background: var(--chip);
     border: 1px solid var(--border);
-    color: var(--text-3);
+    color: var(--text-2); /* 4.5:1 sobre --chip; --text-3 no llegaba */
   }
 
   .nav__right {

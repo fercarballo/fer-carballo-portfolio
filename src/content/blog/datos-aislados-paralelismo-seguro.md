@@ -66,7 +66,7 @@ TransferDraft draft = TransferDraft.builder()
 El aislamiento se logra cuando **nada se comparte entre ejecuciones concurrentes**. Cada worker crea sus propias entidades con identificadores únicos.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/datos-aislados-paralelismo-seguro-1.svg" alt="Diagrama: datos-aislados-paralelismo-seguro (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/datos-aislados-paralelismo-seguro-1.svg" width="672" height="351" alt="Diagrama: datos-aislados-paralelismo-seguro (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Cómo leer el diagrama:** ambos workers usan la misma aplicación, pero **cada uno tiene su propio conjunto de datos y recursos**, nombrados con un identificador de ejecución (`run-a1`, `run-b2`). No hay cuenta compartida, ni archivo de salida común, ni puerto fijo colisionable. El ambiente es compartido; el estado del test no.

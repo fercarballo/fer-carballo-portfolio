@@ -66,7 +66,7 @@ Y hay un sexto elemento transversal que no es un claim sino una obligación: **l
 El siguiente diagrama es el árbol de decisión que aplico a cada oración dudosa antes de publicarla. **Nota sobre los diagramas:** están escritos en Mermaid con etiquetas sin acentos para maximizar compatibilidad entre renderers (GitHub, GitLab, Docusaurus). No pude renderizarlos en el entorno donde escribo, así que los mantengo simples y revisables a ojo; validá el render en tu plataforma antes de publicar.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/escribir-sobre-calidad-con-evidencia-metodo-editorial-1.svg" alt="Diagrama: escribir-sobre-calidad-con-evidencia-metodo-editorial (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/escribir-sobre-calidad-con-evidencia-metodo-editorial-1.svg" width="1010" height="754" alt="Diagrama: escribir-sobre-calidad-con-evidencia-metodo-editorial (1)" loading="lazy" decoding="async" />
 </figure>
 
 ### La tabla de claims (claims ledger)
@@ -118,7 +118,7 @@ Cuando una fuente que ibas a citar ya no está vigente o no dice lo que creías,
 La mayor parte del trabajo de un buen post técnico ocurre antes de la primera oración. Este es el flujo, que también sirve de índice mental:
 
 <figure class="diagram">
-  <img src="/blog/diagrams/escribir-sobre-calidad-con-evidencia-metodo-editorial-2.svg" alt="Diagrama: escribir-sobre-calidad-con-evidencia-metodo-editorial (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/escribir-sobre-calidad-con-evidencia-metodo-editorial-2.svg" width="1829" height="63" alt="Diagrama: escribir-sobre-calidad-con-evidencia-metodo-editorial (2)" loading="lazy" decoding="async" />
 </figure>
 
 1. **Formulá una pregunta, no un título.** "¿Cuánto se degrada la latencia p95 del endpoint de pago cuando dedup por Redis está activo?" es investigable; "JMeter mejora el performance" no lo es.

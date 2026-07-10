@@ -40,7 +40,7 @@ La herramienta editorial correcta para este tipo de claim no es un post de "vers
 Una ADR fuerza esa reformulación porque su primera sección obligatoria es el **contexto**. Sin contexto, no hay decisión: hay preferencia.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/adr-seleccion-herramienta-katalon-selenium-1.svg" alt="Diagrama: adr-seleccion-herramienta-katalon-selenium (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/adr-seleccion-herramienta-katalon-selenium-1.svg" width="1795" height="85" alt="Diagrama: adr-seleccion-herramienta-katalon-selenium (1)" loading="lazy" decoding="async" />
 </figure>
 
 El último nodo importa: <span class="em em--decision">DECISIÓN</span> una ADR no es permanente. Se revisa cuando cambia el contexto (el equipo aprende TypeScript, el presupuesto se recorta, la app pasa de web a móvil). Por eso lleva estado y fecha.

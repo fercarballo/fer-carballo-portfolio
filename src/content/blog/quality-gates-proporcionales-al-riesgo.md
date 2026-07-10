@@ -118,7 +118,7 @@ function releaseDecision(change, evidence, riskProfile):
 El flujo, en diagrama:
 
 <figure class="diagram">
-  <img src="/blog/diagrams/quality-gates-proporcionales-al-riesgo-1.svg" alt="Diagrama: quality-gates-proporcionales-al-riesgo (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/quality-gates-proporcionales-al-riesgo-1.svg" width="750" height="1063" alt="Diagrama: quality-gates-proporcionales-al-riesgo (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Lectura.** Tres compuertas en serie, cada una con una salida negativa distinta. La clave de diseño es que **no todas las salidas negativas son iguales**: faltar evidencia es *block*, un crítico es *block*, pero una señal poco confiable es *review*. Aplanar los tres a un único "falló" es lo que produce gates que la gente aprende a saltear.

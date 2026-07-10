@@ -89,7 +89,7 @@ Por qué cada pieza:
 Este es el segundo diagrama obligatorio de la colección. Modela la secuencia error→campo→anuncio→corrección, que es donde más se rompe la accesibilidad de un formulario.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/semantica-primero-html-nativo-vs-aria-1.svg" alt="Diagrama: semantica-primero-html-nativo-vs-aria (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/semantica-primero-html-nativo-vs-aria-1.svg" width="850" height="452" alt="Diagrama: semantica-primero-html-nativo-vs-aria (1)" loading="lazy" decoding="async" />
 </figure>
 
 Qué verificar en cada flecha:

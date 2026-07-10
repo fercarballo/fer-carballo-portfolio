@@ -120,7 +120,7 @@ Un experimento de resiliencia es un experimento en serio, con la misma estructur
 El siguiente diagrama resume el ciclo. Fijate que **hay dos salidas legítimas**: "cumple" y "no cumple". La segunda no es un error del proceso; es el motor de mejora.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/resiliencia-chaos-engineering-evidencia-y-gobernanza-1.svg" alt="Diagrama: resiliencia-chaos-engineering-evidencia-y-gobernanza (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/resiliencia-chaos-engineering-evidencia-y-gobernanza-1.svg" width="488" height="755" alt="Diagrama: resiliencia-chaos-engineering-evidencia-y-gobernanza (1)" loading="lazy" decoding="async" />
 </figure>
 
 > **Semántica del diagrama.** El único camino para "inyectar" (`D`) pasa por `C`: sin *guardrails* y aprobación no hay experimento. La flecha `H → B` es intencional: al remediar, se reformula la hipótesis y se vuelve a correr; el aprendizaje es iterativo, no un veredicto único.
@@ -153,7 +153,7 @@ Esta sección va **antes** de cualquier tutorial a propósito. Un experimento si
 No se empieza por producción. Se **gana** el derecho a cada nivel demostrando control en el anterior.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/resiliencia-chaos-engineering-evidencia-y-gobernanza-2.svg" alt="Diagrama: resiliencia-chaos-engineering-evidencia-y-gobernanza (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/resiliencia-chaos-engineering-evidencia-y-gobernanza-2.svg" width="1158" height="108" alt="Diagrama: resiliencia-chaos-engineering-evidencia-y-gobernanza (2)" loading="lazy" decoding="async" />
 </figure>
 
 | Nivel | Qué se prueba | Señal de que estás listo para el siguiente |

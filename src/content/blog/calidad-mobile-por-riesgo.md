@@ -45,7 +45,7 @@ Un corolario incómodo: **no podés reproducir toda esa combinatoria** en cada c
 El siguiente diagrama muestra el **bucle de feedback** —no una jerarquía de prestigio—: cada nivel alimenta reporte y evidencia, que a su vez informa dónde reforzar la lógica de dominio.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/calidad-mobile-por-riesgo-1.svg" alt="Diagrama: calidad-mobile-por-riesgo (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/calidad-mobile-por-riesgo-1.svg" width="290" height="449" alt="Diagrama: calidad-mobile-por-riesgo (1)" loading="lazy" decoding="async" />
 </figure>
 
 Qué es más barato detectar en cada nivel:

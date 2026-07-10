@@ -135,6 +135,10 @@ import { certifications, moreCertifications } from '../data/profile';
     padding: 6px 6px 18px;
     margin: 0 -6px;
     scroll-snap-type: x mandatory;
+    /* Debe igualar el padding horizontal: si el punto de snap no cae en
+       scrollLeft:0, Chrome hace un scroll de ajuste en el primer layout y ese
+       scroll finaliza el LCP de toda la página. Ver ProjectsGrid.astro. */
+    scroll-padding-inline: 6px;
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
     -webkit-overflow-scrolling: touch;

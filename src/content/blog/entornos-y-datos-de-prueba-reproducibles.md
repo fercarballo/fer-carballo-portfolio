@@ -93,7 +93,7 @@ Si cualquiera de esos ingredientes vive en la cabeza de una persona, en una wiki
 El primer diagrama resume el ciclo de vida que hace posible la receta:
 
 <figure class="diagram">
-  <img src="/blog/diagrams/entornos-y-datos-de-prueba-reproducibles-1.svg" alt="Diagrama: entornos-y-datos-de-prueba-reproducibles (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/entornos-y-datos-de-prueba-reproducibles-1.svg" width="1514" height="63" alt="Diagrama: entornos-y-datos-de-prueba-reproducibles (1)" loading="lazy" decoding="async" />
 </figure>
 
 Leelo de izquierda a derecha como una cadena de custodia: el commit fija código y contrato de entorno; de ahí salen imágenes y migraciones con versiones conocidas; el entorno se crea aislado para esta ejecución; el seed instala **solo** el estado que la suite declara necesitar; la suite corre; la evidencia se captura **antes** de limpiar; y el resultado queda asociado a todos los ingredientes anteriores. Si un eslabón se rompe —por ejemplo, el seed se ejecuta a mano "para ganar tiempo"— el resultado deja de ser trazable y la cadena entera pierde valor.
@@ -130,7 +130,7 @@ El contrato convierte la pregunta "¿a quién le pido acceso?" en "¿qué versi�
 El segundo diagrama muestra la separación de responsabilidades que el contrato debe respetar:
 
 <figure class="diagram">
-  <img src="/blog/diagrams/entornos-y-datos-de-prueba-reproducibles-2.svg" alt="Diagrama: entornos-y-datos-de-prueba-reproducibles (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/entornos-y-datos-de-prueba-reproducibles-2.svg" width="678" height="352" alt="Diagrama: entornos-y-datos-de-prueba-reproducibles (2)" loading="lazy" decoding="async" />
 </figure>
 
 Del repositorio salen **dos** cosas: la receta de infraestructura (Compose/manifests) y la receta de datos (seeds/factories). Los secretos entran por un canal separado y ojalá efímero. El entorno es el punto de encuentro; las pruebas y reportes son su salida. Si una flecha va del repositorio directo a "credenciales", el diseño está roto.

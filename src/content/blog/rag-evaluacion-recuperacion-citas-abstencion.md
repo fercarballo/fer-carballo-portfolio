@@ -59,7 +59,7 @@ Además del glosario del pilar:
 ## 3. El pipeline y sus cuatro puntos de medición
 
 <figure class="diagram">
-  <img src="/blog/diagrams/rag-evaluacion-recuperacion-citas-abstencion-1.svg" alt="Diagrama: rag-evaluacion-recuperacion-citas-abstencion (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/rag-evaluacion-recuperacion-citas-abstencion-1.svg" width="1461" height="196" alt="Diagrama: rag-evaluacion-recuperacion-citas-abstencion (1)" loading="lazy" decoding="async" />
 </figure>
 
 Medimos en cuatro lugares distintos, y **cada uno es una eval separada**:

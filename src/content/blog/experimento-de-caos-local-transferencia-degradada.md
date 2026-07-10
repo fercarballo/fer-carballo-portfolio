@@ -32,7 +32,7 @@ Queremos **evidencia** de que, cuando la validación de beneficiario está lenta
 El siguiente diagrama muestra el journey y dónde inyectamos la falla (`Dependencia degradada`) y dónde vive la política que debe protegernos (`Timeout y politica de resiliencia`).
 
 <figure class="diagram">
-  <img src="/blog/diagrams/experimento-de-caos-local-transferencia-degradada-1.svg" alt="Diagrama: experimento-de-caos-local-transferencia-degradada (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/experimento-de-caos-local-transferencia-degradada-1.svg" width="949" height="323" alt="Diagrama: experimento-de-caos-local-transferencia-degradada (1)" loading="lazy" decoding="async" />
 </figure>
 
 > **Semántica del diagrama.** La falla se inyecta en `D` (la dependencia, controlada por nosotros). La protección vive en `E`. Todo lo que pasa se registra en `G` para poder **interpretar** el experimento (sin telemetría no hay experimento válido — ver [pilar §6](/blog/resiliencia-chaos-engineering-evidencia-y-gobernanza/)).
@@ -214,7 +214,7 @@ La evidencia mínima para que el experimento sea **reproducible y creíble** com
 *Gates* proporcionados al riesgo. No todo corre en cada PR.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/experimento-de-caos-local-transferencia-degradada-2.svg" alt="Diagrama: experimento-de-caos-local-transferencia-degradada (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/experimento-de-caos-local-transferencia-degradada-2.svg" width="264" height="584" alt="Diagrama: experimento-de-caos-local-transferencia-degradada (2)" loading="lazy" decoding="async" />
 </figure>
 
 - **En cada PR:** solo los **tests deterministas** de §6. Son rápidos, estables y no dependen de infraestructura frágil. Un PR **no** debe disparar un experimento de sistema completo.

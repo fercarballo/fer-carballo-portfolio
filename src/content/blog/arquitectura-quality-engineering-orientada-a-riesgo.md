@@ -76,7 +76,7 @@ Conviene desarmar cuatro términos que suelen usarse como sinónimos y no lo son
 El diagrama siguiente resume el flujo de información que queremos construir: del riesgo a la decisión, y de vuelta al riesgo (el sistema aprende).
 
 <figure class="diagram">
-  <img src="/blog/diagrams/arquitectura-quality-engineering-orientada-a-riesgo-1.svg" alt="Diagrama: arquitectura-quality-engineering-orientada-a-riesgo (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/arquitectura-quality-engineering-orientada-a-riesgo-1.svg" width="1494" height="254" alt="Diagrama: arquitectura-quality-engineering-orientada-a-riesgo (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Lectura del diagrama.** El riesgo alimenta la estrategia; la estrategia define el portafolio de controles; los datos y entornos *habilitan* ese portafolio (sin datos reproducibles, los controles mienten). El CI ejecuta, produce evidencia y trazabilidad, que se combinan con la telemetría operativa (lo que pasa en producción) para tomar una decisión y aprender. Ese aprendizaje **actualiza el riesgo**: el bucle se cierra. Una arquitectura sin la flecha `G → R` es una máquina de correr tests que nunca revisa sus propios supuestos.
@@ -198,7 +198,7 @@ Los controles se ejecutan en distintos momentos, con distinto propósito:
 El siguiente diagrama muestra el ciclo completo de un cambio, incluyendo el retorno de señales operativas:
 
 <figure class="diagram">
-  <img src="/blog/diagrams/arquitectura-quality-engineering-orientada-a-riesgo-2.svg" alt="Diagrama: arquitectura-quality-engineering-orientada-a-riesgo (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/arquitectura-quality-engineering-orientada-a-riesgo-2.svg" width="1050" height="479" alt="Diagrama: arquitectura-quality-engineering-orientada-a-riesgo (2)" loading="lazy" decoding="async" />
 </figure>
 
 **Lectura.** Producto entrega criterio y riesgo; Desarrollo propone casos críticos junto a QE; QE versiona los controles en el repo; el pipeline devuelve evidencia a Desarrollo y publica artefacto + telemetría a Operaciones; Operaciones devuelve señales post-despliegue a QE; y QE cierra el ciclo entregando aprendizaje a Producto, que **revisa el riesgo**. La flecha que casi todos olvidan es `OPS-->>QE`: sin ella, la calidad se ciega apenas el código sale a producción.

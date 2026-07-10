@@ -32,7 +32,7 @@ Que esta distinción esté clara es la diferencia entre un sistema que no duplic
 ## El flujo correcto
 
 <figure class="diagram">
-  <img src="/blog/diagrams/red-degradada-lifecycle-idempotencia-1.svg" alt="Diagrama: red-degradada-lifecycle-idempotencia (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/red-degradada-lifecycle-idempotencia-1.svg" width="850" height="435" alt="Diagrama: red-degradada-lifecycle-idempotencia (1)" loading="lazy" decoding="async" />
 </figure>
 
 Lecturas clave del diagrama:
@@ -51,7 +51,7 @@ Lecturas clave del diagrama:
 Perder red rara vez ocurre de forma limpia. El usuario cambia de aplicación, el sistema operativo termina el proceso por presión de memoria, y más tarde la app se relanza. Cada una de esas transiciones puede disparar un reintento.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/red-degradada-lifecycle-idempotencia-2.svg" alt="Diagrama: red-degradada-lifecycle-idempotencia (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/red-degradada-lifecycle-idempotencia-2.svg" width="391" height="341" alt="Diagrama: red-degradada-lifecycle-idempotencia (2)" loading="lazy" decoding="async" />
 </figure>
 
 Por eso la verificación no es solamente "cortar la red". Es **cortar la red, mandar la app a background, matar el proceso, relanzar** y confirmar que sigue habiendo **una** operación.

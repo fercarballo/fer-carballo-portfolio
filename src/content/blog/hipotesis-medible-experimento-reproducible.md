@@ -73,7 +73,7 @@ Esto ancla la pregunta "¿mejoró?" a un objetivo, en vez de a una sensación. L
 ## Concepto: el diseño experimental mínimo honesto
 
 <figure class="diagram">
-  <img src="/blog/diagrams/hipotesis-medible-experimento-reproducible-1.svg" alt="Diagrama: hipotesis-medible-experimento-reproducible (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/hipotesis-medible-experimento-reproducible-1.svg" width="2060" height="257" alt="Diagrama: hipotesis-medible-experimento-reproducible (1)" loading="lazy" decoding="async" />
 </figure>
 
 Puntos no negociables del diseño:

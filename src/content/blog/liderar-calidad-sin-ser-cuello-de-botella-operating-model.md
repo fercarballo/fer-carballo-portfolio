@@ -99,7 +99,7 @@ Una afirmación de calidad vale lo que vale su evidencia. Un badge verde no prue
 Estos son los artefactos que convierten "lo que Mariana sabe" en "lo que el equipo puede usar, discutir y mejorar". El diagrama muestra cómo se relacionan; ninguno existe por decoración.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/liderar-calidad-sin-ser-cuello-de-botella-operating-model-1.svg" alt="Diagrama: liderar-calidad-sin-ser-cuello-de-botella-operating-model (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/liderar-calidad-sin-ser-cuello-de-botella-operating-model-1.svg" width="640" height="449" alt="Diagrama: liderar-calidad-sin-ser-cuello-de-botella-operating-model (1)" loading="lazy" decoding="async" />
 </figure>
 
 | Artefacto | Qué decide | Dueño colaborativo | Archivo sugerido |
@@ -124,7 +124,7 @@ El detalle de DoR/DoD y quality gates proporcionales al riesgo se desarrolla en 
 El operating model se ejecuta en un ciclo. Cada etapa tiene un feedback más corto que la anterior en la etapa equivocada: es más barato descubrir un malentendido en refinamiento que en producción.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/liderar-calidad-sin-ser-cuello-de-botella-operating-model-2.svg" alt="Diagrama: liderar-calidad-sin-ser-cuello-de-botella-operating-model (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/liderar-calidad-sin-ser-cuello-de-botella-operating-model-2.svg" width="1690" height="120" alt="Diagrama: liderar-calidad-sin-ser-cuello-de-botella-operating-model (2)" loading="lazy" decoding="async" />
 </figure>
 
 **Advertencia sobre el diagrama (importante):** este flujo **no** implica que QA sea un *gatekeeper* al final. La flecha `L[Release con evidencia]` no es "QA firma"; es "existe evidencia suficiente y el dueño del riesgo decide". La **responsabilidad cambia según el tipo de riesgo** (una regla de negocio la valida quien la escribió con negocio; una regresión visual la valida quien tocó la UI), pero **la propiedad se comparte** y la accountability queda registrada. El bucle `O → D` es el punto: la observabilidad de producción alimenta el próximo discovery.

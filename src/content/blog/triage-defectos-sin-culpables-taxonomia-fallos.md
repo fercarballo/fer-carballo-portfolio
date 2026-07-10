@@ -32,7 +32,7 @@ La [cultura de postmortem sin culpa de Google SRE](https://sre.google/sre-book/p
 Un fallo rojo puede tener seis orígenes muy distintos. Confundirlos es la causa número uno de tiempo perdido: se "arregla" un test que no estaba roto, o se ignora un bug real creyendo que "es flaky".
 
 <figure class="diagram">
-  <img src="/blog/diagrams/triage-defectos-sin-culpables-taxonomia-fallos-1.svg" alt="Diagrama: triage-defectos-sin-culpables-taxonomia-fallos (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/triage-defectos-sin-culpables-taxonomia-fallos-1.svg" width="1034" height="749" alt="Diagrama: triage-defectos-sin-culpables-taxonomia-fallos (1)" loading="lazy" decoding="async" />
 </figure>
 
 | Categoría | Señal distintiva | Confusión frecuente | Próximo paso correcto |

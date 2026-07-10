@@ -160,7 +160,7 @@ No todos los gates son iguales. Conviene nombrarlos y saber **qué NO garantizan
 Este es el corazón del artículo. Tres cosas distintas que un pipeline mal diseñado colapsa en una.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/quality-gates-auditables-policy-as-code-1.svg" alt="Diagrama: quality-gates-auditables-policy-as-code (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/quality-gates-auditables-policy-as-code-1.svg" width="510" height="1036" alt="Diagrama: quality-gates-auditables-policy-as-code (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Lectura del diagrama:**

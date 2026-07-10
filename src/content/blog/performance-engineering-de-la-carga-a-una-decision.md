@@ -124,7 +124,7 @@ Tomemos el journey ficticio **"crear transferencia"** en Nexo Finanzas. Antes de
 Un experimento útil separa cuatro cosas que suelen confundirse: el modelo, el generador, el sistema y sus dependencias. Y captura evidencia de **ambos lados** (cliente y servidor) para poder atribuir un cambio a la capa correcta.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/performance-engineering-de-la-carga-a-una-decision-1.svg" alt="Diagrama: performance-engineering-de-la-carga-a-una-decision (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/performance-engineering-de-la-carga-a-una-decision-1.svg" width="1386" height="188" alt="Diagrama: performance-engineering-de-la-carga-a-una-decision (1)" loading="lazy" decoding="async" />
 </figure>
 
 Lectura del diagrama: la carga nace de un **modelo** (sección 4), la ejecuta un **generador** que hay que verificar que no se sature, golpea la **API** que a su vez depende de **base y colas**. Los **resultados del cliente** (lo que el generador midió) y las **métricas/trazas** del servidor confluyen en el **análisis**. Si solo mirás una rama, no podés distinguir "la API está lenta" de "mi generador se quedó sin CPU".
@@ -132,7 +132,7 @@ Lectura del diagrama: la carga nace de un **modelo** (sección 4), la ejecuta un
 ### Diagrama 2 — Del SLI a un gate de entrega
 
 <figure class="diagram">
-  <img src="/blog/diagrams/performance-engineering-de-la-carga-a-una-decision-2.svg" alt="Diagrama: performance-engineering-de-la-carga-a-una-decision (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/performance-engineering-de-la-carga-a-una-decision-2.svg" width="448" height="545" alt="Diagrama: performance-engineering-de-la-carga-a-una-decision (2)" loading="lazy" decoding="async" />
 </figure>
 
 Lectura: el gate de entrega no nace de un número arbitrario. Nace de un **journey** → un **SLI** que se parece a la experiencia → un **SLO acordado** entre producto, ingeniería y operaciones → un **experimento reproducible** cuya **comparación con evidencia** habilita dos salidas legítimas: **decidir el release** o **abrir una investigación**. Nótese que "resultado inconcluso" es una salida válida, no un fracaso.
@@ -188,7 +188,7 @@ Y el artefacto de gobierno: **ADR-004 — "Performance gates basados en evidenci
 No se llega a "gates de performance en CI" en un salto. Una progresión razonable (decisión de diseño, no receta universal):
 
 <figure class="diagram">
-  <img src="/blog/diagrams/performance-engineering-de-la-carga-a-una-decision-3.svg" alt="Diagrama: performance-engineering-de-la-carga-a-una-decision (3)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/performance-engineering-de-la-carga-a-una-decision-3.svg" width="1123" height="85" alt="Diagrama: performance-engineering-de-la-carga-a-una-decision (3)" loading="lazy" decoding="async" />
 </figure>
 
 - **N0 — Baseline local reproducible.** Ficha de experimento + plan versionado + datos aislados. Objetivo: poder repetir.

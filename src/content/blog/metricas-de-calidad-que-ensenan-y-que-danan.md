@@ -142,7 +142,7 @@ Para señales de entrega y estabilidad a nivel de sistema, la investigación de 
 Un pequeño protocolo antes de agregar cualquier métrica al dashboard:
 
 <figure class="diagram">
-  <img src="/blog/diagrams/metricas-de-calidad-que-ensenan-y-que-danan-1.svg" alt="Diagrama: metricas-de-calidad-que-ensenan-y-que-danan (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/metricas-de-calidad-que-ensenan-y-que-danan-1.svg" width="624" height="1131" alt="Diagrama: metricas-de-calidad-que-ensenan-y-que-danan (1)" loading="lazy" decoding="async" />
 </figure>
 
 Preguntas de control:

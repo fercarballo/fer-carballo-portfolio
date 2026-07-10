@@ -65,7 +65,7 @@ Regla de oro: **la transferencia describe la intención; el ledger describe la v
 ### Máquina de estados de una transferencia
 
 <figure class="diagram">
-  <img src="/blog/diagrams/probar-dinero-no-es-probar-formularios-1.svg" alt="Diagrama: probar-dinero-no-es-probar-formularios (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/probar-dinero-no-es-probar-formularios-1.svg" width="469" height="493" alt="Diagrama: probar-dinero-no-es-probar-formularios (1)" loading="lazy" decoding="async" />
 </figure>
 
 Cada flecha es una prueba: una transición no listada (por ejemplo `COMPLETED --> PENDING`) debe ser **imposible** y hay que testearla como caso negativo. `REJECTED` (regla de negocio, ej. saldo insuficiente) y `FAILED` (fallo técnico transitorio) son distintos: solo `FAILED` habilita reintento.
@@ -73,7 +73,7 @@ Cada flecha es una prueba: una transición no listada (por ejemplo `COMPLETED --
 ### El flujo, y lo que el diagrama NO prueba
 
 <figure class="diagram">
-  <img src="/blog/diagrams/probar-dinero-no-es-probar-formularios-2.svg" alt="Diagrama: probar-dinero-no-es-probar-formularios (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/probar-dinero-no-es-probar-formularios-2.svg" width="850" height="499" alt="Diagrama: probar-dinero-no-es-probar-formularios (2)" loading="lazy" decoding="async" />
 </figure>
 
 **Límites del diagrama (declarados explícitamente):** el paso "Resultado atómico" solo es cierto si débito y crédito ocurren en **una transacción local**. En cuanto origen y destino viven en servicios o bases distintas, no hay atomicidad distribuida gratis: se necesitan patrones de **compensación** (ej. saga) y la consistencia pasa a ser **eventual**. No uses este gráfico como prueba de atomicidad distribuida; úsalo para acordar qué es local y qué no. El detalle está en el artículo satélite de reconciliación.

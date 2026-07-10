@@ -104,7 +104,7 @@ Esto rompe tres supuestos del testing tradicional:
 ## 5. Arquitectura del sistema completo (no solo "el modelo")
 
 <figure class="diagram">
-  <img src="/blog/diagrams/evaluacion-continua-sistemas-ia-quality-engineering-1.svg" alt="Diagrama: evaluacion-continua-sistemas-ia-quality-engineering (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/evaluacion-continua-sistemas-ia-quality-engineering-1.svg" width="1754" height="224" alt="Diagrama: evaluacion-continua-sistemas-ia-quality-engineering (1)" loading="lazy" decoding="async" />
 </figure>
 
 Cada caja es simultáneamente **una superficie de fallo** y **una superficie de versión**. Evaluar "el modelo" ignora que la política de entrada, el recuperador y el manejo de la salida producen buena parte de los incidentes reales.
@@ -118,7 +118,7 @@ Para el ciclo de vida del software que rodea a esto, la referencia es el [NIST S
 La arquitectura de arriba describe **el sistema**. Este otro diagrama describe **el proceso** que lo mantiene honesto, y es la columna vertebral del resto del artículo:
 
 <figure class="diagram">
-  <img src="/blog/diagrams/evaluacion-continua-sistemas-ia-quality-engineering-2.svg" alt="Diagrama: evaluacion-continua-sistemas-ia-quality-engineering (2)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/evaluacion-continua-sistemas-ia-quality-engineering-2.svg" width="1245" height="98" alt="Diagrama: evaluacion-continua-sistemas-ia-quality-engineering (2)" loading="lazy" decoding="async" />
 </figure>
 
 Leelo como un ciclo, no como una tubería. Dos consecuencias que casi siempre se pasan por alto:

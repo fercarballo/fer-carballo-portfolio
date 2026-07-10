@@ -31,7 +31,7 @@ Un cambio es **rompiente** si un consumidor *válido existente* deja de funciona
 **El caso `"HELD"` enseña la asimetría:** agregar un valor a un `enum` de **respuesta** es rompiente para un consumidor que enumera exhaustivamente; agregar un valor aceptado en un **request** es rompiente para el proveedor viejo. **Dirección importa.**
 
 <figure class="diagram">
-  <img src="/blog/diagrams/evolucion-contratos-cambios-rompientes-apis-eventos-1.svg" alt="Diagrama: evolucion-contratos-cambios-rompientes-apis-eventos (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/evolucion-contratos-cambios-rompientes-apis-eventos-1.svg" width="530" height="665" alt="Diagrama: evolucion-contratos-cambios-rompientes-apis-eventos (1)" loading="lazy" decoding="async" />
 </figure>
 
 ## Clasificación de cambios (con dirección)

@@ -20,7 +20,7 @@ const stack = [
 ];
 ---
 
-<div class="banner" data-reveal>
+<div class="banner">
   {
     hasLoopVideo ? (
       <video
@@ -48,16 +48,16 @@ const stack = [
   }
   <div class="banner__grain" aria-hidden="true"></div>
   <div class="banner__scrim" aria-hidden="true"></div>
-  <ul class="banner__stack" aria-label="Stack tecnológico principal">
+  <div class="banner__stack" role="list" aria-label="Stack tecnológico principal">
     {
       stack.map((t) => (
-        <li class="banner__badge" role="img" aria-label={t.name} tabindex="0" style={`--tool-color: ${t.color}`}>
+        <span class="banner__badge" role="listitem" aria-label={t.name} tabindex="0" style={`--tool-color: ${t.color}`}>
           <Icon name={t.icon} size={15} />
           <span class="banner__tooltip" aria-hidden="true">{t.name}</span>
-        </li>
+        </span>
       ))
     }
-  </ul>
+  </div>
 </div>
 
 <style>

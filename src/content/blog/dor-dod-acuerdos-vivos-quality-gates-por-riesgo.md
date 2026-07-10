@@ -128,7 +128,7 @@ Para el tooltip del principio, la DoD colapsa al **núcleo común** más, quizá
 Un quality gate es el punto donde los criterios se **verifican de forma automática** para autorizar un avance. El principio es el mismo que la DoD: **proporcionalidad**.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/dor-dod-acuerdos-vivos-quality-gates-por-riesgo-1.svg" alt="Diagrama: dor-dod-acuerdos-vivos-quality-gates-por-riesgo (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/dor-dod-acuerdos-vivos-quality-gates-por-riesgo-1.svg" width="913" height="442" alt="Diagrama: dor-dod-acuerdos-vivos-quality-gates-por-riesgo (1)" loading="lazy" decoding="async" />
 </figure>
 
 | Nivel de riesgo | Gates que se activan | Costo |

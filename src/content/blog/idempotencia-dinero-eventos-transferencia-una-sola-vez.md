@@ -98,7 +98,7 @@ Representar dinero como `float` (binario IEEE-754) introduce errores de redondeo
 Un contrato de comportamiento debe fijar la **máquina de estados** y qué transiciones son válidas:
 
 <figure class="diagram">
-  <img src="/blog/diagrams/idempotencia-dinero-eventos-transferencia-una-sola-vez-1.svg" alt="Diagrama: idempotencia-dinero-eventos-transferencia-una-sola-vez (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/idempotencia-dinero-eventos-transferencia-una-sola-vez-1.svg" width="351" height="271" alt="Diagrama: idempotencia-dinero-eventos-transferencia-una-sola-vez (1)" loading="lazy" decoding="async" />
 </figure>
 
 `REJECTED` (regla de negocio: p. ej. saldo insuficiente → típicamente `422`) es distinto de `FAILED` (error operacional). Campos como `transferId` y `createdAt` son **inmutables**; `status` es la parte que evoluciona. El contrato debe declarar qué transiciones **no** ocurren (no se vuelve de `SETTLED` a `PENDING`).

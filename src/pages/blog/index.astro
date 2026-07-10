@@ -13,14 +13,38 @@ const totalPillars = posts.filter((p) => p.data.type === 'pilar').length;
 
 // Punto de entrada canónico: el pilar de la colección 00 (el mapa).
 const entry = groups.find((g) => g.cluster.id === '00')?.pillar;
+
+const site = Astro.site!.href.replace(/\/$/, '');
+const blogSchema = {
+  '@type': 'Blog',
+  '@id': `${site}/blog/#blog`,
+  url: `${site}/blog/`,
+  name: 'Blog de Quality Engineering',
+  description: `Corpus de ${totalArticles} artículos de Quality Engineering y SDET, organizados en ${totalClusters} colecciones pilar-satélite.`,
+  inLanguage: 'es-AR',
+  author: { '@id': `${site}/#fernando` },
+  publisher: { '@id': `${site}/#fernando` },
+  isPartOf: { '@id': `${site}/#website` },
+  // Sólo los pilares: son las entradas canónicas de cada colección.
+  blogPost: groups.map((g) => ({
+    '@type': 'TechArticle',
+    '@id': `${site}/blog/${g.pillar.id}/#article`,
+    url: `${site}/blog/${g.pillar.id}/`,
+    headline: g.pillar.data.title,
+    datePublished: g.pillar.data.pubDate.toISOString(),
+    author: { '@id': `${site}/#fernando` },
+  })),
+};
 ---
 
 <Base
   title="Blog de Quality Engineering — Fernando Carballo"
   description="Corpus de Quality Engineering y SDET: arquitectura de calidad, contract testing, CI/CD, performance, observabilidad, seguridad, accesibilidad, resiliencia, fintech e IA. Artículos con evidencia citada y código público."
+  breadcrumbs={[{ name: 'Inicio', url: '/' }, { name: 'Blog' }]}
+  schema={blogSchema}
 >
   <main class="container blog">
-    <header class="blog-hero" data-reveal>
+    <header class="blog-hero">
       <span class="kicker">Blog técnico</span>
       <h1>Quality Engineering, de la teoría a la evidencia</h1>
       <p>

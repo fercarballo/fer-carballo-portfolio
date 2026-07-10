@@ -101,7 +101,7 @@ Criterios de selección de herramienta (decisiones, no reglas universales):
 La propuesta es un conjunto de módulos con **dependencias dirigidas**: cada flecha indica "puede depender de", y lo que no está dibujado está prohibido.
 
 <figure class="diagram">
-  <img src="/blog/diagrams/framework-engineering-suite-producto-interno-1.svg" alt="Diagrama: framework-engineering-suite-producto-interno (1)" loading="lazy" decoding="async" />
+  <img src="/blog/diagrams/framework-engineering-suite-producto-interno-1.svg" width="847" height="352" alt="Diagrama: framework-engineering-suite-producto-interno (1)" loading="lazy" decoding="async" />
 </figure>
 
 **Cómo leer el diagrama:**
