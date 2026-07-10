@@ -3,26 +3,31 @@ import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import { getCollection, render } from 'astro:content';
 import { profile } from '../../data/profile';
+import { clusterById, sortByReadingOrder, readingMinutes, repoUrl, NEXO_REPOS } from '../../data/blog';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+
+  return posts.map((post) => {
+    const siblings = sortByReadingOrder(posts.filter((p) => p.data.cluster === post.data.cluster));
+    const i = siblings.findIndex((p) => p.id === post.id);
+    return {
+      params: { slug: post.id },
+      props: { post, siblings, prev: siblings[i - 1] ?? null, next: siblings[i + 1] ?? null },
+    };
+  });
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+const { post, siblings, prev, next } = Astro.props;
+const { Content, headings } = await render(post);
 
-const date = post.data.pubDate.toLocaleDateString('es-AR', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-});
+const cluster = clusterById(post.data.cluster)!;
+const minutes = readingMinutes(post.body);
+const date = post.data.pubDate.toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' });
 
-const words = post.body?.split(/\s+/).length ?? 0;
-const minutes = Math.max(1, Math.round(words / 200));
+// TOC: sólo h2/h3 (los artículos numeran sus secciones).
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const repo = post.data.repo;
 ---
 
 <Base
@@ -32,88 +37,251 @@ const minutes = Math.max(1, Math.round(words / 200));
   publishedTime={post.data.pubDate.toISOString()}
   tags={post.data.tags}
 >
-  <main class="container post">
-    <a class="post__back" href="/blog"><Icon name="arrow-left" size={15} /> Volver al blog</a>
+  <main class="container post" style={`--hue: ${cluster.hue}`}>
+    <nav class="crumbs" aria-label="Ruta de navegación">
+      <a href="/blog/">Blog</a>
+      <Icon name="arrow-right" size={12} />
+      <a href={`/blog/coleccion/${cluster.id}/`}>{cluster.short}</a>
+      <Icon name="arrow-right" size={12} />
+      <span class="crumbs__current">{post.data.type === 'pilar' ? 'Pilar' : `Satélite ${post.data.order}`}</span>
+    </nav>
 
     <header class="post__head" data-reveal>
-      <span class="post__icon" style={`--hue: ${post.data.iconHue}`}>
-        <Icon name={post.data.icon} size={24} />
-      </span>
+      <div class="post__badges">
+        <span class={`badge ${post.data.type === 'pilar' ? 'badge--pilar' : 'badge--sat'}`}>
+          {post.data.type === 'pilar' ? 'Pilar' : 'Satélite'}
+        </span>
+        {post.data.readingLevel && <span class="badge badge--level">{post.data.readingLevel}</span>}
+        <a class="badge badge--cluster" href={`/blog/coleccion/${cluster.id}/`}>
+          <Icon name={cluster.icon} size={12} /> {cluster.short}
+        </a>
+      </div>
+
       <h1>{post.data.title}</h1>
       <p class="post__desc">{post.data.description}</p>
+
+      {
+        post.data.prerequisites && (
+          <p class="post__prereq">
+            <Icon name="check" size={13} />
+            <span><strong>Antes de leer:</strong> {post.data.prerequisites}</span>
+          </p>
+        )
+      }
+
       <div class="post__meta">
-        <span class="post__author">FC</span>
+        <img class="post__author" src="/avatar/fer.jpg" alt={profile.name} width="30" height="30" loading="lazy" />
         <span>{profile.name}</span>
         <span>·</span>
         <time datetime={post.data.pubDate.toISOString()}>{date}</time>
         <span>·</span>
-        <span><Icon name="clock" size={13} /> {minutes} min de lectura</span>
+        <span><Icon name="clock" size={13} /> {minutes} min</span>
       </div>
+
       <div class="post__tags">
         {post.data.tags.map((t) => <span class="chip">{t}</span>)}
       </div>
     </header>
 
-    <article class="post__body card">
-      <Content />
-    </article>
+    <div class="post__layout">
+      <article class="post__body">
+        <Content />
+      </article>
+
+      <aside class="rail">
+        <div class="rail__sticky">
+          {
+            toc.length > 2 && (
+              <nav class="rail__box" aria-labelledby="toc-title">
+                <h2 id="toc-title" class="rail__title">En este artículo</h2>
+                <ul class="toc">
+                  {toc.map((h) => (
+                    <li class={`toc__item toc__item--h${h.depth}`}>
+                      <a href={`#${h.slug}`} data-toc-link={h.slug}>{h.text}</a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )
+          }
+
+          <nav class="rail__box" aria-labelledby="serie-title">
+            <h2 id="serie-title" class="rail__title">
+              Colección {cluster.id}
+            </h2>
+            <p class="rail__sub">{cluster.short}</p>
+            <ol class="serie">
+              {
+                siblings.map((s) => (
+                  <li class={s.id === post.id ? 'serie__item is-current' : 'serie__item'}>
+                    <a href={`/blog/${s.id}/`} aria-current={s.id === post.id ? 'page' : undefined}>
+                      <span class="serie__n">{s.data.type === 'pilar' ? '★' : String(s.data.order).padStart(2, '0')}</span>
+                      <span class="serie__t">{s.data.title}</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ol>
+          </nav>
+
+          {
+            repo && (
+              <a class="rail__box repo-card" href={repoUrl(repo)} target="_blank" rel="noopener">
+                <span class="repo-card__icon"><Icon name="github" size={16} /></span>
+                <div>
+                  <span class="rail__title">Código de soporte</span>
+                  <strong>{repo}</strong>
+                  <span class="repo-card__blurb">{NEXO_REPOS[repo]?.blurb ?? 'Repositorio del ecosistema Nexo Finanzas.'}</span>
+                </div>
+              </a>
+            )
+          }
+
+          <details class="rail__box legend">
+            <summary>
+              <Icon name="sparkle" size={13} />
+              Cómo leer las afirmaciones
+            </summary>
+            <ul>
+              <li><span class="em em--hecho">HECHO</span> verificable en la fuente citada.</li>
+              <li><span class="em em--inferencia">INFERENCIA</span> razonamiento propio a partir de hechos.</li>
+              <li><span class="em em--decision">DECISIÓN</span> elección de diseño, con alternativas y costo.</li>
+              <li><span class="em em--hipotesis">HIPÓTESIS</span> plausible, pendiente de medición.</li>
+              <li><span class="em em--opinion">OPINIÓN</span> juicio profesional discutible.</li>
+            </ul>
+          </details>
+        </div>
+      </aside>
+    </div>
+
+    <nav class="post__nav" aria-label="Navegación de la colección">
+      {prev ? (
+        <a class="post__nav-item card" href={`/blog/${prev.id}/`}>
+          <span><Icon name="arrow-left" size={13} /> Anterior</span>
+          <strong>{prev.data.title}</strong>
+        </a>
+      ) : <span />}
+      {next && (
+        <a class="post__nav-item card post__nav-item--next" href={`/blog/${next.id}/`}>
+          <span>Siguiente <Icon name="arrow-right" size={13} /></span>
+          <strong>{next.data.title}</strong>
+        </a>
+      )}
+    </nav>
 
     <footer class="post__foot card" data-reveal>
       <p>¿Te sirvió este artículo? Charlemos sobre QA, testing y automatización.</p>
       <div class="post__foot-actions">
         <a class="btn btn--primary" href={`mailto:${profile.email}`}><Icon name="mail" size={15} /> Contactame</a>
-        <a class="btn btn--ghost" href="/blog">Más artículos</a>
+        <a class="btn btn--ghost" href={`/blog/coleccion/${cluster.id}/`}>Volver a la colección</a>
       </div>
     </footer>
   </main>
 </Base>
 
+<script>
+  // Scroll-spy del índice: resalta la sección visible.
+  function initToc() {
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
+    if (!links.length) return;
+
+    const map = new Map(links.map((l) => [l.dataset.tocLink!, l]));
+    const targets = links
+      .map((l) => document.getElementById(l.dataset.tocLink!))
+      .filter((el): el is HTMLElement => !!el);
+    if (!targets.length) return;
+
+    let current: HTMLAnchorElement | null = null;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          const link = map.get(e.target.id);
+          if (!link) continue;
+          current?.classList.remove('is-active');
+          link.classList.add('is-active');
+          current = link;
+        }
+      },
+      { rootMargin: '-80px 0px -70% 0px', threshold: 0 }
+    );
+    targets.forEach((t) => io.observe(t));
+  }
+
+  document.addEventListener('astro:page-load', initToc);
+</script>
+
 <style>
   .post {
-    max-width: 760px;
-    padding-top: 48px;
+    padding-top: 40px;
   }
 
-  .post__back {
-    display: inline-flex;
+  .crumbs {
+    display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 13.5px;
+    flex-wrap: wrap;
+    gap: 9px;
+    font-size: 12.5px;
+    color: var(--text-3);
+    margin-bottom: 26px;
+  }
+
+  .crumbs a:hover {
+    color: var(--accent-hover);
+  }
+
+  .crumbs__current {
     color: var(--text-2);
-    margin-bottom: 32px;
-    transition: color 0.2s;
   }
 
-  .post__back:hover {
-    color: var(--text);
-  }
-
+  /* ── Cabecera ── */
   .post__head {
-    margin-bottom: 34px;
+    max-width: 800px;
+    margin-bottom: 40px;
   }
 
-  .post__icon {
-    display: grid;
-    place-items: center;
-    width: 52px;
-    height: 52px;
-    border-radius: 15px;
-    background: #fff;
-    color: hsl(var(--hue) 75% 45%);
-    margin-bottom: 22px;
-    box-shadow: 0 10px 26px -8px rgba(0, 0, 0, 0.55);
+  .post__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
   }
 
   .post__head h1 {
-    font-size: clamp(28px, 4.5vw, 40px);
+    font-size: clamp(27px, 4vw, 40px);
     line-height: 1.15;
   }
 
   .post__desc {
-    margin-top: 14px;
-    font-size: 16px;
+    margin-top: 16px;
+    font-size: 16.5px;
     color: var(--text-2);
     line-height: 1.65;
+  }
+
+  .post__prereq {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 18px;
+    padding: 11px 14px;
+    border-radius: var(--r-md);
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text-3);
+  }
+
+  .post__prereq :global(svg) {
+    flex-shrink: 0;
+    margin-top: 3px;
+    color: var(--accent-hover);
+  }
+
+  .post__prereq strong {
+    color: var(--text-2);
+    font-weight: 600;
   }
 
   .post__meta {
@@ -121,7 +289,7 @@ const minutes = Math.max(1, Math.round(words / 200));
     align-items: center;
     flex-wrap: wrap;
     gap: 9px;
-    margin-top: 20px;
+    margin-top: 22px;
     font-size: 13px;
     color: var(--text-3);
   }
@@ -133,15 +301,12 @@ const minutes = Math.max(1, Math.round(words / 200));
   }
 
   .post__author {
-    display: grid;
-    place-items: center;
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background: linear-gradient(140deg, #14532d, #22a05a);
-    font-size: 10.5px;
-    font-weight: 700;
-    color: #dbe6ff;
+    object-fit: cover;
+    object-position: center 22%;
+    border: 1px solid var(--border-strong);
   }
 
   .post__tags {
@@ -151,45 +316,262 @@ const minutes = Math.max(1, Math.round(words / 200));
     margin-top: 18px;
   }
 
-  .post__body {
-    padding: clamp(24px, 4vw, 44px);
-    border-radius: var(--r-xl);
-    font-size: 15px;
-    line-height: 1.8;
-    color: #cfcfd6;
+  /* ── Layout con rail ── */
+  .post__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 290px;
+    gap: 46px;
+    align-items: start;
   }
 
-  /* Prosa del markdown */
-  .post__body :global(h2) {
-    font-size: 22px;
-    margin: 36px 0 14px;
+  @media (max-width: 1080px) {
+    .post__layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .rail {
+      display: none;
+    }
+  }
+
+  .rail__sticky {
+    position: sticky;
+    top: 86px;
+    display: grid;
+    gap: 14px;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  .rail__box {
+    padding: 18px 20px;
+    border-radius: var(--r-md);
+    border: 1px solid var(--border);
+    background: var(--card);
+  }
+
+  .rail__title {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  .rail__sub {
+    margin-top: 3px;
+    font-size: 13px;
+    font-weight: 600;
     color: var(--text);
+  }
+
+  /* TOC */
+  .toc {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 3px;
+    border-left: 1px solid var(--border);
+  }
+
+  .toc__item a {
+    display: block;
+    padding: 5px 0 5px 13px;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--text-3);
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .toc__item--h3 a {
+    padding-left: 24px;
+    font-size: 12px;
+  }
+
+  .toc__item a:hover {
+    color: var(--text-2);
+  }
+
+  .toc__item a:global(.is-active) {
+    color: var(--accent-hover);
+    border-left-color: var(--accent-hover);
+    font-weight: 600;
+  }
+
+  /* Serie */
+  .serie {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 2px;
+  }
+
+  .serie__item a {
+    display: flex;
+    gap: 10px;
+    padding: 7px 9px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--text-2);
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .serie__item a:hover {
+    background: var(--card-hover);
+    color: var(--text);
+  }
+
+  .serie__item.is-current a {
+    background: hsl(var(--hue) 55% 45% / 0.14);
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .serie__n {
+    flex-shrink: 0;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: hsl(var(--hue) 70% 66%);
+    padding-top: 1px;
+  }
+
+  /* Repo card */
+  .repo-card {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    color: inherit;
+  }
+
+  .repo-card__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: #24292f;
+    border: 1px solid #3a4048;
+    color: #fff;
+  }
+
+  .repo-card div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .repo-card strong {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 650;
+    word-break: break-word;
+  }
+
+  .repo-card:hover strong {
+    color: var(--accent-hover);
+  }
+
+  .repo-card__blurb {
+    font-size: 11.5px;
+    color: var(--text-3);
+    line-height: 1.45;
+  }
+
+  /* Leyenda */
+  .legend summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-2);
+    list-style: none;
+  }
+
+  .legend summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .legend[open] summary {
+    margin-bottom: 12px;
+  }
+
+  .legend ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 9px;
+  }
+
+  .legend li {
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: var(--text-3);
+  }
+
+  /* ── Cuerpo ── */
+  .post__body {
+    max-width: 780px;
+    font-size: 15.5px;
+    line-height: 1.8;
+    color: #cbd4cb;
+  }
+
+  .post__body :global(h2) {
+    font-size: 24px;
+    margin: 48px 0 16px;
+    color: var(--text);
+    scroll-margin-top: 90px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
   }
 
   .post__body :global(h3) {
-    font-size: 17px;
-    margin: 28px 0 10px;
+    font-size: 18px;
+    margin: 32px 0 12px;
     color: var(--text);
+    scroll-margin-top: 90px;
+  }
+
+  .post__body :global(h4) {
+    font-size: 15.5px;
+    margin: 24px 0 10px;
+    color: var(--text-2);
   }
 
   .post__body :global(p) {
-    margin: 0 0 18px;
+    margin: 0 0 20px;
   }
 
   .post__body :global(a) {
     color: var(--accent-hover);
     text-decoration: underline;
     text-underline-offset: 3px;
+    text-decoration-color: rgba(70, 209, 126, 0.4);
+  }
+
+  .post__body :global(a:hover) {
+    text-decoration-color: var(--accent-hover);
   }
 
   .post__body :global(ul),
   .post__body :global(ol) {
-    margin: 0 0 18px;
+    margin: 0 0 20px;
     padding-left: 22px;
   }
 
   .post__body :global(li) {
-    margin-bottom: 8px;
+    margin-bottom: 9px;
   }
 
   .post__body :global(li::marker) {
@@ -198,21 +580,21 @@ const minutes = Math.max(1, Math.round(words / 200));
 
   .post__body :global(code) {
     font-family: var(--mono);
-    font-size: 0.88em;
+    font-size: 0.86em;
     background: var(--chip);
     border: 1px solid var(--border);
     padding: 2px 7px;
     border-radius: 7px;
-    color: #a5c8ff;
+    color: #9fe3bd;
   }
 
   .post__body :global(pre) {
-    background: #0c0c10 !important;
+    background: #0b100c !important;
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 18px 20px;
     overflow-x: auto;
-    margin: 0 0 20px;
+    margin: 0 0 22px;
     font-size: 13px;
     line-height: 1.7;
   }
@@ -225,28 +607,36 @@ const minutes = Math.max(1, Math.round(words / 200));
   }
 
   .post__body :global(blockquote) {
-    margin: 0 0 18px;
-    padding: 4px 0 4px 20px;
+    margin: 0 0 22px;
+    padding: 14px 18px;
     border-left: 3px solid var(--accent);
+    border-radius: 0 var(--r-md) var(--r-md) 0;
+    background: rgba(70, 209, 126, 0.06);
     color: var(--text-2);
-    font-style: italic;
+  }
+
+  .post__body :global(blockquote p:last-child) {
+    margin-bottom: 0;
   }
 
   .post__body :global(strong) {
     color: var(--text);
+    font-weight: 620;
   }
 
   .post__body :global(hr) {
     border: 0;
     border-top: 1px solid var(--border);
-    margin: 32px 0;
+    margin: 40px 0;
   }
 
   .post__body :global(table) {
     width: 100%;
     border-collapse: collapse;
-    margin: 0 0 20px;
+    margin: 0 0 22px;
     font-size: 13.5px;
+    display: block;
+    overflow-x: auto;
   }
 
   .post__body :global(th),
@@ -254,13 +644,58 @@ const minutes = Math.max(1, Math.round(words / 200));
     text-align: left;
     padding: 10px 14px;
     border: 1px solid var(--border);
+    vertical-align: top;
   }
 
   .post__body :global(th) {
     background: var(--chip);
     color: var(--text);
+    white-space: nowrap;
   }
 
+  /* ── Nav prev/next ── */
+  .post__nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 60px;
+  }
+
+  .post__nav-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 20px;
+    border-radius: var(--r-md);
+    color: inherit;
+    max-width: 47%;
+  }
+
+  .post__nav-item--next {
+    margin-left: auto;
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .post__nav-item span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11.5px;
+    color: var(--text-3);
+  }
+
+  .post__nav-item strong {
+    font-size: 13.5px;
+    font-weight: 620;
+    line-height: 1.4;
+  }
+
+  .post__nav-item:hover strong {
+    color: var(--accent-hover);
+  }
+
+  /* ── Footer ── */
   .post__foot {
     display: flex;
     align-items: center;
@@ -281,5 +716,11 @@ const minutes = Math.max(1, Math.round(words / 200));
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+  }
+
+  @media (max-width: 640px) {
+    .post__nav-item {
+      max-width: 100%;
+    }
   }
 </style>

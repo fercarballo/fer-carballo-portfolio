@@ -1,0 +1,68 @@
+{
+  "theme": "base",
+  "themeVariables": {
+    "darkMode": true,
+    "background": "transparent",
+    "fontFamily": "Inter Variable, ui-sans-serif, system-ui, sans-serif",
+    "fontSize": "15px",
+
+    "primaryColor": "#16241a",
+    "primaryTextColor": "#eaf3ea",
+    "primaryBorderColor": "#46d17e",
+
+    "secondaryColor": "#16202a",
+    "secondaryTextColor": "#dbe7f2",
+    "secondaryBorderColor": "#5ec6ff",
+
+    "tertiaryColor": "#1d1a26",
+    "tertiaryTextColor": "#e7e2f2",
+    "tertiaryBorderColor": "#b490ff",
+
+    "lineColor": "#6d7a70",
+    "textColor": "#cfd8cf",
+
+    "mainBkg": "#16241a",
+    "nodeBorder": "#46d17e",
+    "nodeTextColor": "#eaf3ea",
+    "clusterBkg": "#10160f",
+    "clusterBorder": "#2c4a36",
+    "titleColor": "#f2f6f0",
+    "edgeLabelBackground": "#0f150f",
+
+    "actorBkg": "#16241a",
+    "actorBorder": "#46d17e",
+    "actorTextColor": "#eaf3ea",
+    "actorLineColor": "#6d7a70",
+    "signalColor": "#cfd8cf",
+    "signalTextColor": "#cfd8cf",
+    "labelBoxBkgColor": "#16241a",
+    "labelBoxBorderColor": "#46d17e",
+    "labelTextColor": "#eaf3ea",
+    "loopTextColor": "#cfd8cf",
+    "noteBkgColor": "#1f2a20",
+    "noteTextColor": "#eaf3ea",
+    "noteBorderColor": "#46d17e",
+    "activationBkgColor": "#1f3327",
+    "activationBorderColor": "#46d17e",
+    "sequenceNumberColor": "#0a0e0b",
+
+    "altBackground": "#10160f",
+    "attributeBackgroundColorOdd": "#141b15",
+    "attributeBackgroundColorEven": "#10160f",
+
+    "pie1": "#46d17e",
+    "pie2": "#5ec6ff",
+    "pie3": "#b490ff",
+    "pie4": "#ff7a59",
+    "pieTitleTextColor": "#f2f6f0",
+    "pieSectionTextColor": "#0a0e0b",
+    "pieLegendTextColor": "#cfd8cf",
+
+    "cScale0": "#46d17e",
+    "cScale1": "#5ec6ff",
+    "cScale2": "#b490ff"
+  },
+  "flowchart": { "curve": "basis", "htmlLabels": true, "padding": 12 },
+  "sequence": { "useMaxWidth": true, "wrap": true },
+  "gantt": { "useMaxWidth": true }
+}

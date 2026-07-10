@@ -1,0 +1,474 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Icon from '../../../components/Icon.astro';
+import { getCollection } from 'astro:content';
+import { groupByCluster, readingMinutes, repoUrl, NEXO_REPOS } from '../../../data/blog';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const groups = groupByCluster(posts);
+
+  return groups.map((g, i) => ({
+    params: { cluster: g.cluster.id },
+    props: {
+      group: g,
+      prev: groups[i - 1] ?? null,
+      next: groups[i + 1] ?? null,
+    },
+  }));
+}
+
+const { group, prev, next } = Astro.props;
+const { cluster, pillar, satellites, items } = group;
+
+// Repos del ecosistema referenciados por los artículos de esta colección.
+const repos = [...new Set(items.map((p) => p.data.repo).filter(Boolean))] as string[];
+const totalMinutes = items.reduce((acc, p) => acc + readingMinutes(p.body), 0);
+---
+
+<Base
+  title={`${cluster.title} — Blog de Fernando Carballo`}
+  description={cluster.blurb}
+>
+  <main class="container coll" style={`--hue: ${cluster.hue}`}>
+    <nav class="crumbs" aria-label="Ruta de navegación">
+      <a href="/blog/">Blog</a>
+      <Icon name="arrow-right" size={12} />
+      <span>Colección {cluster.id}</span>
+    </nav>
+
+    <header class="coll-hero" data-reveal>
+      <span class="coll-hero__icon"><Icon name={cluster.icon} size={26} /></span>
+      <div>
+        <span class="kicker">Colección {cluster.id}</span>
+        <h1>{cluster.title}</h1>
+        <p>{cluster.blurb}</p>
+        <div class="coll-hero__meta">
+          <span>{items.length} artículos</span>
+          <span>·</span>
+          <span><Icon name="clock" size={13} /> ~{totalMinutes} min de lectura</span>
+          {repos.length > 0 && (<><span>·</span><span>{repos.length} {repos.length === 1 ? 'repo' : 'repos'} de soporte</span></>)}
+        </div>
+      </div>
+    </header>
+
+    <!-- Pilar -->
+    <a class="pillar card" href={`/blog/${pillar.id}/`} data-reveal data-tilt>
+      <div class="pillar__top">
+        <span class="badge badge--pilar">Pilar · empezá acá</span>
+        {pillar.data.readingLevel && <span class="badge badge--level">{pillar.data.readingLevel}</span>}
+      </div>
+      <h2>{pillar.data.title}</h2>
+      <p>{pillar.data.description}</p>
+      <div class="pillar__foot">
+        <span class="pillar__go">Leer el pilar <Icon name="arrow-right" size={15} /></span>
+        <span class="pillar__min"><Icon name="clock" size={13} /> {readingMinutes(pillar.body)} min</span>
+      </div>
+    </a>
+
+    <!-- Satélites -->
+    {
+      satellites.length > 0 && (
+        <section class="sats" aria-labelledby="satelites">
+          <h2 id="satelites" class="sats__title">
+            Satélites <span>· profundizan el pilar, en orden</span>
+          </h2>
+
+          <ol class="sats__list">
+            {satellites.map((p) => (
+              <li data-reveal>
+                <a class="sat card" href={`/blog/${p.id}/`}>
+                  <span class="sat__n">{String(p.data.order).padStart(2, '0')}</span>
+                  <div class="sat__body">
+                    <h3>{p.data.title}</h3>
+                    <p>{p.data.description}</p>
+                    <div class="sat__chips">
+                      {p.data.readingLevel && <span class="badge badge--level">{p.data.readingLevel}</span>}
+                      <span class="sat__min"><Icon name="clock" size={12} /> {readingMinutes(p.body)} min</span>
+                      {p.data.tags.slice(0, 3).map((t) => <span class="chip chip--outline">{t}</span>)}
+                    </div>
+                  </div>
+                  <span class="sat__arrow"><Icon name="arrow-right" size={16} /></span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+
+    <!-- Repos de soporte -->
+    {
+      repos.length > 0 && (
+        <section class="repos" data-reveal>
+          <h2 class="sats__title">Código que implementa esta colección</h2>
+          <div class="repos__grid">
+            {repos.map((r) => (
+              <a class="repo card" href={repoUrl(r)} target="_blank" rel="noopener">
+                <span class="repo__icon"><Icon name="github" size={17} /></span>
+                <div>
+                  <strong>{r}</strong>
+                  <span>{NEXO_REPOS[r]?.blurb ?? 'Repositorio del ecosistema Nexo Finanzas.'}</span>
+                </div>
+                <Icon name="external" size={15} />
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Navegación entre colecciones -->
+    <nav class="coll-nav" aria-label="Otras colecciones">
+      {prev ? (
+        <a class="coll-nav__item card" href={`/blog/coleccion/${prev.cluster.id}/`}>
+          <span class="coll-nav__dir"><Icon name="arrow-left" size={13} /> Colección {prev.cluster.id}</span>
+          <strong>{prev.cluster.short}</strong>
+        </a>
+      ) : <span />}
+      {next && (
+        <a class="coll-nav__item card coll-nav__item--next" href={`/blog/coleccion/${next.cluster.id}/`}>
+          <span class="coll-nav__dir">Colección {next.cluster.id} <Icon name="arrow-right" size={13} /></span>
+          <strong>{next.cluster.short}</strong>
+        </a>
+      )}
+    </nav>
+  </main>
+</Base>
+
+<style>
+  .coll {
+    padding-top: 40px;
+    max-width: 940px;
+  }
+
+  .crumbs {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 12.5px;
+    color: var(--text-3);
+    margin-bottom: 28px;
+  }
+
+  .crumbs a:hover {
+    color: var(--accent-hover);
+  }
+
+  .coll-hero {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 36px;
+  }
+
+  .coll-hero__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 17px;
+    background: hsl(var(--hue) 55% 50% / 0.14);
+    border: 1px solid hsl(var(--hue) 60% 55% / 0.32);
+    color: hsl(var(--hue) 70% 66%);
+  }
+
+  .coll-hero h1 {
+    margin-top: 7px;
+    font-size: clamp(26px, 4vw, 38px);
+    line-height: 1.15;
+  }
+
+  .coll-hero p {
+    margin-top: 12px;
+    font-size: 15px;
+    color: var(--text-2);
+    line-height: 1.65;
+  }
+
+  .coll-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    margin-top: 14px;
+    font-size: 12.5px;
+    color: var(--text-3);
+  }
+
+  .coll-hero__meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ── Pilar destacado ── */
+  .pillar {
+    display: block;
+    padding: 28px;
+    border-radius: var(--r-lg);
+    color: inherit;
+    border-color: hsl(var(--hue) 60% 50% / 0.35);
+    background: linear-gradient(130deg, hsl(var(--hue) 55% 40% / 0.16), var(--card) 62%);
+  }
+
+  .pillar__top {
+    display: flex;
+    gap: 9px;
+    margin-bottom: 14px;
+  }
+
+  .pillar h2 {
+    font-size: clamp(19px, 2.6vw, 24px);
+    line-height: 1.3;
+  }
+
+  .pillar:hover h2 {
+    color: var(--accent-hover);
+  }
+
+  .pillar p {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-2);
+  }
+
+  .pillar__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  .pillar__go {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    font-weight: 650;
+    color: var(--accent-hover);
+  }
+
+  .pillar:hover .pillar__go :global(svg) {
+    transform: translateX(3px);
+  }
+
+  .pillar__go :global(svg) {
+    transition: transform 0.2s;
+  }
+
+  .pillar__min {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-3);
+  }
+
+  /* ── Satélites ── */
+  .sats {
+    margin-top: 54px;
+  }
+
+  .sats__title {
+    font-size: 16px;
+    font-weight: 650;
+    margin-bottom: 18px;
+  }
+
+  .sats__title span {
+    font-weight: 400;
+    color: var(--text-3);
+    font-size: 13.5px;
+  }
+
+  .sats__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+    counter-reset: sat;
+  }
+
+  .sat {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 20px 22px;
+    border-radius: var(--r-lg);
+    color: inherit;
+  }
+
+  .sat__n {
+    flex-shrink: 0;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: hsl(var(--hue) 70% 66%);
+    padding-top: 2px;
+  }
+
+  .sat__body {
+    min-width: 0;
+  }
+
+  .sat h3 {
+    font-size: 15.5px;
+    line-height: 1.4;
+    font-weight: 620;
+  }
+
+  .sat:hover h3 {
+    color: var(--accent-hover);
+  }
+
+  .sat p {
+    margin-top: 7px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+
+  .sat__chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px;
+    margin-top: 12px;
+  }
+
+  .sat__min {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    color: var(--text-3);
+  }
+
+  .sat__arrow {
+    margin-left: auto;
+    flex-shrink: 0;
+    color: var(--text-3);
+    transition: transform 0.2s, color 0.2s;
+  }
+
+  .sat:hover .sat__arrow {
+    color: var(--accent-hover);
+    transform: translateX(3px);
+  }
+
+  /* ── Repos ── */
+  .repos {
+    margin-top: 54px;
+  }
+
+  .repos__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 12px;
+  }
+
+  .repo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: var(--r-md);
+    color: inherit;
+  }
+
+  .repo__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #24292f;
+    border: 1px solid #3a4048;
+    color: #fff;
+  }
+
+  .repo div {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .repo strong {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 650;
+  }
+
+  .repo:hover strong {
+    color: var(--accent-hover);
+  }
+
+  .repo span {
+    font-size: 11.5px;
+    color: var(--text-3);
+    line-height: 1.45;
+    margin-top: 3px;
+  }
+
+  .repo > :global(svg:last-child) {
+    margin-left: auto;
+    flex-shrink: 0;
+    color: var(--text-3);
+  }
+
+  /* ── Nav entre colecciones ── */
+  .coll-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 64px;
+  }
+
+  .coll-nav__item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 16px 20px;
+    border-radius: var(--r-md);
+    color: inherit;
+    max-width: 46%;
+  }
+
+  .coll-nav__item--next {
+    margin-left: auto;
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .coll-nav__dir {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11.5px;
+    color: var(--text-3);
+  }
+
+  .coll-nav__item strong {
+    font-size: 14px;
+    font-weight: 620;
+  }
+
+  .coll-nav__item:hover strong {
+    color: var(--accent-hover);
+  }
+
+  @media (max-width: 640px) {
+    .coll-hero {
+      flex-direction: column;
+      gap: 16px;
+    }
+    .coll-nav__item {
+      max-width: 100%;
+    }
+  }
+</style>

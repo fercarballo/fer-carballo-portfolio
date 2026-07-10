@@ -7,14 +7,16 @@ export async function GET(context) {
   );
 
   return rss({
-    title: 'Blog de Fernando Carballo',
-    description: 'QA, testing manual y automatizado, API testing, CI/CD y calidad de software.',
+    title: 'Blog de Quality Engineering — Fernando Carballo',
+    description:
+      'Arquitectura de calidad, contract testing, CI/CD, performance, observabilidad, seguridad, accesibilidad, resiliencia, fintech e IA. Artículos con evidencia citada.',
     site: context.site,
     items: posts.map((post) => ({
       title: post.data.title,
       description: post.data.description,
       pubDate: post.data.pubDate,
       link: `/blog/${post.id}/`,
+      categories: post.data.tags,
     })),
     customData: '<language>es-ar</language>',
   });

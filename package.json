@@ -7,12 +7,17 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "blog:import": "node scripts/import-blog.mjs",
+    "blog:diagrams": "node scripts/render-diagrams.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.3.0",
     "@fontsource-variable/inter": "^5.2.5",
     "astro": "^5.8.0"
+  },
+  "devDependencies": {
+    "gray-matter": "^4.0.3"
   }
 }

@@ -32,18 +32,27 @@ const minutes = Math.max(1, Math.round(words / 200));
     </div>
   </header>
 
+  <div class="blog-card__badges">
+    <span class={`badge ${post.data.type === 'pilar' ? 'badge--pilar' : 'badge--sat'}`}>
+      {post.data.type === 'pilar' ? 'Pilar' : 'Satélite'}
+    </span>
+    <a class="badge badge--cluster" href={`/blog/coleccion/${post.data.cluster}/`}>
+      {post.data.clusterTitle}
+    </a>
+  </div>
+
   <h3 class="blog-card__title">
-    <a href={`/blog/${post.id}`}>{post.data.title}</a>
+    <a href={`/blog/${post.id}/`}>{post.data.title}</a>
   </h3>
 
   <p class="blog-card__desc">{post.data.description}</p>
 
   <div class="blog-card__chips">
-    {post.data.tags.map((t) => <span class="chip chip--outline">{t}</span>)}
+    {post.data.tags.slice(0, 3).map((t) => <span class="chip chip--outline">{t}</span>)}
   </div>
 
   <footer class="blog-card__foot">
-    <a class="btn btn--primary" href={`/blog/${post.id}`}>Leer artículo</a>
+    <a class="btn btn--primary" href={`/blog/${post.id}/`}>Leer artículo</a>
   </footer>
 </article>
 
@@ -86,6 +95,19 @@ const minutes = Math.max(1, Math.round(words / 200));
     display: inline-flex;
     align-items: center;
     gap: 5px;
+  }
+
+  .blog-card__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .blog-card__badges .badge--cluster {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
   }
 
   .blog-card__title {

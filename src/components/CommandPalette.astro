@@ -3,9 +3,11 @@ import Icon from './Icon.astro';
 import { getCollection } from 'astro:content';
 import { projects } from '../data/profile';
 
-const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+import { CLUSTERS, sortByReadingOrder } from '../data/blog';
+
+// Orden del corpus: colección → pilar → satélites (no cronológico).
+const rawPosts = await getCollection('blog', ({ data }) => !data.draft);
+const posts = CLUSTERS.flatMap((c) => sortByReadingOrder(rawPosts.filter((p) => p.data.cluster === c.id)));
 
 type Item = { label: string; hint: string; href: string; group: string };
 
@@ -19,7 +21,18 @@ const items: Item[] = [
   { label: 'Contacto', hint: 'Hablemos', href: '/#contacto', group: 'Secciones' },
   { label: 'Descargar CV', hint: 'PDF actualizado', href: '/cv/Fernando-Carballo-CV.pdf', group: 'Acciones' },
   ...projects.map((p) => ({ label: p.title, hint: p.org, href: `/#${p.id}`, group: 'Proyectos' })),
-  ...posts.map((p) => ({ label: p.data.title, hint: 'Artículo del blog', href: `/blog/${p.id}`, group: 'Blog' })),
+  ...CLUSTERS.map((c) => ({
+    label: c.title,
+    hint: `Colección ${c.id} · ${c.blurb}`,
+    href: `/blog/coleccion/${c.id}/`,
+    group: 'Colecciones',
+  })),
+  ...posts.map((p) => ({
+    label: p.data.title,
+    hint: `${p.data.type === 'pilar' ? 'Pilar' : 'Satélite'} · ${p.data.clusterTitle}`,
+    href: `/blog/${p.id}/`,
+    group: 'Artículos',
+  })),
 ];
 ---
 

@@ -1,124 +1,418 @@
 ---
 import Base from '../../layouts/Base.astro';
-import BlogCard from '../../components/BlogCard.astro';
+import Icon from '../../components/Icon.astro';
 import { getCollection } from 'astro:content';
+import { groupByCluster } from '../../data/blog';
 
-const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+const groups = groupByCluster(posts);
 
-// Tags únicos para el filtro
-const allTags = [...new Set(posts.flatMap((p) => p.data.tags))];
+const totalArticles = posts.length;
+const totalClusters = groups.length;
+const totalPillars = posts.filter((p) => p.data.type === 'pilar').length;
+
+// Punto de entrada canónico: el pilar de la colección 00 (el mapa).
+const entry = groups.find((g) => g.cluster.id === '00')?.pillar;
 ---
 
 <Base
-  title="Blog — Fernando Carballo"
-  description="Artículos sobre QA, testing manual y automatizado, API testing, CI/CD y calidad de software, escritos desde la trinchera."
+  title="Blog de Quality Engineering — Fernando Carballo"
+  description="Corpus de Quality Engineering y SDET: arquitectura de calidad, contract testing, CI/CD, performance, observabilidad, seguridad, accesibilidad, resiliencia, fintech e IA. Artículos con evidencia citada y código público."
 >
-  <main class="container">
+  <main class="container blog">
     <header class="blog-hero" data-reveal>
-      <span class="kicker">Blog</span>
-      <h1>Notas desde la trinchera de la calidad</h1>
+      <span class="kicker">Blog técnico</span>
+      <h1>Quality Engineering, de la teoría a la evidencia</h1>
       <p>
-        Testing manual y automatizado, API testing, CI/CD y calidad. Lo que aprendo rompiendo software
-        (a propósito) para que no se rompa en producción.
+        Un corpus de {totalArticles} artículos organizados en {totalClusters} colecciones. Cada colección abre con
+        un <strong>pilar</strong> que da el mapa y se profundiza en <strong>satélites</strong>. Cada afirmación va
+        marcada según su naturaleza: hecho verificable, inferencia, decisión de diseño, hipótesis u opinión.
       </p>
+
+      <ul class="blog-stats">
+        <li><strong>{totalArticles}</strong><span>artículos</span></li>
+        <li><strong>{totalClusters}</strong><span>colecciones</span></li>
+        <li><strong>{totalPillars}</strong><span>pilares</span></li>
+        <li><strong>7</strong><span>repos de soporte</span></li>
+      </ul>
     </header>
 
-    <div class="blog-tags" data-reveal>
-      <button class="chip blog-tag active" data-tag="all">Todos</button>
-      {allTags.map((t) => <button class="chip blog-tag" data-tag={t}>{t}</button>)}
-    </div>
-
-    <div class="blog-grid" id="blog-grid">
-      {
-        posts.map((post, i) => (
-          <div class="blog-grid__item" data-tags={post.data.tags.join(',')}>
-            <BlogCard post={post} index={i} />
+    {
+      entry && (
+        <a class="blog-entry card" href={`/blog/${entry.id}/`} data-reveal data-tilt>
+          <span class="blog-entry__icon"><Icon name="grad" size={22} /></span>
+          <div class="blog-entry__text">
+            <span class="blog-entry__kicker">Empezá acá</span>
+            <h2>{entry.data.title}</h2>
+            <p>{entry.data.description}</p>
           </div>
-        ))
-      }
-    </div>
+          <span class="blog-entry__arrow"><Icon name="arrow-right" size={18} /></span>
+        </a>
+      )
+    }
+
+    <section class="blog-section" aria-labelledby="colecciones">
+      <div class="section-head" data-reveal>
+        <div>
+          <span class="kicker">Colecciones</span>
+          <h2 id="colecciones">Las {totalClusters} rutas del corpus</h2>
+          <p class="blog-section__sub">
+            Cada tarjeta es una ruta de lectura completa: un pilar y sus satélites, en orden.
+          </p>
+        </div>
+      </div>
+
+      <div class="cluster-grid">
+        {
+          groups.map((g, i) => (
+            <a
+              class="cluster-card card"
+              href={`/blog/coleccion/${g.cluster.id}/`}
+              data-tilt
+              data-reveal
+              style={`--hue: ${g.cluster.hue}; --d: ${(i % 3) * 0.05}s`}
+            >
+              <header class="cluster-card__head">
+                <span class="cluster-card__icon">
+                  <Icon name={g.cluster.icon} size={20} />
+                </span>
+                <span class="cluster-card__num">{g.cluster.id}</span>
+              </header>
+
+              <h3>{g.cluster.title}</h3>
+              <p class="cluster-card__blurb">{g.cluster.blurb}</p>
+
+              <p class="cluster-card__pillar">
+                <span class="badge badge--pilar">Pilar</span>
+                <span>{g.pillar.data.title}</span>
+              </p>
+
+              <footer class="cluster-card__foot">
+                <span class="cluster-card__count">
+                  {g.items.length} {g.items.length === 1 ? 'artículo' : 'artículos'}
+                </span>
+                <span class="cluster-card__go">
+                  Ver colección <Icon name="arrow-right" size={14} />
+                </span>
+              </footer>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="blog-section" aria-labelledby="indice">
+      <div class="section-head" data-reveal>
+        <div>
+          <span class="kicker">Índice completo</span>
+          <h2 id="indice">Los {totalArticles} artículos, en orden de lectura</h2>
+        </div>
+      </div>
+
+      <div class="index-cols">
+        {
+          groups.map((g) => (
+            <div class="index-block" data-reveal style={`--hue: ${g.cluster.hue}`}>
+              <h3 class="index-block__title">
+                <span class="index-block__num">{g.cluster.id}</span>
+                <a href={`/blog/coleccion/${g.cluster.id}/`}>{g.cluster.short}</a>
+              </h3>
+              <ol class="index-list">
+                {g.items.map((p) => (
+                  <li>
+                    <a href={`/blog/${p.id}/`}>
+                      {p.data.type === 'pilar' && <span class="dot" aria-label="Pilar" />}
+                      {p.data.title}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))
+        }
+      </div>
+    </section>
   </main>
 </Base>
 
 <style>
-  main {
+  .blog {
     padding-top: 60px;
-    min-height: 60vh;
   }
 
   .blog-hero {
-    max-width: 640px;
-    margin-bottom: 40px;
+    max-width: 760px;
   }
 
   .blog-hero h1 {
-    font-size: clamp(30px, 5vw, 44px);
+    font-size: clamp(30px, 5vw, 46px);
     margin-top: 8px;
+    line-height: 1.1;
   }
 
   .blog-hero p {
-    margin-top: 16px;
+    margin-top: 18px;
     font-size: 15.5px;
     color: var(--text-2);
-    line-height: 1.7;
+    line-height: 1.75;
   }
 
-  .blog-tags {
+  .blog-hero strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .blog-stats {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 28px;
+    gap: 28px;
+    margin: 28px 0 0;
+    padding: 0;
+    list-style: none;
   }
 
-  .blog-tag {
-    cursor: pointer;
-    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  .blog-stats li {
+    display: flex;
+    flex-direction: column;
   }
 
-  .blog-tag:hover {
-    color: var(--text);
-    border-color: var(--border-strong);
+  .blog-stats strong {
+    font-size: 26px;
+    font-weight: 750;
+    color: var(--accent-hover);
+    font-variant-numeric: tabular-nums;
   }
 
-  .blog-tag.active {
+  .blog-stats span {
+    font-size: 12.5px;
+    color: var(--text-3);
+  }
+
+  /* ── Punto de entrada ── */
+  .blog-entry {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 40px;
+    padding: 24px 26px;
+    border-radius: var(--r-lg);
+    border-color: rgba(70, 209, 126, 0.3);
+    background: linear-gradient(120deg, rgba(34, 160, 90, 0.14), var(--card) 60%);
+    color: inherit;
+  }
+
+  .blog-entry__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
     background: var(--accent);
-    border-color: var(--accent);
     color: #fff;
   }
 
-  .blog-grid {
+  .blog-entry__kicker {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent-hover);
+  }
+
+  .blog-entry__text h2 {
+    margin-top: 5px;
+    font-size: 19px;
+    line-height: 1.3;
+  }
+
+  .blog-entry__text p {
+    margin-top: 7px;
+    font-size: 13.5px;
+    color: var(--text-2);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .blog-entry__arrow {
+    margin-left: auto;
+    flex-shrink: 0;
+    color: var(--accent-hover);
+    transition: transform 0.2s;
+  }
+
+  .blog-entry:hover .blog-entry__arrow {
+    transform: translateX(5px);
+  }
+
+  /* ── Secciones ── */
+  .blog-section {
+    margin-top: 80px;
+  }
+
+  .blog-section__sub {
+    margin-top: 6px;
+    font-size: 13.5px;
+    color: var(--text-3);
+  }
+
+  /* ── Grilla de colecciones ── */
+  .cluster-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 18px;
   }
 
-  .blog-grid__item.hide {
-    display: none;
+  .cluster-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 22px;
+    border-radius: var(--r-lg);
+    color: inherit;
+  }
+
+  .cluster-card:hover {
+    border-color: hsl(var(--hue) 60% 45% / 0.5);
+  }
+
+  .cluster-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cluster-card__icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: hsl(var(--hue) 55% 50% / 0.14);
+    border: 1px solid hsl(var(--hue) 60% 55% / 0.3);
+    color: hsl(var(--hue) 70% 66%);
+  }
+
+  .cluster-card__num {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-3);
+    opacity: 0.5;
+  }
+
+  .cluster-card h3 {
+    font-size: 16.5px;
+    line-height: 1.35;
+    font-weight: 650;
+  }
+
+  .cluster-card:hover h3 {
+    color: var(--accent-hover);
+  }
+
+  .cluster-card__blurb {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+
+  .cluster-card__pillar {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    font-size: 12.5px;
+    color: var(--text-3);
+    line-height: 1.5;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .cluster-card__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 6px;
+  }
+
+  .cluster-card__count {
+    font-size: 12px;
+    color: var(--text-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cluster-card__go {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--accent-hover);
+  }
+
+  /* ── Índice completo ── */
+  .index-cols {
+    columns: 3 300px;
+    column-gap: 34px;
+  }
+
+  .index-block {
+    break-inside: avoid;
+    margin-bottom: 30px;
+  }
+
+  .index-block__title {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 650;
+    margin-bottom: 10px;
+  }
+
+  .index-block__title a:hover {
+    color: var(--accent-hover);
+  }
+
+  .index-block__num {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: hsl(var(--hue) 70% 66%);
+  }
+
+  .index-list {
+    margin: 0;
+    padding: 0 0 0 4px;
+    list-style: none;
+    display: grid;
+    gap: 7px;
+    border-left: 1px solid var(--border);
+  }
+
+  .index-list li a {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding-left: 12px;
+    font-size: 12.8px;
+    line-height: 1.5;
+    color: var(--text-2);
+  }
+
+  .index-list li a:hover {
+    color: var(--accent-hover);
+  }
+
+  .dot {
+    flex-shrink: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent-hover);
+    transform: translateY(-2px);
   }
 </style>
-
-<script>
-  function initBlogFilter() {
-    const grid = document.getElementById('blog-grid');
-    if (!grid || grid.dataset.init) return;
-    grid.dataset.init = '1';
-
-    const tags = Array.from(document.querySelectorAll<HTMLButtonElement>('.blog-tag'));
-    const items = Array.from(grid.querySelectorAll<HTMLElement>('.blog-grid__item'));
-
-    tags.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        tags.forEach((t) => t.classList.toggle('active', t === btn));
-        const tag = btn.dataset.tag;
-        items.forEach((item) => {
-          const show = tag === 'all' || (item.dataset.tags ?? '').split(',').includes(tag!);
-          item.classList.toggle('hide', !show);
-        });
-      });
-    });
-  }
-
-  document.addEventListener('astro:page-load', initBlogFilter);
-</script>

@@ -308,3 +308,114 @@ p {
   outline-offset: 3px;
   border-radius: 6px;
 }
+
+/* ─────────────────────────────────────────────
+   Blog: badges, marcadores epistémicos y diagramas
+   ───────────────────────────────────────────── */
+
+/* Badges de estructura editorial */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: var(--r-full);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.badge--pilar {
+  background: rgba(70, 209, 126, 0.14);
+  border-color: rgba(70, 209, 126, 0.4);
+  color: var(--accent-hover);
+}
+
+.badge--sat {
+  background: rgba(94, 198, 255, 0.12);
+  border-color: rgba(94, 198, 255, 0.32);
+  color: var(--cyan);
+}
+
+.badge--level {
+  text-transform: capitalize;
+  color: var(--text-3);
+}
+
+.badge--cluster {
+  color: var(--text-2);
+}
+
+.badge--cluster:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+/*
+ * Marcadores epistémicos: cada afirmación del corpus declara su naturaleza.
+ * Es la firma visual del blog — el lector sabe qué está leyendo.
+ */
+.em {
+  display: inline-block;
+  padding: 1px 7px;
+  margin-right: 2px;
+  border-radius: 5px;
+  font-family: var(--mono);
+  font-size: 0.68em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  vertical-align: 1px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.em--hecho {
+  background: rgba(70, 209, 126, 0.15);
+  border-color: rgba(70, 209, 126, 0.4);
+  color: #6fe0a0;
+}
+
+.em--inferencia {
+  background: rgba(94, 198, 255, 0.14);
+  border-color: rgba(94, 198, 255, 0.36);
+  color: #7ed0ff;
+}
+
+.em--decision {
+  background: rgba(180, 144, 255, 0.14);
+  border-color: rgba(180, 144, 255, 0.36);
+  color: #c4a6ff;
+}
+
+.em--hipotesis {
+  background: rgba(255, 190, 90, 0.14);
+  border-color: rgba(255, 190, 90, 0.36);
+  color: #ffc978;
+}
+
+.em--opinion {
+  background: rgba(255, 122, 89, 0.13);
+  border-color: rgba(255, 122, 89, 0.34);
+  color: #ff9a7d;
+}
+
+/* Diagramas Mermaid pre-renderizados a SVG */
+.diagram {
+  margin: 0 0 26px;
+  padding: 22px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+  overflow-x: auto;
+}
+
+.diagram img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
