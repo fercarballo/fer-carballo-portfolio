@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import { getCollection, render } from 'astro:content';
 import { profile } from '../../data/profile';
-import { clusterById, sortByReadingOrder, readingMinutes, repoUrl, NEXO_REPOS } from '../../data/blog';
+import { clusterById, clusterLabel, sortByReadingOrder, readingMinutes, repoUrl, NEXO_REPOS } from '../../data/blog';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -11,14 +11,26 @@ export async function getStaticPaths() {
   return posts.map((post) => {
     const siblings = sortByReadingOrder(posts.filter((p) => p.data.cluster === post.data.cluster));
     const i = siblings.findIndex((p) => p.id === post.id);
+
+    // Relacionados: tags compartidos con artículos de OTRAS colecciones.
+    // Los de la propia colección ya están en la navegación de la serie.
+    const tagSet = new Set(post.data.tags);
+    const related = posts
+      .filter((p) => p.data.cluster !== post.data.cluster)
+      .map((p) => ({ p, score: p.data.tags.filter((t) => tagSet.has(t)).length }))
+      .filter((r) => r.score >= 1)
+      .sort((a, b) => b.score - a.score || a.p.data.title.localeCompare(b.p.data.title))
+      .slice(0, 3)
+      .map((r) => r.p);
+
     return {
       params: { slug: post.id },
-      props: { post, siblings, prev: siblings[i - 1] ?? null, next: siblings[i + 1] ?? null },
+      props: { post, siblings, prev: siblings[i - 1] ?? null, next: siblings[i + 1] ?? null, related },
     };
   });
 }
 
-const { post, siblings, prev, next } = Astro.props;
+const { post, siblings, prev, next, related } = Astro.props;
 const { Content, headings } = await render(post);
 
 const cluster = clusterById(post.data.cluster)!;
@@ -28,6 +40,10 @@ const date = post.data.pubDate.toLocaleDateString('es-AR', { day: 'numeric', mon
 // TOC: sólo h2/h3 (los artículos numeran sus secciones).
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const repo = post.data.repo;
+
+// La leyenda de marcadores sólo aplica a los posts que los usan (primera
+// tanda). La serie avanzada rotula sus afirmaciones con avisos en bloque.
+const hasMarkers = /class="em em--/.test(post.body ?? '');
 
 const breadcrumbs = [
   { name: 'Inicio', url: '/' },
@@ -116,7 +132,7 @@ const breadcrumbs = [
 
           <nav class="rail__box" aria-labelledby="serie-title">
             <h2 id="serie-title" class="rail__title">
-              Colección {cluster.id}
+              {clusterLabel(cluster)}
             </h2>
             <p class="rail__sub">{cluster.short}</p>
             <ol class="serie">
@@ -146,6 +162,7 @@ const breadcrumbs = [
             )
           }
 
+          {hasMarkers && (
           <details class="rail__box legend">
             <summary>
               <Icon name="sparkle" size={13} />
@@ -159,9 +176,33 @@ const breadcrumbs = [
               <li><span class="em em--opinion">OPINIÓN</span> juicio profesional discutible.</li>
             </ul>
           </details>
+          )}
         </div>
       </aside>
     </div>
+
+    {
+      related.length > 0 && (
+        <section class="rel" aria-labelledby="rel-title">
+          <h2 id="rel-title" class="rel__head">Relacionados en el blog</h2>
+          <div class="rel__grid">
+            {related.map((r) => {
+              const rc = clusterById(r.data.cluster)!;
+              return (
+                <a class="rel__card card" href={`/blog/${r.id}/`} data-tilt style={`--hue: ${rc.hue}`}>
+                  <span class="rel__cluster">
+                    <Icon name={rc.icon} size={12} /> {rc.short}
+                    {rc.series === 'avanzada' && <em class="rel__adv">Serie avanzada</em>}
+                  </span>
+                  <strong>{r.data.title}</strong>
+                  <span class="rel__desc">{r.data.description}</span>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      )
+    }
 
     <nav class="post__nav" aria-label="Navegación de la colección">
       {prev ? (
@@ -323,6 +364,76 @@ const breadcrumbs = [
     flex-wrap: wrap;
     gap: 8px;
     margin-top: 18px;
+  }
+
+  /* ── Relacionados ── */
+  .rel {
+    margin-top: 56px;
+  }
+
+  .rel__head {
+    font-size: 16px;
+    font-weight: 650;
+    margin-bottom: 16px;
+  }
+
+  .rel__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+  }
+
+  .rel__card {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 18px 20px;
+    border-radius: var(--r-lg);
+    color: inherit;
+  }
+
+  .rel__card:hover {
+    border-color: hsl(var(--hue) 60% 45% / 0.5);
+  }
+
+  .rel__cluster {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 650;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: hsl(var(--hue) 70% 66%);
+  }
+
+  .rel__adv {
+    font-style: normal;
+    font-size: 9.5px;
+    padding: 1px 7px;
+    border-radius: var(--r-full);
+    background: hsl(var(--hue) 55% 50% / 0.14);
+    border: 1px solid hsl(var(--hue) 60% 55% / 0.32);
+  }
+
+  .rel__card strong {
+    font-size: 14px;
+    line-height: 1.4;
+    font-weight: 620;
+  }
+
+  .rel__card:hover strong {
+    color: var(--accent-hover);
+  }
+
+  .rel__desc {
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--text-3);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   /* ── Layout con rail ── */

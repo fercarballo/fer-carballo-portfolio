@@ -2,7 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 import Icon from '../../../components/Icon.astro';
 import { getCollection } from 'astro:content';
-import { groupByCluster, readingMinutes, repoUrl, NEXO_REPOS } from '../../../data/blog';
+import { groupByCluster, readingMinutes, repoUrl, NEXO_REPOS, clusterById, clusterLabel, BRIDGES, bridgeSourcesOf } from '../../../data/blog';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -24,6 +24,12 @@ const { cluster, pillar, satellites, items } = group;
 // Repos del ecosistema referenciados por los artículos de esta colección.
 const repos = [...new Set(items.map((p) => p.data.repo).filter(Boolean))] as string[];
 const totalMinutes = items.reduce((acc, p) => acc + readingMinutes(p.body), 0);
+
+// Puentes editoriales entre series (curados en blog.ts, no algorítmicos).
+const continuesIn = BRIDGES[cluster.id] ? clusterById(BRIDGES[cluster.id]) : null;
+const foundations = cluster.series === 'avanzada'
+  ? bridgeSourcesOf(cluster.id).map((id) => clusterById(id)!).filter(Boolean)
+  : [];
 
 const site = Astro.site!.href.replace(/\/$/, '');
 const collectionSchema = {
@@ -62,13 +68,13 @@ const collectionSchema = {
     <nav class="crumbs" aria-label="Ruta de navegación">
       <a href="/blog/">Blog</a>
       <Icon name="arrow-right" size={12} />
-      <span>Colección {cluster.id}</span>
+      <span>{clusterLabel(cluster)}</span>
     </nav>
 
     <header class="coll-hero">
       <span class="coll-hero__icon"><Icon name={cluster.icon} size={26} /></span>
       <div>
-        <span class="kicker">Colección {cluster.id}</span>
+        <span class="kicker">{clusterLabel(cluster)}{cluster.series === 'avanzada' && ' · Serie avanzada'}</span>
         <h1>{cluster.title}</h1>
         <p>{cluster.blurb}</p>
         <div class="coll-hero__meta">
@@ -148,17 +154,46 @@ const collectionSchema = {
       )
     }
 
+    <!-- Puentes entre series -->
+    {
+      continuesIn && (
+        <a class="bridge card" href={`/blog/coleccion/${continuesIn.id}/`} data-tilt style={`--hue: ${continuesIn.hue}`}>
+          <span class="bridge__icon"><Icon name={continuesIn.icon} size={20} /></span>
+          <div>
+            <span class="bridge__kicker">Continúa en la serie avanzada</span>
+            <strong>{continuesIn.title}</strong>
+            <p>{continuesIn.blurb}</p>
+          </div>
+          <Icon name="arrow-right" size={17} />
+        </a>
+      )
+    }
+    {
+      foundations.length > 0 && (
+        <div class="bridge bridge--back card">
+          <span class="bridge__kicker">Fundamentos recomendados antes de este capítulo</span>
+          <div class="bridge__chips">
+            {foundations.map((f) => (
+              <a class="chip chip--outline" href={`/blog/coleccion/${f.id}/`}>
+                <Icon name={f.icon} size={12} /> {f.short}
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
     <!-- Navegación entre colecciones -->
     <nav class="coll-nav" aria-label="Otras colecciones">
       {prev ? (
         <a class="coll-nav__item card" href={`/blog/coleccion/${prev.cluster.id}/`}>
-          <span class="coll-nav__dir"><Icon name="arrow-left" size={13} /> Colección {prev.cluster.id}</span>
+          <span class="coll-nav__dir"><Icon name="arrow-left" size={13} /> {clusterLabel(prev.cluster)}</span>
           <strong>{prev.cluster.short}</strong>
         </a>
       ) : <span />}
       {next && (
         <a class="coll-nav__item card coll-nav__item--next" href={`/blog/coleccion/${next.cluster.id}/`}>
-          <span class="coll-nav__dir">Colección {next.cluster.id} <Icon name="arrow-right" size={13} /></span>
+          <span class="coll-nav__dir">{clusterLabel(next.cluster)} <Icon name="arrow-right" size={13} /></span>
           <strong>{next.cluster.short}</strong>
         </a>
       )}
@@ -449,6 +484,80 @@ const collectionSchema = {
     margin-left: auto;
     flex-shrink: 0;
     color: var(--text-3);
+  }
+
+  /* ── Puentes entre series ── */
+  .bridge {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 54px;
+    padding: 22px 24px;
+    border-radius: var(--r-lg);
+    color: inherit;
+    border-color: hsl(var(--hue, 152) 60% 50% / 0.35);
+    background: linear-gradient(120deg, hsl(var(--hue, 152) 55% 40% / 0.13), var(--card) 60%);
+  }
+
+  .bridge__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: hsl(var(--hue) 55% 50% / 0.15);
+    border: 1px solid hsl(var(--hue) 60% 55% / 0.35);
+    color: hsl(var(--hue) 70% 66%);
+  }
+
+  .bridge__kicker {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: hsl(var(--hue, 152) 70% 66%);
+    margin-bottom: 4px;
+  }
+
+  .bridge strong {
+    font-size: 15.5px;
+    font-weight: 650;
+  }
+
+  .bridge:hover strong {
+    color: var(--accent-hover);
+  }
+
+  .bridge p {
+    margin-top: 5px;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--text-2);
+  }
+
+  .bridge > :global(svg:last-child) {
+    margin-left: auto;
+    flex-shrink: 0;
+    color: var(--text-3);
+  }
+
+  .bridge--back {
+    display: block;
+    margin-top: 26px;
+  }
+
+  .bridge__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .bridge__chips .chip:hover {
+    border-color: var(--accent);
+    color: var(--text);
   }
 
   /* ── Nav entre colecciones ── */

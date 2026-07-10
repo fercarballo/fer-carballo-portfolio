@@ -6,13 +6,16 @@ import { groupByCluster } from '../../data/blog';
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
 const groups = groupByCluster(posts);
+const baseGroups = groups.filter((g) => g.cluster.series === 'base');
+const advGroups = groups.filter((g) => g.cluster.series === 'avanzada');
 
 const totalArticles = posts.length;
 const totalClusters = groups.length;
 const totalPillars = posts.filter((p) => p.data.type === 'pilar').length;
 
-// Punto de entrada canónico: el pilar de la colección 00 (el mapa).
+// Cada serie tiene su puerta de entrada: el pilar de su capítulo 00 (el mapa).
 const entry = groups.find((g) => g.cluster.id === '00')?.pillar;
+const entryAdv = groups.find((g) => g.cluster.id === 'a00')?.pillar;
 
 const site = Astro.site!.href.replace(/\/$/, '');
 const blogSchema = {
@@ -48,9 +51,11 @@ const blogSchema = {
       <span class="kicker">Blog técnico</span>
       <h1>Quality Engineering, de la teoría a la evidencia</h1>
       <p>
-        Un corpus de {totalArticles} artículos organizados en {totalClusters} colecciones. Cada colección abre con
-        un <strong>pilar</strong> que da el mapa y se profundiza en <strong>satélites</strong>. Cada afirmación va
-        marcada según su naturaleza: hecho verificable, inferencia, decisión de diseño, hipótesis u opinión.
+        Un corpus de {totalArticles} artículos en {totalClusters} colecciones, organizado en dos series:
+        <strong>fundamentos</strong> ({baseGroups.length} colecciones) y una <strong>serie avanzada</strong> ({advGroups.length} capítulos
+        sobre event-driven, supply chain, privacy, data quality y plataforma). Cada colección abre con un
+        <strong>pilar</strong> y se profundiza en <strong>satélites</strong>, siempre con la evidencia citada y
+        lo no verificado rotulado como tal.
       </p>
 
       <ul class="blog-stats">
@@ -61,25 +66,40 @@ const blogSchema = {
       </ul>
     </header>
 
-    {
-      entry && (
-        <a class="blog-entry card" href={`/blog/${entry.id}/`} data-reveal data-tilt>
-          <span class="blog-entry__icon"><Icon name="grad" size={22} /></span>
-          <div class="blog-entry__text">
-            <span class="blog-entry__kicker">Empezá acá</span>
-            <h2>{entry.data.title}</h2>
-            <p>{entry.data.description}</p>
-          </div>
-          <span class="blog-entry__arrow"><Icon name="arrow-right" size={18} /></span>
-        </a>
-      )
-    }
+    <div class="blog-entries">
+      {
+        entry && (
+          <a class="blog-entry card" href={`/blog/${entry.id}/`} data-reveal data-tilt>
+            <span class="blog-entry__icon"><Icon name="grad" size={22} /></span>
+            <div class="blog-entry__text">
+              <span class="blog-entry__kicker">Empezá acá · fundamentos</span>
+              <h2>{entry.data.title}</h2>
+              <p>{entry.data.description}</p>
+            </div>
+            <span class="blog-entry__arrow"><Icon name="arrow-right" size={18} /></span>
+          </a>
+        )
+      }
+      {
+        entryAdv && (
+          <a class="blog-entry blog-entry--adv card" href={`/blog/${entryAdv.id}/`} data-reveal data-tilt>
+            <span class="blog-entry__icon blog-entry__icon--adv"><Icon name="command" size={22} /></span>
+            <div class="blog-entry__text">
+              <span class="blog-entry__kicker blog-entry__kicker--adv">Serie avanzada · el mapa</span>
+              <h2>{entryAdv.data.title}</h2>
+              <p>{entryAdv.data.description}</p>
+            </div>
+            <span class="blog-entry__arrow"><Icon name="arrow-right" size={18} /></span>
+          </a>
+        )
+      }
+    </div>
 
     <section class="blog-section" aria-labelledby="colecciones">
       <div class="section-head" data-reveal>
         <div>
-          <span class="kicker">Colecciones</span>
-          <h2 id="colecciones">Las {totalClusters} rutas del corpus</h2>
+          <span class="kicker">Serie fundamentos</span>
+          <h2 id="colecciones">Las {baseGroups.length} rutas de la serie base</h2>
           <p class="blog-section__sub">
             Cada tarjeta es una ruta de lectura completa: un pilar y sus satélites, en orden.
           </p>
@@ -88,7 +108,7 @@ const blogSchema = {
 
       <div class="cluster-grid">
         {
-          groups.map((g, i) => (
+          baseGroups.map((g, i) => (
             <a
               class="cluster-card card"
               href={`/blog/coleccion/${g.cluster.id}/`}
@@ -117,6 +137,57 @@ const blogSchema = {
                 </span>
                 <span class="cluster-card__go">
                   Ver colección <Icon name="arrow-right" size={14} />
+                </span>
+              </footer>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="blog-section" aria-labelledby="avanzada">
+      <div class="section-head" data-reveal>
+        <div>
+          <span class="kicker">Serie avanzada</span>
+          <h2 id="avanzada">Los {advGroups.length} capítulos avanzados</h2>
+          <p class="blog-section__sub">
+            La continuación senior de los fundamentos: sistemas asíncronos, cadena de suministro, privacidad,
+            datos, plataforma y el capstone que integra todo. Dominio ficticio Nexo Finanzas, evidencia rotulada.
+          </p>
+        </div>
+      </div>
+
+      <div class="cluster-grid">
+        {
+          advGroups.map((g, i) => (
+            <a
+              class="cluster-card card"
+              href={`/blog/coleccion/${g.cluster.id}/`}
+              data-tilt
+              data-reveal
+              style={`--hue: ${g.cluster.hue}; --d: ${(i % 3) * 0.05}s`}
+            >
+              <header class="cluster-card__head">
+                <span class="cluster-card__icon">
+                  <Icon name={g.cluster.icon} size={20} />
+                </span>
+                <span class="cluster-card__num">{g.cluster.id.slice(1)}</span>
+              </header>
+
+              <h3>{g.cluster.title}</h3>
+              <p class="cluster-card__blurb">{g.cluster.blurb}</p>
+
+              <p class="cluster-card__pillar">
+                <span class="badge badge--pilar">Pilar</span>
+                <span>{g.pillar.data.title}</span>
+              </p>
+
+              <footer class="cluster-card__foot">
+                <span class="cluster-card__count">
+                  {g.items.length} {g.items.length === 1 ? 'artículo' : 'artículos'}
+                </span>
+                <span class="cluster-card__go">
+                  Ver capítulo <Icon name="arrow-right" size={14} />
                 </span>
               </footer>
             </a>
@@ -210,6 +281,35 @@ const blogSchema = {
   .blog-stats span {
     font-size: 12.5px;
     color: var(--text-3);
+  }
+
+  /* ── Puntos de entrada (uno por serie) ── */
+  .blog-entries {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .blog-entries .blog-entry {
+    margin-top: 0;
+  }
+
+  .blog-entry--adv {
+    border-color: rgba(94, 198, 255, 0.3);
+    background: linear-gradient(120deg, rgba(47, 127, 208, 0.15), var(--card) 60%);
+  }
+
+  .blog-entry__icon--adv {
+    background: #2f7fd0;
+  }
+
+  .blog-entry__kicker--adv {
+    color: var(--cyan);
+  }
+
+  .blog-entry--adv .blog-entry__arrow {
+    color: var(--cyan);
   }
 
   /* ── Punto de entrada ── */
