@@ -1,9 +1,9 @@
 ---
 import Icon from './Icon.astro';
-import { projects, tabs } from '../data/profile';
+import { projects, tabs, profile } from '../data/profile';
 
 interface Props {
-  // true cuando se renderiza como sección propia (no embebida junto a ProfileCard)
+  /** true cuando se renderiza como sección propia (no embebida junto a ProfileCard) */
   standalone?: boolean;
 }
 
@@ -15,27 +15,42 @@ const { standalone = false } = Astro.props;
     <div>
       <span class="kicker">GitHub</span>
       <h2>Proyectos</h2>
-      <p class="proj__sub">Repos públicos reales — el código y el detalle completo están en cada uno.</p>
+      <p class="proj__sub">
+        Repos públicos reales — {projects.length} proyectos, de a 4. El código y el detalle están en cada uno.
+      </p>
     </div>
-    <div class="proj__tabs" role="tablist" aria-label="Filtrar proyectos">
-      {
-        tabs.map((tab, i) => (
-          <button
-            class:list={['proj__tab', { active: i === 0 }]}
-            role="tab"
-            aria-selected={i === 0 ? 'true' : 'false'}
-            data-filter={tab.id}
-          >
-            {tab.label}
-          </button>
-        ))
-      }
+
+    <div class="proj__controls">
+      <div class="proj__tabs" role="tablist" aria-label="Filtrar proyectos">
+        {
+          tabs.map((tab, i) => (
+            <button
+              class:list={['proj__tab', { active: i === 0 }]}
+              role="tab"
+              aria-selected={i === 0 ? 'true' : 'false'}
+              data-filter={tab.id}
+            >
+              {tab.label}
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="proj__nav">
+        <button class="proj__arrow" data-proj-prev aria-label="Proyectos anteriores" disabled>
+          <Icon name="arrow-left" size={16} />
+        </button>
+        <span class="proj__page" data-proj-page aria-live="polite">1 / 1</span>
+        <button class="proj__arrow" data-proj-next aria-label="Más proyectos">
+          <Icon name="arrow-right" size={16} />
+        </button>
+      </div>
     </div>
   </div>
 
-  <div class="proj__grid" id="proj-grid">
+  <div class="proj__rail" id="proj-rail" data-reveal>
     {
-      projects.map((p, i) => (
+      projects.map((p) => (
         <a
           class="proj-card card"
           id={p.id}
@@ -44,40 +59,45 @@ const { standalone = false } = Astro.props;
           rel="noopener"
           data-category={p.category}
           data-tilt
-          data-reveal
-          style={`--d: ${(i % 2) * 0.08}s`}
         >
           <header class="proj-card__head">
             <span class="proj-card__icon" style={`--hue: ${p.iconHue}`}>
-              <Icon name={p.icon} size={22} />
+              <Icon name={p.icon} size={21} />
             </span>
-            <div class="proj-card__titles">
-              <h3>{p.title}</h3>
-              <p>{p.org}</p>
-            </div>
             <span class="proj-card__external">
-              <Icon name="external" size={16} />
+              <Icon name="external" size={15} />
             </span>
           </header>
+
+          <div class="proj-card__titles">
+            <h3>{p.title}</h3>
+            <p>{p.org}</p>
+          </div>
 
           <p class="proj-card__desc">{p.summary}</p>
 
           <div class="proj-card__chips">
             <span class="chip chip--outline">{p.level}</span>
-            {p.tags.map((t) => (
+            {p.tags.slice(0, 2).map((t) => (
               <span class="chip chip--outline">{t}</span>
             ))}
           </div>
 
           <footer class="proj-card__actions">
             <span class="proj-card__link">
-              <Icon name="github" size={15} /> Ver en GitHub
+              <Icon name="github" size={14} /> Ver en GitHub
             </span>
           </footer>
         </a>
       ))
     }
   </div>
+
+  <p class="proj__all">
+    <a href={profile.links.github} target="_blank" rel="noopener">
+      Ver todos los repositorios en GitHub <Icon name="arrow-right" size={14} />
+    </a>
+  </p>
 </section>
 
 <style>
@@ -87,10 +107,10 @@ const { standalone = false } = Astro.props;
 
   .proj__bar {
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: space-between;
-    gap: 18px;
-    margin-bottom: 22px;
+    gap: 22px;
+    margin-bottom: 24px;
     flex-wrap: wrap;
   }
 
@@ -98,6 +118,13 @@ const { standalone = false } = Astro.props;
     margin-top: 6px;
     font-size: 13.5px;
     color: var(--text-3);
+  }
+
+  .proj__controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
   }
 
   .proj__tabs {
@@ -109,7 +136,6 @@ const { standalone = false } = Astro.props;
     border: 1px solid var(--border);
     overflow-x: auto;
     scrollbar-width: none;
-    flex-shrink: 0;
   }
 
   .proj__tabs::-webkit-scrollbar {
@@ -117,9 +143,9 @@ const { standalone = false } = Astro.props;
   }
 
   .proj__tab {
-    padding: 8px 18px;
+    padding: 8px 16px;
     border-radius: var(--r-full);
-    font-size: 13.5px;
+    font-size: 13px;
     font-weight: 550;
     color: var(--text-2);
     white-space: nowrap;
@@ -134,26 +160,104 @@ const { standalone = false } = Astro.props;
     background: var(--card-hover);
     border: 1px solid var(--border-strong);
     color: var(--text);
-    padding: 7px 17px;
+    padding: 7px 15px;
   }
 
-  .proj__grid {
+  /* ── Navegación del carrusel ── */
+  .proj__nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .proj__arrow {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--r-full);
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text-2);
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, transform 0.15s, opacity 0.2s;
   }
 
-  @media (max-width: 1080px) {
-    .proj__grid {
-      grid-template-columns: minmax(0, 1fr);
+  .proj__arrow:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent-hover);
+    transform: translateY(-1px);
+  }
+
+  .proj__arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .proj__page {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-3);
+    min-width: 46px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /*
+   * Carrusel: rail con scroll-snap. Cada "página" muestra 4 tarjetas exactas
+   * en desktop; los botones saltan a la posición exacta de la tarjeta.
+   *
+   * `proximity` y no `mandatory`: con snap obligatorio Chrome cancela el
+   * scroll programático (scrollTo/scrollBy quedan en 0), rompiendo los botones.
+   * Con proximity el arrastre del usuario sigue enganchando a las tarjetas.
+   */
+  .proj__rail {
+    --cols: 4;
+    --gap: 18px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+    gap: var(--gap);
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scroll-behavior: smooth;
+    padding: 6px 4px 20px;
+    margin: 0 -4px;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .proj__rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (max-width: 1180px) {
+    .proj__rail {
+      --cols: 3;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .proj__rail {
+      --cols: 2;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .proj__rail {
+      --cols: 1;
+    }
+    .proj__bar {
+      align-items: flex-start;
     }
   }
 
   .proj-card {
+    scroll-snap-align: start;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    padding: 22px;
+    gap: 12px;
+    padding: 20px;
     border-radius: var(--r-lg);
     scroll-margin-top: 90px;
     color: inherit;
@@ -167,38 +271,21 @@ const { standalone = false } = Astro.props;
   .proj-card__head {
     display: flex;
     align-items: center;
-    gap: 13px;
+    justify-content: space-between;
   }
 
   .proj-card__icon {
     display: grid;
     place-items: center;
-    flex-shrink: 0;
-    width: 46px;
-    height: 46px;
-    border-radius: 14px;
-    background: #fff;
-    color: hsl(var(--hue) 75% 45%);
-    box-shadow: 0 6px 16px -6px rgba(0, 0, 0, 0.5);
-  }
-
-  .proj-card__titles {
-    min-width: 0;
-  }
-
-  .proj-card__titles h3 {
-    font-size: 16.5px;
-    font-weight: 650;
-  }
-
-  .proj-card__titles p {
-    margin-top: 2px;
-    font-size: 12.5px;
-    color: var(--text-3);
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    background: hsl(var(--hue) 55% 50% / 0.14);
+    border: 1px solid hsl(var(--hue) 60% 55% / 0.3);
+    color: hsl(var(--hue) 70% 66%);
   }
 
   .proj-card__external {
-    margin-left: auto;
     color: var(--text-3);
     transition: color 0.2s, transform 0.2s;
   }
@@ -208,16 +295,36 @@ const { standalone = false } = Astro.props;
     transform: translate(2px, -2px);
   }
 
+  .proj-card__titles h3 {
+    font-size: 16px;
+    font-weight: 650;
+    line-height: 1.3;
+  }
+
+  .proj-card:hover .proj-card__titles h3 {
+    color: var(--accent-hover);
+  }
+
+  .proj-card__titles p {
+    margin-top: 3px;
+    font-size: 12px;
+    color: var(--text-3);
+  }
+
   .proj-card__desc {
-    font-size: 13.5px;
+    font-size: 13px;
     line-height: 1.6;
     color: var(--text-2);
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .proj-card__chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 7px;
+    gap: 6px;
   }
 
   .proj-card__actions {
@@ -228,8 +335,8 @@ const { standalone = false } = Astro.props;
   .proj-card__link {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-size: 13.5px;
+    gap: 7px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--accent-hover);
   }
@@ -237,22 +344,116 @@ const { standalone = false } = Astro.props;
   .proj-card:hover .proj-card__link {
     color: var(--cyan);
   }
+
+  .proj__all {
+    margin-top: 4px;
+    font-size: 13px;
+  }
+
+  .proj__all a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--text-3);
+  }
+
+  .proj__all a:hover {
+    color: var(--accent-hover);
+  }
 </style>
 
 <script>
   function initProjects() {
-    const grid = document.getElementById('proj-grid');
-    if (!grid || grid.dataset.init) return;
-    grid.dataset.init = '1';
+    const rail = document.getElementById('proj-rail');
+    if (!rail || rail.dataset.init) return;
+    rail.dataset.init = '1';
 
-    const cards = Array.from(grid.querySelectorAll<HTMLElement>('.proj-card'));
+    const cards = Array.from(rail.querySelectorAll<HTMLElement>('.proj-card'));
     const tabButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.proj__tab'));
+    const prev = document.querySelector<HTMLButtonElement>('[data-proj-prev]');
+    const next = document.querySelector<HTMLButtonElement>('[data-proj-next]');
+    const pageLabel = document.querySelector<HTMLElement>('[data-proj-page]');
+
+    /** Tarjetas actualmente visibles (el filtro oculta el resto). */
+    const shown = () => cards.filter((c) => !c.classList.contains('hide'));
+
+    /** Posición de scroll que deja `card` pegada al borde izquierdo. */
+    const posOf = (card: HTMLElement) =>
+      card.getBoundingClientRect().left - rail.getBoundingClientRect().left + rail.scrollLeft;
+
+    /** Paso = ancho de tarjeta + gap, medido del DOM (no hardcodeado). */
+    function step() {
+      const list = shown();
+      if (list.length > 1) return posOf(list[1]) - posOf(list[0]);
+      return list[0]?.getBoundingClientRect().width || rail.clientWidth;
+    }
+
+    /** Columnas visibles: las decide el CSS (media queries); acá se deducen. */
+    const cols = () => Math.max(1, Math.round(rail.clientWidth / step()));
+
+    /**
+     * La página (1..N) es la fuente de verdad, no `scrollLeft`: durante un
+     * scroll suave éste todavía tiene el valor viejo. La última página se
+     * alinea al final del rail para no dejar huecos, pero se sigue contando
+     * como la última (p. ej. 5/5 con 17 tarjetas de a 4).
+     */
+    let page = 1;
+
+    const totalPages = () => Math.max(1, Math.ceil(shown().length / cols()));
+
+    /** Primera tarjeta de la página, alineada al final si es la última. */
+    function startOf(p: number) {
+      const list = shown();
+      const c = cols();
+      return Math.max(0, Math.min((p - 1) * c, Math.max(0, list.length - c)));
+    }
+
+    function sync() {
+      const pages = totalPages();
+      page = Math.max(1, Math.min(page, pages));
+      if (pageLabel) pageLabel.textContent = `${page} / ${pages}`;
+      if (prev) prev.disabled = page <= 1;
+      if (next) next.disabled = page >= pages;
+    }
+
+    function goTo(p: number) {
+      const list = shown();
+      if (!list.length) return;
+      page = Math.max(1, Math.min(p, totalPages()));
+      const idx = startOf(page);
+      rail.scrollTo({ left: idx === 0 ? 0 : posOf(list[idx]), behavior: 'smooth' });
+      sync();
+    }
+
+    prev?.addEventListener('click', () => goTo(page - 1));
+    next?.addEventListener('click', () => goTo(page + 1));
+
+    // Arrastre del usuario: recalculamos la página desde la posición real.
+    let t: number;
+    rail.addEventListener(
+      'scroll',
+      () => {
+        clearTimeout(t);
+        t = window.setTimeout(() => {
+          const c = cols();
+          const first = Math.round(rail.scrollLeft / step());
+          // Si está pegado al final, es la última página.
+          page = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 4
+            ? totalPages()
+            : Math.floor(first / c) + 1;
+          sync();
+        }, 90);
+      },
+      { passive: true }
+    );
+
+    window.addEventListener('resize', sync, { passive: true });
 
     tabButtons.forEach((tab) => {
       tab.addEventListener('click', () => {
-        tabButtons.forEach((t) => {
-          t.classList.toggle('active', t === tab);
-          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+        tabButtons.forEach((t2) => {
+          t2.classList.toggle('active', t2 === tab);
+          t2.setAttribute('aria-selected', t2 === tab ? 'true' : 'false');
         });
         const filter = tab.dataset.filter;
         let visible = 0;
@@ -263,15 +464,23 @@ const { standalone = false } = Astro.props;
             visible++;
             card.animate(
               [
-                { opacity: 0, transform: 'translateY(14px)' },
+                { opacity: 0, transform: 'translateY(12px)' },
                 { opacity: 1, transform: 'none' },
               ],
-              { duration: 350, easing: 'cubic-bezier(.2,.6,.2,1)', delay: visible * 40, fill: 'backwards' }
+              { duration: 320, easing: 'cubic-bezier(.2,.6,.2,1)', delay: visible * 35, fill: 'backwards' }
             );
           }
         });
+        // El filtro cambia cuántas tarjetas hay: volvemos al inicio y recalculamos.
+        // `sync()` va sincrónico: leer geometría ya fuerza el reflow, y no
+        // dependemos de un rAF que puede no dispararse (pestaña en segundo plano).
+        page = 1;
+        rail.scrollTo({ left: 0, behavior: 'auto' });
+        sync();
       });
     });
+
+    sync();
   }
 
   document.addEventListener('astro:page-load', initProjects);

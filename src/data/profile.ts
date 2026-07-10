@@ -145,7 +145,7 @@ export type Project = {
   iconHue: number;
   title: string;
   org: string;
-  category: 'qa' | 'devops' | 'dev';
+  category: 'nexo' | 'qa' | 'devops';
   summary: string;
   tags: string[];
   level: string;
@@ -153,19 +153,115 @@ export type Project = {
 };
 
 /**
- * Proyectos = últimos repos públicos reales de github.com/fercarballo.
- * Descripción breve tomada del repo; para más detalle, el botón lleva directo a GitHub.
+ * Proyectos = repos públicos reales de github.com/fercarballo, curados.
+ * Orden: primero el ecosistema Nexo Finanzas (lo más reciente y lo que
+ * documenta el blog), luego la suite de fundamentos SDET.
+ * La descripción sale del repo; el botón lleva al código.
  */
 export const projects: Project[] = [
+  // ── Ecosistema Nexo Finanzas (7 repos, sistema completo) ──
+  {
+    id: 'nexo-transfer-api',
+    icon: 'braces',
+    iconHue: 28,
+    title: 'API de transferencias',
+    org: 'Ecosistema Nexo · 1/7',
+    category: 'nexo',
+    summary:
+      'API de transferencias segura y trazable: Java 21, Spring Boot, Cucumber BDD y REST-assured, con Docker y CI. El sistema bajo prueba del ecosistema.',
+    tags: ['Java 21', 'Spring Boot', 'Cucumber'],
+    level: 'Backend + BDD',
+    repo: 'https://github.com/fercarballo/nexo-transfer-api',
+  },
+  {
+    id: 'nexo-web-banking-e2e',
+    icon: 'code',
+    iconHue: 210,
+    title: 'E2E web con Selenium',
+    org: 'Ecosistema Nexo · 2/7',
+    category: 'nexo',
+    summary:
+      'Portal web y su automatización end-to-end: Selenium 4 + Cucumber BDD + Page Object Model en Java, ejecutando en Chrome headless.',
+    tags: ['Selenium 4', 'Cucumber', 'POM'],
+    level: 'E2E Web',
+    repo: 'https://github.com/fercarballo/nexo-web-banking-e2e',
+  },
+  {
+    id: 'nexo-wallet-mobile',
+    icon: 'phone',
+    iconHue: 300,
+    title: 'Automatización mobile',
+    org: 'Ecosistema Nexo · 3/7',
+    category: 'nexo',
+    summary:
+      'Billetera Android y su automatización con Appium 9 + Cucumber BDD + POM en Java, con un modo simulado que corre sin emulador.',
+    tags: ['Appium 9', 'Android', 'Cucumber'],
+    level: 'E2E Mobile',
+    repo: 'https://github.com/fercarballo/nexo-wallet-mobile',
+  },
+  {
+    id: 'nexo-cross-channel-regression',
+    icon: 'refresh',
+    iconHue: 45,
+    title: 'Regresión cross-canal',
+    org: 'Ecosistema Nexo · 4/7',
+    category: 'nexo',
+    summary:
+      'Smoke cross-channel (API + Web + Mobile) con Katalon Studio, más un validador estático propio que actúa como gate de CI.',
+    tags: ['Katalon', 'Cross-channel', 'CI gate'],
+    level: 'Regresión',
+    repo: 'https://github.com/fercarballo/nexo-cross-channel-regression',
+  },
+  {
+    id: 'nexo-performance-lab',
+    icon: 'chart',
+    iconHue: 12,
+    title: 'Laboratorio de performance',
+    org: 'Ecosistema Nexo · 5/7',
+    category: 'nexo',
+    summary:
+      'Carga y análisis de capacidad con Apache JMeter: hipótesis, modelo de carga, SLOs como gate y conclusiones medidas sobre un SUT propio.',
+    tags: ['JMeter', 'SLO', 'Capacidad'],
+    level: 'Performance',
+    repo: 'https://github.com/fercarballo/nexo-performance-lab',
+  },
+  {
+    id: 'nexo-quality-control-tower',
+    icon: 'shield',
+    iconHue: 145,
+    title: 'Torre de control de calidad',
+    org: 'Ecosistema Nexo · 6/7',
+    category: 'nexo',
+    summary:
+      'Ingiere JUnit XML de todo el ecosistema, construye la matriz de trazabilidad requisito→prueba→resultado y publica en Jira/Xray. Bloquea requisitos sin cobertura.',
+    tags: ['Java', 'Jira/Xray', 'JUnit XML'],
+    level: 'Trazabilidad',
+    repo: 'https://github.com/fercarballo/nexo-quality-control-tower',
+  },
+  {
+    id: 'nexo-quality-platform',
+    icon: 'container',
+    iconHue: 190,
+    title: 'Plataforma de calidad',
+    org: 'Ecosistema Nexo · 7/7',
+    category: 'nexo',
+    summary:
+      'Entorno de pruebas reproducible: Docker Compose y Kubernetes con kind (rolling update verificado sin corte), más pipelines GitLab CI / Jenkins con quality gates.',
+    tags: ['Kubernetes', 'GitLab CI', 'Jenkins'],
+    level: 'Plataforma',
+    repo: 'https://github.com/fercarballo/nexo-quality-platform',
+  },
+
+  // ── Suite de fundamentos SDET ──
   {
     id: 'playwright-e2e-framework-saucedemo',
     icon: 'flask',
     iconHue: 210,
     title: 'Framework E2E de UI',
-    org: 'Suite QA · Fundamentos',
+    org: 'Suite SDET',
     category: 'qa',
     summary:
-      'Framework de automatización end-to-end sobre Playwright + TypeScript con arquitectura por capas: Page Object Model con componentes reutilizables, fixtures, datos desacoplados y ejecución cross-browser (Chromium, Firefox, WebKit).',
+      'Automatización end-to-end con Playwright + TypeScript: Page Object Model con componentes reutilizables, fixtures, datos desacoplados y ejecución cross-browser.',
     tags: ['Playwright', 'TypeScript', 'POM'],
     level: 'E2E UI',
     repo: 'https://github.com/fercarballo/playwright-e2e-framework-saucedemo',
@@ -174,37 +270,24 @@ export const projects: Project[] = [
     id: 'api-testing-framework-restful-booker',
     icon: 'braces',
     iconHue: 28,
-    title: 'Testing de API',
-    org: 'Suite QA · Fundamentos',
+    title: 'Testing de API con contratos',
+    org: 'Suite SDET',
     category: 'qa',
     summary:
-      'Suite de testing de API con validación de contratos: API Clients como Page Objects, schemas Zod para contract testing y tipado, CRUD encadenado, casos negativos, autenticación y preparación de datos por API.',
+      'API Clients como Page Objects, schemas Zod para contract testing y tipado, CRUD encadenado, casos negativos y preparación de datos por API.',
     tags: ['Playwright', 'Zod', 'Contract testing'],
     level: 'API',
     repo: 'https://github.com/fercarballo/api-testing-framework-restful-booker',
-  },
-  {
-    id: 'qa-automation-cicd-pipeline',
-    icon: 'infinity',
-    iconHue: 200,
-    title: 'Pipeline CI/CD',
-    org: 'Suite QA · Fundamentos',
-    category: 'devops',
-    summary:
-      'Pipeline de Integración Continua sobre GitHub Actions con estrategia de dos velocidades: verificación rápida y bloqueante por pull request (quality gates + smoke) y regresión completa cross-browser nocturna con matriz, sharding y merge de reportes.',
-    tags: ['GitHub Actions', 'Sharding', 'Quality gates'],
-    level: 'CI/CD',
-    repo: 'https://github.com/fercarballo/qa-automation-cicd-pipeline',
   },
   {
     id: 'flakiness-hunting-playwright',
     icon: 'refresh',
     iconHue: 45,
     title: 'Estabilidad y flakiness',
-    org: 'Suite QA · Fundamentos',
+    org: 'Suite SDET',
     category: 'qa',
     summary:
-      'Experimento controlado que demuestra, mide y elimina el flakiness de timing: una misma app con latencia variable, una suite frágil y una estable, y un medidor que reporta la tasa de fallo. Resultado medido: 85 % → 0 %.',
+      'Experimento controlado que demuestra, mide y elimina el flakiness de timing: una suite frágil, una estable y un medidor de tasa de fallo. Resultado medido: 85 % → 0 %.',
     tags: ['Playwright', 'Flakiness', 'Web-first'],
     level: 'Estabilidad',
     repo: 'https://github.com/fercarballo/flakiness-hunting-playwright',
@@ -214,10 +297,10 @@ export const projects: Project[] = [
     icon: 'set',
     iconHue: 280,
     title: 'Regresión visual & contract testing',
-    org: 'Suite QA · Fundamentos',
+    org: 'Suite SDET',
     category: 'qa',
     summary:
-      'Dos técnicas avanzadas en un repositorio: regresión visual con comparación de screenshots (baselines versionados y tolerancia configurada) y contract testing consumer-driven con Pact, ambos integrados como gates en CI.',
+      'Regresión visual con baselines versionados y tolerancia configurada, más contract testing consumer-driven con Pact. Ambos integrados como gates en CI.',
     tags: ['Playwright', 'Pact', 'Visual regression'],
     level: 'Visual + Contract',
     repo: 'https://github.com/fercarballo/visual-and-contract-testing',
@@ -227,10 +310,10 @@ export const projects: Project[] = [
     icon: 'chart',
     iconHue: 12,
     title: 'Performance & load testing',
-    org: 'Suite QA · SDET',
+    org: 'Suite SDET',
     category: 'qa',
     summary:
-      'Suite de performance con k6 (smoke, load, stress, spike, soak) contra un servicio propio, con think times realistas y SLOs expresados como thresholds que actúan de gate en el pipeline.',
+      'Suite de performance con k6 (smoke, load, stress, spike, soak) con think times realistas y SLOs expresados como thresholds que actúan de gate en el pipeline.',
     tags: ['k6', 'Load testing', 'SLO gates'],
     level: 'Performance',
     repo: 'https://github.com/fercarballo/performance-testing-k6',
@@ -240,36 +323,23 @@ export const projects: Project[] = [
     icon: 'container',
     iconHue: 190,
     title: 'Integración con dependencias reales',
-    org: 'Suite QA · SDET',
+    org: 'Suite SDET',
     category: 'qa',
     summary:
-      'Tests de integración contra dependencias reales y efímeras: Testcontainers levanta un PostgreSQL descartable por corrida, valida constraints (UNIQUE/CHECK), defaults y tipos reales, con aislamiento por test.',
+      'Testcontainers levanta un PostgreSQL descartable por corrida y valida constraints (UNIQUE/CHECK), defaults y tipos reales, con aislamiento por test.',
     tags: ['Testcontainers', 'PostgreSQL', 'Integración'],
     level: 'Integración',
     repo: 'https://github.com/fercarballo/integration-testing-testcontainers',
-  },
-  {
-    id: 'devsecops-pipeline',
-    icon: 'shield',
-    iconHue: 0,
-    title: 'DevSecOps',
-    org: 'Suite QA · SDET',
-    category: 'devops',
-    summary:
-      'Pipeline de seguridad shift-left que integra tres capas como quality gates: SAST (Semgrep), SCA (npm audit) y DAST (pruebas dinámicas), bloqueando la integración ante vulnerabilidades graves.',
-    tags: ['Semgrep', 'SAST/SCA/DAST', 'Shift-left'],
-    level: 'DevSecOps',
-    repo: 'https://github.com/fercarballo/devsecops-pipeline',
   },
   {
     id: 'qa-insights',
     icon: 'terminal',
     iconHue: 145,
     title: 'Tooling interno de QA',
-    org: 'Suite QA · SDET',
+    org: 'Suite SDET',
     category: 'qa',
     summary:
-      'Herramienta interna de QA (CLI TypeScript): análisis de impacto de tests (grafo de dependencias + cierre transitivo para correr solo lo afectado) y detección de flaky tests a partir del histórico de ejecuciones.',
+      'CLI en TypeScript: análisis de impacto de tests (grafo de dependencias para correr sólo lo afectado) y detección de flaky tests desde el histórico de ejecuciones.',
     tags: ['TypeScript', 'Test impact', 'Flaky detection'],
     level: 'Tooling',
     repo: 'https://github.com/fercarballo/qa-insights',
@@ -279,39 +349,39 @@ export const projects: Project[] = [
     icon: 'bot',
     iconHue: 265,
     title: 'Evals de aplicaciones con IA',
-    org: 'Suite QA · SDET',
+    org: 'Suite SDET',
     category: 'qa',
     summary:
-      'Harness de evaluación (evals) para testear una aplicación basada en un LLM: golden dataset, tres scorers (exact-match, similitud semántica y LLM-as-judge) y un umbral como gate para detectar regresiones de prompt.',
+      'Harness de evaluación para una app basada en LLM: golden dataset, tres scorers (exact-match, similitud semántica y LLM-as-judge) y un umbral como gate de regresión.',
     tags: ['LLM testing', 'Evals', 'Golden dataset'],
     level: 'IA / LLM',
     repo: 'https://github.com/fercarballo/llm-evals-harness',
   },
   {
-    id: 'performance-reliability-testing-suite',
-    icon: 'chart',
-    iconHue: 12,
-    title: 'Performance & Reliability Testing Suite',
-    org: 'Proyecto personal',
-    category: 'qa',
+    id: 'qa-automation-cicd-pipeline',
+    icon: 'infinity',
+    iconHue: 200,
+    title: 'Pipeline CI/CD de dos velocidades',
+    org: 'Suite SDET',
+    category: 'devops',
     summary:
-      'Suite de pruebas de performance y reliability con k6 (carga, estrés, spike, soak) e inyección de fallas, con observabilidad end-to-end vía Prometheus, Grafana, OpenTelemetry, Tempo y Loki sobre una demo de self-care telco.',
-    tags: ['TypeScript', 'k6', 'OpenTelemetry'],
-    level: 'Performance',
-    repo: 'https://github.com/fercarballo/performance-reliability-testing-suite',
+      'GitHub Actions con verificación rápida y bloqueante por pull request (quality gates + smoke) y regresión completa cross-browser nocturna con matriz, sharding y merge de reportes.',
+    tags: ['GitHub Actions', 'Sharding', 'Quality gates'],
+    level: 'CI/CD',
+    repo: 'https://github.com/fercarballo/qa-automation-cicd-pipeline',
   },
   {
-    id: 'telco-reliability-lab',
+    id: 'devsecops-pipeline',
     icon: 'shield',
-    iconHue: 145,
-    title: 'Telco Reliability Lab',
-    org: 'Proyecto personal',
-    category: 'qa',
+    iconHue: 0,
+    title: 'DevSecOps shift-left',
+    org: 'Suite SDET',
+    category: 'devops',
     summary:
-      'API de autogestión telco instrumentada de punta a punta: suite de performance con k6, observabilidad completa en Grafana (métricas, trazas y logs vía OpenTelemetry), idempotencia de pagos a nivel de base de datos, inyección de fallas y CI con gates de SLO.',
-    tags: ['k6', 'Grafana', 'SLO gates'],
-    level: 'Reliability',
-    repo: 'https://github.com/fercarballo/telco-reliability-lab',
+      'Pipeline de seguridad que integra tres capas como quality gates: SAST (Semgrep), SCA (npm audit) y DAST, bloqueando la integración ante vulnerabilidades graves.',
+    tags: ['Semgrep', 'SAST/SCA/DAST', 'Shift-left'],
+    level: 'DevSecOps',
+    repo: 'https://github.com/fercarballo/devsecops-pipeline',
   },
 ];
 
@@ -467,6 +537,7 @@ export const education: Education[] = [
 
 export const tabs = [
   { id: 'all', label: 'Todo' },
+  { id: 'nexo', label: 'Ecosistema Nexo' },
   { id: 'qa', label: 'QA & Testing' },
   { id: 'devops', label: 'CI/CD' },
 ] as const;
