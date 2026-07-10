@@ -138,23 +138,6 @@ const hasPhoto = existsSync(new URL('../../public/avatar/fer.jpg', import.meta.u
     display: inline-block;
   }
 
-  .rot.swap {
-    animation: rot-swap 0.45s ease;
-  }
-
-  @keyframes rot-swap {
-    0% {
-      opacity: 0;
-      transform: translateY(8px);
-      filter: blur(4px);
-    }
-    100% {
-      opacity: 1;
-      transform: none;
-      filter: none;
-    }
-  }
-
   .pcard__loc {
     display: flex;
     align-items: center;
@@ -295,13 +278,20 @@ const hasPhoto = existsSync(new URL('../../public/avatar/fer.jpg', import.meta.u
     if (roles.length < 2) return;
     let i = roles.indexOf(el.textContent?.trim() || '') ;
 
+    let anim: Animation | undefined;
     setInterval(() => {
       i = (i + 1) % roles.length;
-      el.classList.remove('swap');
-      // reflow para reiniciar la animación
-      void el.offsetWidth;
       el.textContent = roles[i];
-      el.classList.add('swap');
+      // Web Animations API en vez del truco de `void el.offsetWidth`:
+      // aquel reflow síncrono aparecía como [Violation] Forced reflow (~33ms).
+      anim?.cancel();
+      anim = el.animate(
+        [
+          { opacity: 0, transform: 'translateY(8px)', filter: 'blur(4px)' },
+          { opacity: 1, transform: 'none', filter: 'none' },
+        ],
+        { duration: 450, easing: 'ease' }
+      );
     }, 2600);
   }
 
