@@ -7,6 +7,7 @@ cluster: "02"
 clusterTitle: "API contract testing y sistemas distribuidos"
 type: "satelite"
 order: 3
+repo: "nexo-transfer-api"
 icon: "braces"
 iconHue: 28
 readingLevel: "Avanzado"

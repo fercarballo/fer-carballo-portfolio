@@ -7,6 +7,7 @@ cluster: "07"
 clusterTitle: "Observabilidad para Quality Engineering"
 type: "satelite"
 order: 3
+repo: "flakiness-hunting-playwright"
 icon: "search"
 iconHue: 265
 readingLevel: "Intermedio–Avanzado"

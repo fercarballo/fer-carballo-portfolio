@@ -7,6 +7,7 @@ cluster: "15"
 clusterTitle: "Investigación técnica y escritura basada en evidencia"
 type: "satelite"
 order: 2
+repo: "nexo-performance-lab"
 icon: "book"
 iconHue: 220
 readingLevel: "Intermedio–Avanzado"

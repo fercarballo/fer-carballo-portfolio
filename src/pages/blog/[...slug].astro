@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import { getCollection, render } from 'astro:content';
 import { profile } from '../../data/profile';
-import { clusterById, clusterLabel, sortByReadingOrder, readingMinutes, repoUrl, NEXO_REPOS } from '../../data/blog';
+import { clusterById, clusterLabel, sortByReadingOrder, readingMinutes, repoUrl, REPOS } from '../../data/blog';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -156,7 +156,7 @@ const breadcrumbs = [
                 <div>
                   <span class="rail__title">Código de soporte</span>
                   <strong>{repo}</strong>
-                  <span class="repo-card__blurb">{NEXO_REPOS[repo]?.blurb ?? 'Repositorio del ecosistema Nexo Finanzas.'}</span>
+                  <span class="repo-card__blurb">{REPOS[repo]?.blurb ?? 'Repositorio del ecosistema Nexo Finanzas.'}</span>
                 </div>
               </a>
             )

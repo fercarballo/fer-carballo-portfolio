@@ -7,6 +7,7 @@ cluster: "11"
 clusterTitle: "Resiliencia y chaos engineering"
 type: "pilar"
 order: 1
+repo: "performance-reliability-testing-suite"
 icon: "refresh"
 iconHue: 45
 readingLevel: "Intermedio–Avanzado"

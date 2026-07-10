@@ -7,6 +7,7 @@ cluster: "02"
 clusterTitle: "API contract testing y sistemas distribuidos"
 type: "satelite"
 order: 2
+repo: "visual-and-contract-testing"
 icon: "braces"
 iconHue: 28
 readingLevel: "Intermedio–Avanzado"

@@ -11,7 +11,7 @@ icon: "chat"
 iconHue: 330
 readingLevel: "Intermedio"
 prerequisites: "gestión de defectos y CI/CD básico"
-repo: "nexo-cross-channel-regression"
+repo: "nexo-quality-platform"
 ---
 > Artículo satélite de **"Liderar calidad sin convertirse en cuello de botella"**. Aquí desarrollamos la política de triage: cómo clasificar un fallo, con qué evidencia y quién lo toma primero —sin convertir la reunión en una cacería. **Datos de Nexo Finanzas: ficticios.**
 

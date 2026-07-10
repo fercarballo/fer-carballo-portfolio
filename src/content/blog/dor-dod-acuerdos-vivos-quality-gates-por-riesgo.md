@@ -11,7 +11,7 @@ icon: "chat"
 iconHue: 330
 readingLevel: "Intermedio"
 prerequisites: "conoce criterios de aceptación y PRs"
-repo: "nexo-transfer-api"
+repo: "nexo-quality-platform"
 ---
 > Artículo satélite de **"Liderar calidad sin convertirse en cuello de botella"**. Aquí bajamos a tierra dos artefactos: la Definition of Ready y la Definition of Done, y mostramos cómo evitar que se conviertan en checklists muertas. **Datos de Nexo Finanzas: ficticios.** Nada de esto es asesoramiento de cumplimiento.
 

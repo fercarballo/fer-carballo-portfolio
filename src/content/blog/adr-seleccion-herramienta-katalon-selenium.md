@@ -7,6 +7,7 @@ cluster: "15"
 clusterTitle: "Investigación técnica y escritura basada en evidencia"
 type: "satelite"
 order: 3
+repo: "nexo-cross-channel-regression"
 icon: "book"
 iconHue: 220
 readingLevel: "Intermedio"

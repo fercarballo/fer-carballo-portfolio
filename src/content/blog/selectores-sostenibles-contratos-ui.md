@@ -7,6 +7,7 @@ cluster: "03"
 clusterTitle: "Framework engineering para automatización"
 type: "satelite"
 order: 2
+repo: "playwright-e2e-framework-saucedemo"
 icon: "bot"
 iconHue: 210
 readingLevel: "Intermedio"

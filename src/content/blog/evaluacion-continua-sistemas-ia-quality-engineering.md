@@ -7,6 +7,7 @@ cluster: "14"
 clusterTitle: "IA aplicada y evaluación de calidad"
 type: "pilar"
 order: 1
+repo: "llm-evals-harness"
 icon: "sparkle"
 iconHue: 280
 readingLevel: "Intermedio–Avanzado"

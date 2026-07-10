@@ -7,6 +7,7 @@ cluster: "04"
 clusterTitle: "CI/CD y continuous quality"
 type: "satelite"
 order: 4
+repo: "nexo-quality-platform"
 icon: "infinity"
 iconHue: 200
 readingLevel: "Intermedio–Avanzado"

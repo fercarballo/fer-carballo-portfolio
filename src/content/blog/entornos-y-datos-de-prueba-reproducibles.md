@@ -10,7 +10,7 @@ order: 1
 icon: "container"
 iconHue: 190
 readingLevel: "Intermedio"
-repo: "nexo-transfer-api"
+repo: "nexo-quality-platform"
 ---
 > **Bajada.** Un test automatizado es confiable solo si sus precondiciones pueden declararse, recrearse, observarse y limpiarse de forma segura. Los entornos y datos de prueba son un **producto interno** con contratos, ciclo de vida, ownership y evidencia; no una carpeta de credenciales ni una copia informal de producción. Este artículo desarrolla esa tesis con trade-offs explícitos: el nivel de aislamiento, fidelidad y costo se deriva del riesgo, no de una receta universal.
 

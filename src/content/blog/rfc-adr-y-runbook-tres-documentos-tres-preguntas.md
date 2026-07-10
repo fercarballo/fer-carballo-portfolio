@@ -9,6 +9,7 @@ type: pilar
 order: 1
 readingLevel: "Avanzado"
 prerequisites: "Requiere leer diagramas de arquitectura y razonar sobre NFRs."
+repo: "nexo-quality-platform"
 icon: 'book'
 iconHue: 220
 ---

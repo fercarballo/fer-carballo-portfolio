@@ -7,6 +7,7 @@ cluster: "01"
 clusterTitle: "Arquitectura de Quality Engineering"
 type: "satelite"
 order: 2
+repo: "nexo-quality-platform"
 icon: "shield"
 iconHue: 152
 readingLevel: "Intermedio–Avanzado"

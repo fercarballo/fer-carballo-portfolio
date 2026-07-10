@@ -10,7 +10,7 @@ order: 4
 icon: "chart"
 iconHue: 12
 readingLevel: "Avanzado"
-repo: "nexo-quality-platform"
+repo: "performance-testing-k6"
 ---
 > **Bajada.** Un informe de performance con un promedio y un "pasó/falló" es peor que no tener informe: da falsa confianza. Este satélite del pilar [Performance Engineering: de la carga a una decisión](/blog/performance-engineering-de-la-carga-a-una-decision/) enseña a leer la evidencia con honestidad —percentiles, coordinated omission, series por fase, saturación— y a convertirla en un **quality gate defendible**, con la plantilla de **ADR-004** para Nexo Finanzas.
 

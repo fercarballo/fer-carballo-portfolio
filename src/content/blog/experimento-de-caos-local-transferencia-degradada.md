@@ -7,6 +7,7 @@ cluster: "11"
 clusterTitle: "Resiliencia y chaos engineering"
 type: "satelite"
 order: 3
+repo: "telco-reliability-lab"
 icon: "refresh"
 iconHue: 45
 readingLevel: "Avanzado"

@@ -7,6 +7,7 @@ cluster: "10"
 clusterTitle: "Mobile Quality Engineering"
 type: "satelite"
 order: 3
+repo: "nexo-wallet-mobile"
 icon: "phone"
 iconHue: 300
 readingLevel: "Avanzado"

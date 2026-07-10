@@ -9,6 +9,7 @@ type: satelite
 order: 3
 readingLevel: "Avanzado"
 prerequisites: "Requiere versionado semántico y operación de servicios internos."
+repo: "nexo-quality-platform"
 icon: 'kube'
 iconHue: 210
 ---

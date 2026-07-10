@@ -7,6 +7,7 @@ cluster: "03"
 clusterTitle: "Framework engineering para automatización"
 type: "satelite"
 order: 3
+repo: "api-testing-framework-restful-booker"
 icon: "bot"
 iconHue: 210
 readingLevel: "Intermedio–Avanzado"

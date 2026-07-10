@@ -7,6 +7,7 @@ cluster: "04"
 clusterTitle: "CI/CD y continuous quality"
 type: "pilar"
 order: 1
+repo: "qa-automation-cicd-pipeline"
 icon: "infinity"
 iconHue: 200
 readingLevel: "Intermedio–Avanzado"

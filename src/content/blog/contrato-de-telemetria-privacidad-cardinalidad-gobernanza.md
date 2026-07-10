@@ -7,6 +7,7 @@ cluster: "07"
 clusterTitle: "Observabilidad para Quality Engineering"
 type: "satelite"
 order: 2
+repo: "performance-reliability-testing-suite"
 icon: "search"
 iconHue: 265
 readingLevel: "Avanzado"

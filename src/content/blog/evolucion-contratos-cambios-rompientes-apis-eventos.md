@@ -7,6 +7,7 @@ cluster: "02"
 clusterTitle: "API contract testing y sistemas distribuidos"
 type: "satelite"
 order: 4
+repo: "api-testing-framework-restful-booker"
 icon: "braces"
 iconHue: 28
 readingLevel: "Intermedio–Avanzado"

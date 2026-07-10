@@ -7,6 +7,7 @@ cluster: "07"
 clusterTitle: "Observabilidad para Quality Engineering"
 type: "pilar"
 order: 1
+repo: "telco-reliability-lab"
 icon: "search"
 iconHue: 265
 readingLevel: "Intermedio–Avanzado"

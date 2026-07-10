@@ -86,15 +86,39 @@ export const bridgeSourcesOf = (advancedId: string) =>
 
 export const clusterById = (id: string) => CLUSTERS.find((c) => c.id === id);
 
-/** Repos públicos del ecosistema Nexo Finanzas que implementan lo que el blog explica. */
-export const NEXO_REPOS: Record<string, { name: string; blurb: string }> = {
-  'nexo-transfer-api': { name: 'nexo-transfer-api', blurb: 'API de transferencias: Java 21, Spring Boot, Cucumber BDD, REST-assured.' },
-  'nexo-quality-platform': { name: 'nexo-quality-platform', blurb: 'Entorno reproducible y pipelines GitLab CI / Jenkins con quality gates.' },
-  'nexo-quality-control-tower': { name: 'nexo-quality-control-tower', blurb: 'Trazabilidad requisito → prueba → resultado, publicada en Jira/Xray.' },
-  'nexo-performance-lab': { name: 'nexo-performance-lab', blurb: 'Laboratorio de carga con JMeter: hipótesis, modelo y SLOs como gate.' },
-  'nexo-cross-channel-regression': { name: 'nexo-cross-channel-regression', blurb: 'Smoke cross-canal (API + Web + Mobile) con validador estático en CI.' },
-  'nexo-web-banking-e2e': { name: 'nexo-web-banking-e2e', blurb: 'Journeys web de alto riesgo del ecosistema Nexo.' },
-  'nexo-wallet-mobile': { name: 'nexo-wallet-mobile', blurb: 'App móvil del ecosistema: base de la estrategia de calidad mobile.' },
+/**
+ * Repos públicos reales de github.com/fercarballo que respaldan artículos.
+ *
+ * Regla: un artículo sólo declara `repo` si ese repositorio implementa de
+ * verdad lo que el artículo explica, verificado leyendo el código — no por
+ * coincidencia de nombre. Los capítulos sin implementación pública no
+ * declaran repo. Ver scripts/assign-repos.mjs para la evidencia de cada match.
+ */
+export const REPOS: Record<string, { name: string; blurb: string }> = {
+  // ── Ecosistema Nexo Finanzas (7 repos) ──
+  'nexo-transfer-api': { name: 'nexo-transfer-api', blurb: 'API de transferencias: Java 21, Spring Boot, Cucumber BDD y REST-assured. Idempotency-Key, autorización por titularidad y BigDecimal.' },
+  'nexo-quality-platform': { name: 'nexo-quality-platform', blurb: 'Entorno reproducible (Docker Compose, kind) y pipelines GitLab CI / Jenkins con quality gates. ADRs, runbooks, DoR/DoD.' },
+  'nexo-quality-control-tower': { name: 'nexo-quality-control-tower', blurb: 'Trazabilidad requisito → prueba → resultado desde JUnit XML, publicada en Jira/Xray. Gate ante requisitos sin cobertura.' },
+  'nexo-performance-lab': { name: 'nexo-performance-lab', blurb: 'Laboratorio de carga con JMeter: hipótesis, modelo de carga, SLOs como gate y conclusiones medidas.' },
+  'nexo-cross-channel-regression': { name: 'nexo-cross-channel-regression', blurb: 'Smoke cross-canal (API + Web + Mobile) con Katalon Studio y un validador estático propio como gate de CI.' },
+  'nexo-web-banking-e2e': { name: 'nexo-web-banking-e2e', blurb: 'Journeys web de alto riesgo: Selenium 4 + Cucumber BDD + Page Object Model en Java.' },
+  'nexo-wallet-mobile': { name: 'nexo-wallet-mobile', blurb: 'Billetera Android y su automatización: Appium 9 + Cucumber BDD + POM, con modo simulado sin emulador.' },
+
+  // ── Laboratorios de fiabilidad y observabilidad ──
+  'telco-reliability-lab': { name: 'telco-reliability-lab', blurb: 'API telco instrumentada de punta a punta: k6, observabilidad completa (OpenTelemetry, Prometheus, Tempo, Loki, Grafana), idempotencia impuesta por la base y CI con gate de SLO.' },
+  'performance-reliability-testing-suite': { name: 'performance-reliability-testing-suite', blurb: 'Suite de performance y fiabilidad: k6 (load/stress/spike/soak), inyección controlada de fallos, gates de SLO y trazabilidad métrica → traza → log.' },
+
+  // ── Herramientas y frameworks de QA ──
+  'visual-and-contract-testing': { name: 'visual-and-contract-testing', blurb: 'Contract testing con Pact (consumidor y proveedor reales) y regresión visual con Playwright.' },
+  'flakiness-hunting-playwright': { name: 'flakiness-hunting-playwright', blurb: 'Demostrar, medir y eliminar tests inestables: script que corre N veces cada suite con retries=0 y compara anti-patrones contra la versión estable.' },
+  'llm-evals-harness': { name: 'llm-evals-harness', blurb: 'Evals de aplicaciones con IA: golden dataset, scorers (exact match, similitud, LLM-as-judge) y umbral como quality gate.' },
+  'devsecops-pipeline': { name: 'devsecops-pipeline', blurb: 'Seguridad automatizada en el pipeline: SAST (Semgrep), SCA con gate por severidad y DAST (ZAP).' },
+  'integration-testing-testcontainers': { name: 'integration-testing-testcontainers', blurb: 'Integración contra un Postgres real y efímero con Testcontainers: valida constraints, migraciones y tipos de verdad.' },
+  'performance-testing-k6': { name: 'performance-testing-k6', blurb: 'Escenarios de carga realista con k6 (smoke, load, stress, spike, soak) y thresholds como quality gate.' },
+  'qa-automation-cicd-pipeline': { name: 'qa-automation-cicd-pipeline', blurb: 'Pipeline CI/CD con GitHub Actions sobre suite UI + API: smoke bloqueante en PR y regresión nocturna con sharding y merge de reportes.' },
+  'api-testing-framework-restful-booker': { name: 'api-testing-framework-restful-booker', blurb: 'Framework de testing de API con Playwright, TypeScript y Zod: contratos por schema, builders de datos y setup por API.' },
+  'playwright-e2e-framework-saucedemo': { name: 'playwright-e2e-framework-saucedemo', blurb: 'Framework E2E de referencia: Page Object Model, fixtures, cross-browser y CI. La automatización tratada como producto.' },
+  'qa-insights': { name: 'qa-insights', blurb: 'Herramienta interna: Test Impact Analysis (correr sólo los tests afectados) y detección de flakiness, sin dependencias de runtime.' },
 };
 
 export const repoUrl = (repo: string) => `https://github.com/fercarballo/${repo}`;

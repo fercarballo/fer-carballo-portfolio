@@ -7,6 +7,7 @@ cluster: "15"
 clusterTitle: "Investigación técnica y escritura basada en evidencia"
 type: "satelite"
 order: 4
+repo: "performance-reliability-testing-suite"
 icon: "book"
 iconHue: 220
 readingLevel: "Intermedio"

@@ -7,6 +7,7 @@ cluster: "13"
 clusterTitle: "Quality Engineering en fintech"
 type: "satelite"
 order: 2
+repo: "telco-reliability-lab"
 icon: "flask"
 iconHue: 88
 readingLevel: "Avanzado"

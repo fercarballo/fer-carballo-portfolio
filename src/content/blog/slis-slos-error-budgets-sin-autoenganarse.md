@@ -10,7 +10,7 @@ order: 2
 icon: "chart"
 iconHue: 12
 readingLevel: "Intermedio–Avanzado"
-repo: "nexo-quality-platform"
+repo: "telco-reliability-lab"
 ---
 > **Bajada.** Un SLO no es "el p95 que salió en el último test". Es un acuerdo entre producto, ingeniería y operaciones sobre qué nivel de servicio se le promete al usuario, medido con un indicador que *se parece a su experiencia*. Este satélite del pilar [Performance Engineering: de la carga a una decisión](/blog/performance-engineering-de-la-carga-a-una-decision/) explica cómo definir el SLI, cómo escribir el SLO y su error budget, y cómo medirlo sin que la instrumentación te mienta.
 

@@ -9,6 +9,7 @@ type: satelite
 order: 2
 readingLevel: "Avanzado"
 prerequisites: "Requiere comunicación escrita y lectura de arquitectura."
+repo: "nexo-quality-platform"
 icon: 'book'
 iconHue: 220
 ---

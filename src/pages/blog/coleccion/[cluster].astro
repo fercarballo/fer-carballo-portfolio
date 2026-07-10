@@ -2,7 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 import Icon from '../../../components/Icon.astro';
 import { getCollection } from 'astro:content';
-import { groupByCluster, readingMinutes, repoUrl, NEXO_REPOS, clusterById, clusterLabel, BRIDGES, bridgeSourcesOf } from '../../../data/blog';
+import { groupByCluster, readingMinutes, repoUrl, REPOS, clusterById, clusterLabel, BRIDGES, bridgeSourcesOf } from '../../../data/blog';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -144,7 +144,7 @@ const collectionSchema = {
                 <span class="repo__icon"><Icon name="github" size={17} /></span>
                 <div>
                   <strong>{r}</strong>
-                  <span>{NEXO_REPOS[r]?.blurb ?? 'Repositorio del ecosistema Nexo Finanzas.'}</span>
+                  <span>{REPOS[r]?.blurb ?? 'Repositorio del ecosistema Nexo Finanzas.'}</span>
                 </div>
                 <Icon name="external" size={15} />
               </a>

@@ -9,6 +9,7 @@ type: pilar
 order: 1
 readingLevel: "Avanzado"
 prerequisites: "Requiere CI/CD, Kubernetes, testing y diseño de APIs."
+repo: "nexo-quality-platform"
 icon: 'kube'
 iconHue: 210
 ---

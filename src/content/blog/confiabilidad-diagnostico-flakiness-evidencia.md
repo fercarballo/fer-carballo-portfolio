@@ -7,6 +7,7 @@ cluster: "03"
 clusterTitle: "Framework engineering para automatización"
 type: "satelite"
 order: 4
+repo: "flakiness-hunting-playwright"
 icon: "bot"
 iconHue: 210
 readingLevel: "Intermedio–Avanzado"

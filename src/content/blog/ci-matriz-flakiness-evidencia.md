@@ -7,6 +7,7 @@ cluster: "10"
 clusterTitle: "Mobile Quality Engineering"
 type: "satelite"
 order: 4
+repo: "nexo-cross-channel-regression"
 icon: "phone"
 iconHue: 300
 readingLevel: "Intermedio–Avanzado"

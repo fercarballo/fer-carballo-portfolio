@@ -7,6 +7,7 @@ cluster: "08"
 clusterTitle: "Seguridad y threat modeling para QA"
 type: "satelite"
 order: 2
+repo: "nexo-transfer-api"
 icon: "shield"
 iconHue: 0
 readingLevel: "Avanzado"

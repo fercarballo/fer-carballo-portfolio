@@ -7,6 +7,7 @@ cluster: "08"
 clusterTitle: "Seguridad y threat modeling para QA"
 type: "satelite"
 order: 3
+repo: "devsecops-pipeline"
 icon: "shield"
 iconHue: 0
 readingLevel: "Intermedio–Avanzado"

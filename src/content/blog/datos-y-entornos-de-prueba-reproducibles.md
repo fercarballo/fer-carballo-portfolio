@@ -7,6 +7,7 @@ cluster: "01"
 clusterTitle: "Arquitectura de Quality Engineering"
 type: "satelite"
 order: 3
+repo: "integration-testing-testcontainers"
 icon: "shield"
 iconHue: 152
 readingLevel: "Intermedio"

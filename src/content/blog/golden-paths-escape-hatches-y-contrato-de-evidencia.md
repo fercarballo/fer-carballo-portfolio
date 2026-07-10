@@ -9,6 +9,7 @@ type: satelite
 order: 2
 readingLevel: "Avanzado"
 prerequisites: "Requiere CI/CD, Java, contenedores y reporting de tests."
+repo: "nexo-quality-platform"
 icon: 'kube'
 iconHue: 210
 ---
