@@ -454,3 +454,11 @@ p {
   list-style: none;
   margin-left: -1.1em;
 }
+
+/* Shiki (github-dark): el gris de comentarios #6A737D rinde 3.98:1 sobre
+   nuestro fondo #0b100c — falla WCAG AA (4.5:1). Lo subimos a un gris que
+   rinde ~6.3:1 sin alterar el resto del tema de sintaxis. */
+.astro-code span[style*="#6A737D"],
+.astro-code span[style*="#6a737d"] {
+  color: #8f9ba5 !important;
+}
