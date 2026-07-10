@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 4321
+    },
+    {
+      "name": "portfolio-preview",
+      "runtimeExecutable": "./node_modules/.bin/astro",
+      "runtimeArgs": ["preview", "--port", "4322"],
+      "port": 4322
     }
   ]
 }
