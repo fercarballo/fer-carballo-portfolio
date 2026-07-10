@@ -54,6 +54,14 @@ const person = {
   '@type': 'Person',
   '@id': PERSON_ID,
   name: profile.name,
+  givenName: 'Fernando',
+  familyName: 'Carballo',
+  // Alias reales bajo los que aparece: el dominio y los handles de GitHub/LinkedIn.
+  alternateName: ['Fer Carballo', 'fercarballo'],
+  // Propiedad de schema.org para homónimos: distingue esta entidad de otras
+  // personas con nombre similar (p. ej. el docente de agricultura homónimo).
+  disambiguatingDescription:
+    'Ingeniero de calidad de software (QA/SDET) de Buenos Aires, Argentina. No confundir con otras personas llamadas Fer Carballo dedicadas a la docencia agrícola o la creación de contenido sobre cultivos.',
   url: `${site}/`,
   image: `${site}/avatar/fer.jpg`,
   jobTitle: 'QA Engineer',
