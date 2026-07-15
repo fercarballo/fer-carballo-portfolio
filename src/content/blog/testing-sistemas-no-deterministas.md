@@ -1,6 +1,6 @@
 ---
 title: "Tests que a veces pasan: cómo cazar y matar la flakiness en Playwright"
-description: "Un test que falla 1 de cada 20 corridas sin que cambie el código es peor que no tenerlo: enseña al equipo a ignorar el rojo. Cómo mido la flakiness, encuentro la causa raíz y la elimino en vez de tapar con reintentos."
+description: "Un test que falla 1 de cada 20 corridas sin que cambie el código es peor que no tenerlo: enseña al equipo a ignorar el rojo. Cómo se mide la flakiness, se encuentra la causa raíz y se elimina en vez de taparla con reintentos."
 pubDate: 2026-07-06
 tags: ['flakiness', 'playwright', 'test-automation', 'ci-cd', 'sdet']
 cluster: '07'
@@ -14,15 +14,33 @@ icon: 'refresh'
 iconHue: 265
 ---
 
-Hay un tipo de bug que no está en el producto: está en tus tests. Es el test que pasa 19 veces y a la vigésima falla, sin que nadie haya tocado una línea de código. Lo volvés a correr, pasa, y seguís. Ese test es **flaky**, y es más peligroso de lo que parece.
+> **Subtítulo:** Medir antes de tocar, una taxonomía de causas, la cura de fondo (esperar por estado, no por tiempo), el reintento como curita y el trace como la evidencia que hace tratable lo intermitente.
 
-¿Por qué peligroso, si "total, pasa"? Porque erosiona la única cosa que hace útil a una suite: **que le creas cuando está en rojo**. El día que un test flaky falla por un bug real, ya nadie lo mira — "ah, es ese que siempre falla, dale de nuevo". La flakiness no rompe tests, rompe la confianza en los tests.
+> **Nota de alcance.** Guía de método con ejemplos ilustrativos. El ciclo completo sobre un caso real —medición inicial, traces y correcciones hasta 0/50— está documentado en el repositorio [`flakiness-hunting-playwright`](https://github.com/fercarballo/flakiness-hunting-playwright).
 
-Este post es el método que uso para cazarla, documentado en [`flakiness-hunting-playwright`](https://github.com/fercarballo/flakiness-hunting-playwright).
+---
 
-## Primero: medir, no adivinar
+## Resumen ejecutivo
 
-No se puede matar lo que no se mide. Antes de tocar un test "sospechoso", lo corro N veces y saco su **tasa de fallo**. Un test no es "flaky" por sensación; es flaky con un número.
+- Hay un tipo de bug que no está en el producto: está en los tests. El test que pasa 19 veces y falla la vigésima, sin que nadie tocara el código, es **flaky**.
+- Es peligroso no porque falle, sino porque **erosiona lo único que hace útil a una suite: que se le crea cuando está en rojo.** La flakiness no rompe tests, rompe la confianza en los tests.
+- No se puede matar lo que no se mide: un test es flaky **con un número** (tasa de fallo sobre N corridas), no por sensación.
+- La causa raíz número uno es **esperar por tiempo en vez de por estado**. La cura no es subir el timeout, es esperar la condición observable.
+- El **reintento** amortigua ruido en CI, pero oculta la flakiness; no la elimina. Si un test *necesita* reintentos para pasar, es un test roto, no lento. El **trace** es lo que vuelve diagnosticable un fallo que, por definición, no se reproduce cuando lo vas a mirar.
+
+Al terminar vas a poder medir la tasa de flakiness de un test, ubicar su causa en una taxonomía, reemplazar esperas por tiempo con esperas por estado, usar el reintento sin que tape bugs y leer un trace para diagnosticar en segundos.
+
+---
+
+## 1. El problema: la flakiness es una deuda de confianza
+
+Un test flaky pasa 19 veces y a la vigésima falla, sin que nadie haya tocado una línea. Se lo vuelve a correr, pasa, y se sigue. La pregunta razonable es: si "total, pasa", ¿por qué es peligroso?
+
+Porque erosiona la única cosa que hace útil a una suite: **que se le crea cuando está en rojo**. El día que un test flaky falla por un bug real, ya nadie lo mira — "ah, es ese que siempre falla, dale de nuevo". El costo no es el test perdido: es que la suite entera deja de ser una señal.
+
+## 2. Primero: medir, no adivinar
+
+No se puede matar lo que no se mide. Antes de tocar un test "sospechoso", se lo corre N veces y se saca su **tasa de fallo**. Un test no es flaky por sensación; es flaky con un número.
 
 ```bash
 # correr el mismo test 50 veces y contar cuántas falla
@@ -36,11 +54,11 @@ npx playwright test flujo-checkout.spec.ts --repeat-each=50
               esto NO es "mala suerte", es una señal
 ```
 
-Ese 8% es mi punto de partida y mi vara de éxito: cuando termine, tiene que ser 0/50. Sin la medición, "lo arreglé" es una opinión.
+Ese 8 % es el punto de partida y la vara de éxito: al terminar tiene que ser 0/50. Sin la medición, "lo arreglé" es una opinión, no un resultado.
 
-## Segundo: la taxonomía de causas (casi siempre es una de estas)
+## 3. La taxonomía de causas
 
-Después de cazar unas cuantas, la flakiness casi siempre cae en una de estas categorías. Tenerlas en la cabeza acelera el diagnóstico:
+Después de diagnosticar varios casos, la flakiness casi siempre cae en una de estas categorías. Tenerlas presentes acelera el diagnóstico:
 
 | Causa | Síntoma típico | La cura de fondo |
 |---|---|---|
@@ -52,7 +70,7 @@ Después de cazar unas cuantas, la flakiness casi siempre cae en una de estas ca
 
 La número uno, lejos, es la primera: **esperar por tiempo en vez de por estado.**
 
-## La causa raíz más común: `sleep` disfrazado
+## 4. La causa raíz más común: `sleep` disfrazado
 
 El anti-patrón que genera más flakiness es asumir que algo "ya tiene que estar listo" después de X milisegundos:
 
@@ -62,7 +80,7 @@ await page.waitForTimeout(1000);
 await expect(page.locator('.total')).toHaveText('$1.500');
 ```
 
-Funciona en tu máquina, que es rápida. En CI, que está cargado y es más lento, ese segundo a veces no alcanza y el test falla. La solución no es subir el timeout a 2 segundos (eso solo mueve el problema y hace la suite más lenta): es **esperar por la condición real**.
+Funciona en una máquina rápida. En CI, cargado y más lento, ese segundo a veces no alcanza y el test falla. La solución no es subir el timeout a 2 segundos —eso solo mueve el problema y hace la suite más lenta—: es **esperar por la condición real**.
 
 ```typescript
 // ✅ robusto: espera hasta que el estado sea el esperado, con timeout máximo
@@ -71,40 +89,40 @@ await expect(page.locator('.total')).toHaveText('$1.500', { timeout: 5000 });
 
 La diferencia conceptual: el primero espera *tiempo*; el segundo espera *que pase la cosa*. Playwright tiene auto-waiting justo para esto, y sus `expect` son retriables. Usar `waitForTimeout` es, casi siempre, pelearse con la herramienta.
 
-## Tercero: el reintento es una curita, no la cura
+## 5. El reintento es una curita, no la cura
 
-Playwright deja configurar reintentos, y está bien para amortiguar el ruido en CI:
+Playwright permite configurar reintentos, y está bien para amortiguar el ruido en CI:
 
 ```typescript
 retries: process.env.CI ? 2 : 0,
 ```
 
-Pero ojo con la trampa: **el reintento oculta la flakiness, no la elimina.** Si tapás todo con reintentos, un día un bug real se te escapa porque "reintentó y pasó". Mi regla:
+Pero hay una trampa: **el reintento oculta la flakiness, no la elimina.** Si se tapa todo con reintentos, un día un bug real se escapa porque "reintentó y pasó". La regla:
 
-> El reintento es para que un fallo aislado no rompa el pipeline mientras investigás. No es la solución. Si un test *necesita* reintentos para pasar, tenés un test roto, no un test lento.
+> El reintento es para que un fallo aislado no rompa el pipeline mientras se investiga. No es la solución. Si un test *necesita* reintentos para pasar, hay un test roto, no un test lento.
 
-Por eso Playwright marca los tests que pasaron *en reintento* como "flaky" en el reporte. Esa lista es mi backlog de caza, no algo para ignorar.
+Por eso Playwright marca los tests que pasaron *en reintento* como "flaky" en el reporte. Esa lista es el backlog de caza, no algo para ignorar.
 
-## La herramienta que lo cambió todo: el Trace Viewer
+## 6. El trace: evidencia de lo que no se reproduce
 
-Cazar flakiness a ciegas es imposible: por definición, cuando vas a mirar, el test pasa. Lo que lo hace tratable es el **trace**: Playwright graba cada paso con snapshot del DOM, red y consola. Cuando el test falla en CI a las 3 de la mañana, a la mañana abro el trace de *esa* corrida y veo exactamente qué había en pantalla en el instante del fallo.
+Cazar flakiness a ciegas es imposible: por definición, cuando se va a mirar, el test pasa. Lo que lo vuelve tratable es el **trace**: Playwright graba cada paso con snapshot del DOM, red y consola. Cuando el test falla en CI de madrugada, después se abre el trace de *esa* corrida y se ve exactamente qué había en pantalla en el instante del fallo.
 
 ```text
   sin trace:  "falló el assert del total"  → ¿por qué? ni idea, andá a reproducirlo
-  con trace:  ves que en ESA corrida el spinner todavía giraba
+  con trace:  se ve que en ESA corrida el spinner todavía giraba
               → era una espera mal hecha. Diagnóstico en 30 segundos.
 ```
 
-Configurarlo para que grabe solo en el primer reintento es gratis y te ahorra horas:
+Configurarlo para que grabe solo en el primer reintento es gratis y ahorra horas:
 
 ```typescript
 use: { trace: 'on-first-retry' },
 ```
 
-## El resultado que persigo
+## 7. El resultado que se persigue
 
-El objetivo no es "menos flaky". Es **cero**. En el repo documento el ciclo completo sobre un caso real: medir (tasa de fallo inicial), diagnosticar (con trace), corregir la causa raíz, y volver a medir hasta 0/50. Demostrar → medir → eliminar. No "creo que lo arreglé": *lo medí antes y después*.
+El objetivo no es "menos flaky". Es **cero**. El ciclo es siempre el mismo: medir (tasa de fallo inicial), diagnosticar (con trace), corregir la causa raíz y volver a medir hasta 0/50. Demostrar → medir → eliminar. No "creo que lo arreglé": medido antes y después.
 
-Porque al final, la flakiness es una deuda de confianza. Y la confianza en la suite es, para mí, el activo más importante de todo el trabajo de automatización. Un test en el que el equipo cree cuando está en rojo vale por diez que "casi siempre pasan".
+Porque al final la flakiness es una deuda de confianza, y la confianza en la suite es el activo más importante de la automatización. Un test en el que el equipo cree cuando está en rojo vale por diez que "casi siempre pasan".
 
-> El caso completo —medición, traces y las correcciones— está en [`flakiness-hunting-playwright`](https://github.com/fercarballo/flakiness-hunting-playwright).
+> El caso completo —medición, traces y las correcciones— está en [`flakiness-hunting-playwright`](https://github.com/fercarballo/flakiness-hunting-playwright). Para el ángulo de causa raíz por clasificación de fallas y correlation-id, ver [Confiabilidad: diagnóstico de flakiness con evidencia](/blog/confiabilidad-diagnostico-flakiness-evidencia/); para diagnosticar con trazas distribuidas, [Diagnosticar un test flaky con trazas](/blog/diagnosticar-test-flaky-con-trazas-metodo-evidencia/).
