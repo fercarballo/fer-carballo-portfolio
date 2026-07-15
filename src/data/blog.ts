@@ -119,6 +119,10 @@ export const REPOS: Record<string, { name: string; blurb: string }> = {
   'api-testing-framework-restful-booker': { name: 'api-testing-framework-restful-booker', blurb: 'Framework de testing de API con Playwright, TypeScript y Zod: contratos por schema, builders de datos y setup por API.' },
   'playwright-e2e-framework-saucedemo': { name: 'playwright-e2e-framework-saucedemo', blurb: 'Framework E2E de referencia: Page Object Model, fixtures, cross-browser y CI. La automatización tratada como producto.' },
   'qa-insights': { name: 'qa-insights', blurb: 'Herramienta interna: Test Impact Analysis (correr sólo los tests afectados) y detección de flakiness, sin dependencias de runtime.' },
+
+  // ── Suites hands-on en Python ──
+  'pytest-api-suite': { name: 'pytest-api-suite', blurb: 'Suite de testing de una API REST en tres niveles: unitario (pytest y unittest), integración contra la API real y contrato por JSON Schema, todo en GitHub Actions.' },
+  'data-quality-testing': { name: 'data-quality-testing', blurb: 'Un pipeline ETL tratado como sistema que merece pruebas: contratos de datos con Pandera en cada frontera y checks de integridad SQL post-carga, como quality gate.' },
 };
 
 export const repoUrl = (repo: string) => `https://github.com/fercarballo/${repo}`;
