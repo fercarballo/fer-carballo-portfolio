@@ -27,7 +27,10 @@ const totalMinutes = items.reduce((acc, p) => acc + readingMinutes(p.body), 0);
 
 // Puentes editoriales entre series (curados en blog.ts, no algorítmicos).
 const continuesIn = BRIDGES[cluster.id] ? clusterById(BRIDGES[cluster.id]) : null;
-const foundations = cluster.series === 'avanzada'
+const continuesLabel = continuesIn?.series === 'agentes'
+  ? 'Continúa en la serie de agentes'
+  : 'Continúa en la serie avanzada';
+const foundations = cluster.series !== 'base'
   ? bridgeSourcesOf(cluster.id).map((id) => clusterById(id)!).filter(Boolean)
   : [];
 
@@ -74,7 +77,7 @@ const collectionSchema = {
     <header class="coll-hero">
       <span class="coll-hero__icon"><Icon name={cluster.icon} size={26} /></span>
       <div>
-        <span class="kicker">{clusterLabel(cluster)}{cluster.series === 'avanzada' && ' · Serie avanzada'}</span>
+        <span class="kicker">{clusterLabel(cluster)}{cluster.series === 'avanzada' && ' · Serie avanzada'}{cluster.series === 'agentes' && ' · Serie de agentes'}</span>
         <h1>{cluster.title}</h1>
         <p>{cluster.blurb}</p>
         <div class="coll-hero__meta">
@@ -160,7 +163,7 @@ const collectionSchema = {
         <a class="bridge card" href={`/blog/coleccion/${continuesIn.id}/`} data-tilt style={`--hue: ${continuesIn.hue}`}>
           <span class="bridge__icon"><Icon name={continuesIn.icon} size={20} /></span>
           <div>
-            <span class="bridge__kicker">Continúa en la serie avanzada</span>
+            <span class="bridge__kicker">{continuesLabel}</span>
             <strong>{continuesIn.title}</strong>
             <p>{continuesIn.blurb}</p>
           </div>

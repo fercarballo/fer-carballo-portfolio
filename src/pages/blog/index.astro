@@ -8,6 +8,7 @@ const posts = await getCollection('blog', ({ data }) => !data.draft);
 const groups = groupByCluster(posts);
 const baseGroups = groups.filter((g) => g.cluster.series === 'base');
 const advGroups = groups.filter((g) => g.cluster.series === 'avanzada');
+const agGroups = groups.filter((g) => g.cluster.series === 'agentes');
 
 const totalArticles = posts.length;
 const totalClusters = groups.length;
@@ -16,6 +17,7 @@ const totalPillars = posts.filter((p) => p.data.type === 'pilar').length;
 // Cada serie tiene su puerta de entrada: el pilar de su capítulo 00 (el mapa).
 const entry = groups.find((g) => g.cluster.id === '00')?.pillar;
 const entryAdv = groups.find((g) => g.cluster.id === 'a00')?.pillar;
+const entryAg = groups.find((g) => g.cluster.id === 'g00')?.pillar;
 
 const site = Astro.site!.href.replace(/\/$/, '');
 const blogSchema = {
@@ -51,9 +53,10 @@ const blogSchema = {
       <span class="kicker">Blog técnico</span>
       <h1>Quality Engineering, de la teoría a la evidencia</h1>
       <p>
-        Un corpus de {totalArticles} artículos en {totalClusters} colecciones, organizado en dos series:
-        <strong>fundamentos</strong> ({baseGroups.length} colecciones) y una <strong>serie avanzada</strong> ({advGroups.length} capítulos
-        sobre event-driven, supply chain, privacy, data quality y plataforma). Cada colección abre con un
+        Un corpus de {totalArticles} artículos en {totalClusters} colecciones, organizado en tres series:
+        <strong>fundamentos</strong> ({baseGroups.length} colecciones), la <strong>serie avanzada</strong> ({advGroups.length} capítulos
+        sobre event-driven, supply chain, privacy, data quality y plataforma) y la <strong>serie de agentes de IA</strong>
+        ({agGroups.length} capítulos: arquitecturas, MCP, evaluación y seguridad de agentes). Cada colección abre con un
         <strong>pilar</strong> y se profundiza en <strong>satélites</strong>, siempre con la evidencia citada y
         lo no verificado rotulado como tal.
       </p>
@@ -88,6 +91,19 @@ const blogSchema = {
               <span class="blog-entry__kicker blog-entry__kicker--adv">Serie avanzada · el mapa</span>
               <h2>{entryAdv.data.title}</h2>
               <p>{entryAdv.data.description}</p>
+            </div>
+            <span class="blog-entry__arrow"><Icon name="arrow-right" size={18} /></span>
+          </a>
+        )
+      }
+      {
+        entryAg && (
+          <a class="blog-entry blog-entry--ag card" href={`/blog/${entryAg.id}/`} data-reveal data-tilt>
+            <span class="blog-entry__icon blog-entry__icon--ag"><Icon name="bot" size={22} /></span>
+            <div class="blog-entry__text">
+              <span class="blog-entry__kicker blog-entry__kicker--ag">Serie de agentes · el mapa</span>
+              <h2>{entryAg.data.title}</h2>
+              <p>{entryAg.data.description}</p>
             </div>
             <span class="blog-entry__arrow"><Icon name="arrow-right" size={18} /></span>
           </a>
@@ -160,6 +176,58 @@ const blogSchema = {
       <div class="cluster-grid">
         {
           advGroups.map((g, i) => (
+            <a
+              class="cluster-card card"
+              href={`/blog/coleccion/${g.cluster.id}/`}
+              data-tilt
+              data-reveal
+              style={`--hue: ${g.cluster.hue}; --d: ${(i % 3) * 0.05}s`}
+            >
+              <header class="cluster-card__head">
+                <span class="cluster-card__icon">
+                  <Icon name={g.cluster.icon} size={20} />
+                </span>
+                <span class="cluster-card__num">{g.cluster.id.slice(1)}</span>
+              </header>
+
+              <h3>{g.cluster.title}</h3>
+              <p class="cluster-card__blurb">{g.cluster.blurb}</p>
+
+              <p class="cluster-card__pillar">
+                <span class="badge badge--pilar">Pilar</span>
+                <span>{g.pillar.data.title}</span>
+              </p>
+
+              <footer class="cluster-card__foot">
+                <span class="cluster-card__count">
+                  {g.items.length} {g.items.length === 1 ? 'artículo' : 'artículos'}
+                </span>
+                <span class="cluster-card__go">
+                  Ver capítulo <Icon name="arrow-right" size={14} />
+                </span>
+              </footer>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="blog-section" aria-labelledby="agentes">
+      <div class="section-head" data-reveal>
+        <div>
+          <span class="kicker">Serie de agentes de IA</span>
+          <h2 id="agentes">Los {agGroups.length} capítulos agénticos</h2>
+          <p class="blog-section__sub">
+            Sistemas que actúan solos exigen otra disciplina de calidad: arquitecturas y sus modos de fallo,
+            herramientas y MCP, evaluación de trayectorias, seguridad y los agentes aplicados a QA.
+            Anclado a repos de referencia reales.
+          </p>
+        </div>
+      </div>
+
+      <div class="cluster-grid">
+        {
+          agGroups.map((g, i) => (
             <a
               class="cluster-card card"
               href={`/blog/coleccion/${g.cluster.id}/`}
@@ -310,6 +378,23 @@ const blogSchema = {
 
   .blog-entry--adv .blog-entry__arrow {
     color: var(--cyan);
+  }
+
+  .blog-entry--ag {
+    border-color: rgba(255, 122, 89, 0.3);
+    background: linear-gradient(120deg, rgba(210, 90, 60, 0.14), var(--card) 60%);
+  }
+
+  .blog-entry__icon--ag {
+    background: #c65a3a;
+  }
+
+  .blog-entry__kicker--ag {
+    color: var(--poppy);
+  }
+
+  .blog-entry--ag .blog-entry__arrow {
+    color: var(--poppy);
   }
 
   /* ── Punto de entrada ── */

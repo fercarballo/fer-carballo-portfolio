@@ -15,8 +15,8 @@ export type ClusterMeta = {
   icon: string;
   hue: number;
   blurb: string;
-  /** 'base' = fundamentos (primera tanda) · 'avanzada' = serie avanzada. */
-  series: 'base' | 'avanzada';
+  /** 'base' = fundamentos · 'avanzada' = serie avanzada · 'agentes' = serie de agentes de IA. */
+  series: 'base' | 'avanzada' | 'agentes';
 };
 
 export const CLUSTERS: ClusterMeta[] = [
@@ -57,11 +57,28 @@ export const CLUSTERS: ClusterMeta[] = [
   { id: 'a11', title: 'Plan de integración con Nexo Finanzas', short: 'Integración Nexo', icon: 'infinity', hue: 152, blurb: 'Integrar sin big bang: contratos primero, incrementos verificables y un catálogo de decisiones pendientes.', series: 'avanzada' },
   { id: 'a12', title: 'Capstone: Nexo Trusted Transfer Platform', short: 'Capstone', icon: 'flask', hue: 12, blurb: 'El proyecto integral y acotado: alcance, invariantes de negocio y qué evidencia demuestra cada control.', series: 'avanzada' },
   { id: 'a13', title: 'RFC y design review de calidad', short: 'RFC y design review', icon: 'book', hue: 220, blurb: 'RFC, ADR y runbook: tres documentos, tres preguntas distintas, y cómo facilitar una design review desde calidad.', series: 'avanzada' },
+
+  /*
+   * ── Serie Agentes de IA ──
+   * Tercera serie del corpus (prefijo 'g'). Cada colección responde una
+   * pregunta del campo agéntico desde Quality Engineering, anclada a repos
+   * de referencia reales cuando el artículo lo amerita.
+   */
+  { id: 'g00', title: 'Mapa agéntico: de LLM apps a agentes', short: 'Mapa agéntico', icon: 'bot', hue: 150, blurb: 'La puerta de entrada: el espectro de autonomía, la evolución 2022–2026 y el glosario que evita discusiones vacías.', series: 'agentes' },
+  { id: 'g01', title: 'Anatomía del agente y workflows', short: 'Anatomía y workflows', icon: 'set', hue: 205, blurb: 'Los seis órganos de todo agente y sus modos de fallo, los cinco workflows previos y la condición de parada como requisito.', series: 'agentes' },
+  { id: 'g02', title: 'Herramientas y MCP', short: 'Herramientas y MCP', icon: 'braces', hue: 25, blurb: 'De function calling a MCP: el contrato de las herramientas, un servidor MCP de herramientas QA y code execution vs tool-calls.', series: 'agentes' },
+  { id: 'g03', title: 'Memoria y context engineering', short: 'Memoria y contexto', icon: 'book', hue: 280, blurb: 'El contexto como recurso finito: compaction, taxonomía de memoria y por qué los archivos versionados siguen ganando.', series: 'agentes' },
+  { id: 'g04', title: 'Arquitecturas de agente', short: 'Arquitecturas', icon: 'refresh', hue: 190, blurb: 'ReAct, plan-and-execute, reflection y code agents; el debate multi-agente de 2025 y los agentes durables con journal y replay.', series: 'agentes' },
+  { id: 'g05', title: 'Evaluar agentes', short: 'Evaluar agentes', icon: 'flask', hue: 145, blurb: 'Trayectoria vs outcome, pass^k, golden tasks con verificador de estado, simuladores de usuario y observabilidad del agente.', series: 'agentes' },
+  { id: 'g06', title: 'Seguridad agéntica', short: 'Seguridad agéntica', icon: 'shield', hue: 355, blurb: 'La tríada letal, red-teaming como regresión continua y el diseño de sandbox y permisos que vuelve operable un agente.', series: 'agentes' },
+  { id: 'g07', title: 'Agentes para QA', short: 'Agentes para QA', icon: 'check', hue: 88, blurb: 'El agente propone con evidencia y el humano decide: triage de fallos, self-healing como PR y exploratorio sintético.', series: 'agentes' },
 ];
 
 /** Etiqueta corta de una colección según su serie. */
 export const clusterLabel = (c: ClusterMeta) =>
-  c.series === 'avanzada' ? `Avanzada ${c.id.slice(1)}` : `Colección ${c.id}`;
+  c.series === 'avanzada' ? `Avanzada ${c.id.slice(1)}`
+  : c.series === 'agentes' ? `Agentes ${c.id.slice(1)}`
+  : `Colección ${c.id}`;
 
 /**
  * Puentes curados entre series: la colección base que un lector termina y el
@@ -78,6 +95,8 @@ export const BRIDGES: Record<string, string> = {
   '08': 'a02', // threat modeling → supply-chain security
   '12': 'a13', // operating model → RFC y design review
   '13': 'a07', // probar dinero → ingeniería de fraude
+  '14': 'g00', // IA y evals → mapa agéntico
+  'a01': 'g04', // contratos asíncronos → agentes durables
 };
 
 /** Colecciones base que recomiendan leer antes un capítulo avanzado dado. */
@@ -119,6 +138,13 @@ export const REPOS: Record<string, { name: string; blurb: string }> = {
   'api-testing-framework-restful-booker': { name: 'api-testing-framework-restful-booker', blurb: 'Framework de testing de API con Playwright, TypeScript y Zod: contratos por schema, builders de datos y setup por API.' },
   'playwright-e2e-framework-saucedemo': { name: 'playwright-e2e-framework-saucedemo', blurb: 'Framework E2E de referencia: Page Object Model, fixtures, cross-browser y CI. La automatización tratada como producto.' },
   'qa-insights': { name: 'qa-insights', blurb: 'Herramienta interna: Test Impact Analysis (correr sólo los tests afectados) y detección de flakiness, sin dependencias de runtime.' },
+
+  // ── Serie Agentes: repos de referencia ──
+  'agent-evals-lab': { name: 'agent-evals-lab', blurb: 'Golden tasks con verificador programático del estado final, métricas pass^k vs pass@k con intervalo de Wilson y un gate de CI que se auto-valida. Sin llamadas a modelos: políticas deterministas.' },
+  'mcp-qa-toolbox': { name: 'mcp-qa-toolbox', blurb: 'Servidor MCP con herramientas de QA (parseo JUnit, reporte de flakiness, quality gate) y la lógica de negocio separada del protocolo para testearse sin MCP.' },
+  'agent-triage-assistant': { name: 'agent-triage-assistant', blurb: 'Triage de fallos de CI con reglas explicables: clasifica producto/entorno/dato/test citando la evidencia exacta. El agente propone; el humano decide.' },
+  'prompt-injection-arena': { name: 'prompt-injection-arena', blurb: 'Banco de payloads de inyección versionado + harness que mide tasa de bloqueo y falsos positivos por categoría, con gate de regresión contra baseline.' },
+  'durable-agent-workflow': { name: 'durable-agent-workflow', blurb: 'Journal de eventos append-only, crash-resume en cualquier punto, aprobación humana asíncrona y replay determinista con LLM memoizado. El patrón, minimal y legible.' },
 
   // ── Suites hands-on en Python ──
   'pytest-api-suite': { name: 'pytest-api-suite', blurb: 'Suite de testing de una API REST en tres niveles: unitario (pytest y unittest), integración contra la API real y contrato por JSON Schema, todo en GitHub Actions.' },
